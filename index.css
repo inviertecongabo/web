@@ -387,6 +387,7 @@ body {
     color: var(--text-muted);
     margin-bottom: 20px;
     font-size: 1.05rem;
+    text-align: justify;
 }
 
 .about-quote {
@@ -434,9 +435,9 @@ body {
 }
 
 .filter-btn {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
+    background-color: rgba(240, 185, 11, 0.05);
+    border: 1px solid var(--accent);
+    color: var(--accent);
     padding: 10px 20px;
     border-radius: 50px;
     cursor: pointer;
@@ -450,6 +451,7 @@ body {
     background-color: var(--accent);
     color: var(--text-dark);
     border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(240, 185, 11, 0.2);
 }
 
 .video-grid {
@@ -937,4 +939,27 @@ body {
         flex-direction: column;
         gap: 12px;
     }
+}
+
+/* --- Estilos Adicionales de Telegram --- */
+.icon-telegram {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-secondary.btn-telegram:hover {
+    border-color: #0088cc;
+    color: #0088cc;
+}
+
+.community-social-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-social.btn-social-telegram:hover {
+    background-color: #0088cc;
+    color: #ffffff;
+    border-color: #0088cc;
 }
