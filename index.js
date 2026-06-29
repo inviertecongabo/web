@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Simulación de Suscripción al Boletín ---
+    // --- Registro Real al Boletín con Web3Forms ---
     const subscribeForm = document.getElementById('subscribeForm');
     const formMessage = document.getElementById('formMessage');
 
@@ -107,23 +107,49 @@ document.addEventListener('DOMContentLoaded', () => {
             formMessage.textContent = '';
             formMessage.className = 'form-message';
 
-            // Simulación de petición de red (1.5 segundos)
-            setTimeout(() => {
+            // Petición real a la API de Web3Forms
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: '325cfa7a-cff8-4928-9bfc-b3f24c2653e1',
+                    email: emailValue,
+                    from_name: 'Web de Invierte con Gabo',
+                    subject: '¡Nuevo Suscriptor en tu Web!'
+                })
+            })
+            .then(async (response) => {
+                let json = await response.json();
+                if (response.status === 200) {
+                    // Registro exitoso
+                    formMessage.textContent = '¡Listo! Te has unido a la comunidad con éxito.';
+                    formMessage.classList.add('success');
+                    emailInput.value = '';
+                } else {
+                    // Servidor responde con error
+                    formMessage.textContent = json.message || 'Ocurrió un error. Intenta de nuevo.';
+                    formMessage.classList.add('error');
+                }
+            })
+            .catch(error => {
+                // Error de red
+                console.error(error);
+                formMessage.textContent = 'Error de conexión. Revisa tu red e intenta de nuevo.';
+                formMessage.classList.add('error');
+            })
+            .then(() => {
+                // Restaurar botón y ocultar mensaje a los 5 segundos
                 submitButton.disabled = false;
                 submitButton.textContent = 'Unirme a la lista';
                 
-                // Respuesta exitosa simulada
-                formMessage.textContent = '¡Bienvenido, Gabo te enviará contenido pronto!';
-                formMessage.classList.add('success');
-                emailInput.value = '';
-                
-                // Quitar mensaje después de 5 segundos
                 setTimeout(() => {
                     formMessage.textContent = '';
                     formMessage.className = 'form-message';
                 }, 5000);
-
-            }, 1500);
+            });
         });
     }
 });
