@@ -160,6 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                
+                // Quitar las clases después de que termine la animación (800ms)
+                // para que no interfieran con los efectos :hover de las tarjetas
+                setTimeout(() => {
+                    entry.target.classList.remove('reveal', 'active');
+                }, 800);
+                
                 observer.unobserve(entry.target); // Solo animar la primera vez
             }
         });
