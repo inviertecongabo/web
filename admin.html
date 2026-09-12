@@ -592,9 +592,12 @@
         }
 
         function editVideo(id) {
-            const v = allVideos.find(x => x.id === id);
-            if(!v) return;
-            editingVideoId = id;
+            const v = allVideos.find(x => String(x.id) === String(id));
+            if(!v) {
+                console.error("No se encontró el video con id:", id);
+                return;
+            }
+            editingVideoId = v.id; // Guarda el ID con su tipo original (entero)
             document.getElementById("vTitle").value = v.title;
             document.getElementById("vCategory").value = v.category || 'otros';
             document.getElementById("vUrl").value = v.url;
