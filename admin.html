@@ -3,73 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administrador | Invierte con Gabo</title>
+    <title>Gabo Admin | Control Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Iconos Phosphor (Modernos) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="index.css">
-    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); margin: 0; padding: 20px; }
-        .admin-container { max-width: 800px; margin: 0 auto; background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 40px; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
-        .admin-title { font-family: var(--font-heading); font-size: 1.8rem; color: var(--accent); margin: 0; }
+        /* Admin Specific Overrides */
+        :root {
+            --sidebar-width: 260px;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Loading Overlay */
+        #authOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-primary);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        
+        /* Layout */
+        .admin-sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .admin-main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            display: none; /* Shown after auth */
+        }
+
+        /* Sidebar Elements */
+        .sidebar-brand {
+            padding: 0 24px 32px;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-brand span { color: var(--accent); }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .menu-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.02);
+            color: var(--text-primary);
+        }
+        .menu-item.active {
+            background-color: var(--accent-glow);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        .menu-item i { font-size: 1.2rem; }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Top Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .header-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin: 0;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .stat-info h4 { margin: 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+        .stat-info .stat-value { margin: 4px 0 0; font-size: 1.8rem; font-family: var(--font-heading); font-weight: 700; color: var(--text-primary); }
+
+        /* Tables & Lists */
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 32px;
+            display: none;
+        }
+        .section-card.active { display: block; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .section-title { font-family: var(--font-heading); font-size: 1.3rem; margin: 0; }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .data-table th {
+            padding: 16px;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.95rem;
+        }
+        .data-table tr:hover td { background-color: rgba(255,255,255,0.01); }
+        
+        /* Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge.active { background: rgba(16,185,129,0.15); color: #10B981; }
+        .badge.inactive { background: rgba(239,68,68,0.15); color: #EF4444; }
+
+        /* Forms */
         .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 0.95rem; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; }
-        .form-input { width: 100%; padding: 12px; background-color: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-body); }
+        .form-label { display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; }
+        .form-input {
+            width: 100%; padding: 12px 16px;
+            background-color: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
         .form-input:focus { border-color: var(--accent); outline: none; }
-        .btn-publish { padding: 14px 24px; background: var(--accent-gradient); color: var(--text-dark); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition-fast); }
-        .btn-publish:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
-        .content-list { margin-top: 40px; }
-        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); margin-bottom: 12px; }
-        .content-info h4 { margin: 0 0 4px 0; font-family: var(--font-heading); font-size: 1.1rem; }
-        .content-info p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
-        .btn-delete { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
-        .btn-delete:hover { background-color: rgba(239, 68, 68, 0.2); }
-        .msg { padding: 12px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        
+        .btn-primary {
+            padding: 12px 24px;
+            background: var(--accent-gradient);
+            color: var(--text-dark);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-fast);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(240,185,11,0.25); }
+        
+        .btn-icon-danger {
+            background: rgba(239,68,68,0.1);
+            color: #EF4444;
+            border: none;
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-icon-danger:hover { background: #EF4444; color: #FFF; }
+        
+        /* Utils */
+        .msg { padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 24px; display: none; font-size: 0.9rem; font-weight: 500; }
         .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         .msg.err { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
     </style>
 </head>
 <body>
-    <div class="admin-container" id="adminPanel" style="display: none;">
-        <div class="admin-header">
-            <h1 class="admin-title">Panel de Administrador</h1>
-            <a href="dashboard.html" style="color: var(--text-muted); text-decoration: none;">Volver al Dashboard</a>
-        </div>
-        
-        <div id="statusMsg" class="msg"></div>
-
-        <h3>Publicar Nuevo Contenido</h3>
-        <form id="contentForm">
-            <div class="form-group">
-                <label class="form-label">Título del Video</label>
-                <input type="text" id="vTitle" class="form-input" placeholder="Ej: Análisis del mercado de esta semana" required>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Descripción</label>
-                <textarea id="vDesc" class="form-input" rows="3" placeholder="Breve resumen del contenido..." required></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label">URL del Video (YouTube o Instagram)</label>
-                <input type="url" id="vUrl" class="form-input" placeholder="Ej: https://www.youtube.com/watch?v=..." required>
-            </div>
-            <button type="submit" class="btn-publish" id="btnSubmit">Publicar Contenido</button>
-        </form>
-
-        <div class="content-list">
-            <h3>Contenido Publicado</h3>
-            <div id="videosList">Cargando contenido...</div>
-        </div>
+    <!-- Overlay de Carga y Autenticación -->
+    <div id="authOverlay">
+        <h2 style="font-family: var(--font-heading); color: var(--accent);">Verificando Credenciales...</h2>
+        <p style="color: var(--text-muted);">Solo personal autorizado</p>
     </div>
 
-    <!-- Supabase Initialization -->
+    <!-- Sidebar Lateral -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <i class="ph-fill ph-chart-line-up"></i>
+            Gabo<span>Admin</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-item active" onclick="switchTab('dashboard')">
+                <i class="ph ph-squares-four"></i> Dashboard
+            </li>
+            <li class="menu-item" onclick="switchTab('users')">
+                <i class="ph ph-users"></i> Clientes
+            </li>
+            <li class="menu-item" onclick="switchTab('content')">
+                <i class="ph ph-video"></i> Contenido
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="dashboard.html" class="menu-item" style="padding:0; border:none; margin-bottom: 12px;">
+                <i class="ph ph-arrow-left"></i> Volver a mi cuenta
+            </a>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                Sesión: <span id="adminEmailDisplay" style="color:var(--text-primary);">...</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="admin-main" id="mainContent">
+        
+        <header class="header">
+            <h1 class="header-title" id="pageTitle">Dashboard General</h1>
+        </header>
+
+        <!-- PESTAÑA 1: DASHBOARD / RESUMEN -->
+        <section id="tab-dashboard" class="section-card active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="ph-fill ph-users"></i></div>
+                    <div class="stat-info">
+                        <h4>Usuarios Totales</h4>
+                        <div class="stat-value" id="statUsers">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="ph-fill ph-robot"></i></div>
+                    <div class="stat-info">
+                        <h4>Bots Activos</h4>
+                        <div class="stat-value" id="statBots">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="ph-fill ph-play-circle"></i></div>
+                    <div class="stat-info">
+                        <h4>Videos Publicados</h4>
+                        <div class="stat-value" id="statVideos">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px; margin-bottom: 20px;">Actividad Reciente (Últimos Registros)</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Fecha de Registro</th>
+                    </tr>
+                </thead>
+                <tbody id="recentUsersTable">
+                    <tr><td colspan="3" style="text-align:center;">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- PESTAÑA 2: USUARIOS -->
+        <section id="tab-users" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Directorio de Clientes</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Email</th>
+                        <th>Estado GaboBot</th>
+                        <th>Fecha de Registro</th>
+                    </tr>
+                </thead>
+                <tbody id="allUsersTable">
+                    <tr><td colspan="4" style="text-align:center;">Cargando perfiles...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- PESTAÑA 3: CONTENIDO EDUCATIVO -->
+        <section id="tab-content" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Gestión de Contenido</h2>
+                <button class="btn-primary" onclick="document.getElementById('uploadFormWrapper').style.display='block'">
+                    <i class="ph ph-plus-circle"></i> Subir Video
+                </button>
+            </div>
+            
+            <div id="uploadFormWrapper" style="display:none; background: rgba(0,0,0,0.2); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 32px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                    <h3 style="margin:0;">Nuevo Video Educativo</h3>
+                    <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('uploadFormWrapper').style.display='none'"><i class="ph ph-x" style="font-size:1.5rem;"></i></button>
+                </div>
+                
+                <div id="statusMsg" class="msg"></div>
+                
+                <form id="contentForm">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Título del Video</label>
+                            <input type="text" id="vTitle" class="form-input" placeholder="Ej: Análisis del mercado" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL del Video (YouTube / Instagram)</label>
+                            <input type="url" id="vUrl" class="form-input" placeholder="https://..." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="vDesc" class="form-input" rows="2" placeholder="Breve resumen..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btnSubmit">
+                        <i class="ph ph-upload-simple"></i> Publicar Ahora
+                    </button>
+                </form>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Video</th>
+                        <th>URL</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="videosTable">
+                    <tr><td colspan="4" style="text-align:center;">Cargando contenido...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
     <script>
         const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
         const SUPABASE_KEY = "sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa";
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        let currentUser = null;
-        const ADMIN_EMAILS = ["aibersonmontilla22@gmail.com"];
+        const ADMIN_EMAIL = "aibersonmontilla22@gmail.com";
 
         async function initAdmin() {
             const { data: { session } } = await sb.auth.getSession();
@@ -77,93 +409,168 @@
                 window.location.href = "login.html";
                 return;
             }
-            currentUser = session.user;
             
-            // Verificar si es administrador
-            if (!ADMIN_EMAILS.includes(currentUser.email)) {
-                alert("No tienes permisos de administrador.");
+            if (session.user.email !== ADMIN_EMAIL) {
+                alert("Acceso Denegado. Esta área es exclusiva para la cuenta administradora.");
                 window.location.href = "dashboard.html";
                 return;
             }
             
-            document.getElementById("adminPanel").style.display = "block";
-            loadContent();
+            // Acceso Concedido
+            document.getElementById("adminEmailDisplay").textContent = session.user.email;
+            document.getElementById("authOverlay").style.display = "none";
+            document.getElementById("mainContent").style.display = "block";
+            
+            // Cargar datos
+            loadDashboardData();
         }
 
-        async function loadContent() {
-            const list = document.getElementById("videosList");
-            const { data, error } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
+        // Navegación del Menú
+        function switchTab(tabId) {
+            // Actualizar menú
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
             
-            if (error) {
-                list.innerHTML = `<div style="color:red">Error cargando videos: ${error.message}</div>`;
+            // Actualizar vista
+            document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // Títulos
+            const titles = {
+                'dashboard': 'Dashboard General',
+                'users': 'Directorio de Clientes',
+                'content': 'Gestión de Contenido'
+            };
+            document.getElementById('pageTitle').textContent = titles[tabId];
+        }
+
+        // Carga de Datos Principales
+        async function loadDashboardData() {
+            // 1. Cargar Perfiles (Usuarios)
+            const { data: users, error: errU } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
+            // 2. Cargar Videos
+            const { data: videos, error: errV } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
+            
+            if(!errU && users) {
+                renderUsers(users);
+                document.getElementById("statUsers").textContent = users.length;
+                document.getElementById("statBots").textContent = users.filter(u => u.bot_active).length;
+            }
+            
+            if(!errV && videos) {
+                renderVideos(videos);
+                document.getElementById("statVideos").textContent = videos.length;
+            }
+        }
+
+        function renderUsers(users) {
+            const tbodyAll = document.getElementById("allUsersTable");
+            const tbodyRecent = document.getElementById("recentUsersTable");
+            tbodyAll.innerHTML = "";
+            tbodyRecent.innerHTML = "";
+            
+            if(users.length === 0) {
+                tbodyAll.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
+                tbodyRecent.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
                 return;
             }
             
-            if (data.length === 0) {
-                list.innerHTML = "<p style='color:var(--text-muted)'>No hay contenido publicado aún.</p>";
-                return;
-            }
-            
-            list.innerHTML = "";
-            data.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'content-item';
-                div.innerHTML = `
-                    <div class="content-info">
-                        <h4>${item.title}</h4>
-                        <p>${item.description}</p>
-                        <a href="${item.url}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none; margin-top:8px; display:inline-block;">Ver enlace</a>
-                    </div>
-                    <button class="btn-delete" onclick="deleteContent('${item.id}')">Eliminar</button>
+            users.forEach((u, index) => {
+                const dateStr = new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+                const botBadge = u.bot_active ? '<span class="badge active">ACTIVO</span>' : '<span class="badge inactive">APAGADO</span>';
+                const name = u.full_name || "Sin nombre";
+                
+                // Tabla Principal
+                const trAll = document.createElement('tr');
+                trAll.innerHTML = `
+                    <td><strong>${name}</strong></td>
+                    <td style="color:var(--text-muted);">${u.email}</td>
+                    <td>${botBadge}</td>
+                    <td>${dateStr}</td>
                 `;
-                list.appendChild(div);
+                tbodyAll.appendChild(trAll);
+                
+                // Tabla Recientes (solo los primeros 5)
+                if(index < 5) {
+                    const trRecent = document.createElement('tr');
+                    trRecent.innerHTML = `
+                        <td><strong>${name}</strong></td>
+                        <td style="color:var(--text-muted);">${u.email}</td>
+                        <td>${dateStr}</td>
+                    `;
+                    tbodyRecent.appendChild(trRecent);
+                }
             });
         }
 
+        function renderVideos(videos) {
+            const tbody = document.getElementById("videosTable");
+            tbody.innerHTML = "";
+            
+            if(videos.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No hay videos publicados.</td></tr>";
+                return;
+            }
+            
+            videos.forEach(v => {
+                const dateStr = new Date(v.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <strong style="display:block; margin-bottom:4px;">${v.title}</strong>
+                        <span style="color:var(--text-muted); font-size:0.85rem;">${v.description}</span>
+                    </td>
+                    <td><a href="${v.url}" target="_blank" style="color:var(--accent);">Enlace <i class="ph ph-arrow-square-out"></i></a></td>
+                    <td>${dateStr}</td>
+                    <td>
+                        <button class="btn-icon-danger" onclick="deleteVideo('${v.id}')" title="Eliminar">
+                            <i class="ph ph-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Formularios y Acciones
         document.getElementById("contentForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const btn = document.getElementById("btnSubmit");
             const msg = document.getElementById("statusMsg");
             
             btn.disabled = true;
-            btn.textContent = "Publicando...";
-            msg.style.display = "none";
+            btn.innerHTML = `<i class="ph ph-spinner-gap"></i> Publicando...`;
             
             const title = document.getElementById("vTitle").value;
             const desc = document.getElementById("vDesc").value;
             const url = document.getElementById("vUrl").value;
             
-            const { data, error } = await sb.from('educational_content').insert([
-                { title, description: desc, url }
-            ]);
+            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url }]);
             
             if (error) {
                 msg.textContent = "Error: " + error.message;
                 msg.className = "msg err";
             } else {
-                msg.textContent = "¡Contenido publicado con éxito!";
+                msg.textContent = "¡Video publicado con éxito!";
                 msg.className = "msg ok";
                 document.getElementById("contentForm").reset();
-                loadContent(); // Recargar lista
+                loadDashboardData(); // Recargar tablas
             }
             
             msg.style.display = "block";
             btn.disabled = false;
-            btn.textContent = "Publicar Contenido";
-            setTimeout(() => msg.style.display = "none", 5000);
+            btn.innerHTML = `<i class="ph ph-upload-simple"></i> Publicar Ahora`;
+            setTimeout(() => { msg.style.display = "none"; }, 4000);
         });
 
-        async function deleteContent(id) {
-            if (!confirm("¿Estás seguro de que quieres eliminar este contenido?")) return;
-            
+        async function deleteVideo(id) {
+            if (!confirm("¿Eliminar este video permanentemente?")) return;
             const { error } = await sb.from('educational_content').delete().eq('id', id);
-            if (error) {
-                alert("Error al eliminar: " + error.message);
-            } else {
-                loadContent(); // Recargar lista
-            }
+            if (error) alert("Error al eliminar: " + error.message);
+            else loadDashboardData();
         }
 
+        // Arrancar
         initAdmin();
     </script>
 </body>
