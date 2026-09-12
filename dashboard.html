@@ -551,7 +551,7 @@
     }
 
     // AUTH
-    sb.auth.getSession().then(({ data: { session } }) => {
+    sb.auth.getSession().then(async ({ data: { session } }) => {
         if (!session) {
             setTimeout(() => {
                 sb.auth.getSession().then(({ data: { session: s2 } }) => {
@@ -559,6 +559,14 @@
                     else initDash(s2.user);
                 });
             }, 800);
+            return;
+        }
+        // Verificar si el usuario está baneado antes de cargar el dashboard
+        const { data: profile } = await sb.from('profiles').select('is_banned').eq('id', session.user.id).single();
+        if (profile && profile.is_banned) {
+            alert("Tu cuenta ha sido suspendida por el administrador.");
+            await sb.auth.signOut();
+            window.location.href = "login.html";
             return;
         }
         initDash(session.user);
@@ -674,16 +682,8 @@
 
         // Cargar config del bot
         const botConfig = user.user_metadata?.bot_config || {};
-        // Fetch user from DB to check if banned
-        const { data: profile } = await sb.from('profiles').select('is_banned').eq('id', user.id).single();
-        if (profile && profile.is_banned) {
-            alert("Tu cuenta ha sido suspendida por el administrador.");
-            await sb.auth.signOut();
-            window.location.href = "login.html";
-            return;
-        }
-
-        // Llenar datos básicos del DOMinamico
+        
+        // Llenar datos básicos del DOM
         loadEducationalContent();
         
         if (document.getElementById("botOnboarding")) {
