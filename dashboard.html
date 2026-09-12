@@ -620,7 +620,7 @@
             
             const videoId = v.url.includes("v=") ? v.url.split("v=")[1].split("&")[0] : 
                            v.url.includes("youtu.be/") ? v.url.split("youtu.be/")[1].split("?")[0] : null;
-            const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://via.placeholder.com/320x180/121824/F0B90B?text=Gabo+Video';
+            const thumbUrl = v.image_data ? v.image_data : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://via.placeholder.com/320x180/121824/F0B90B?text=Gabo+Video');
             
             html += `
                 <div class="video-card" data-vcat="${catKey}">

@@ -360,7 +360,7 @@
                 <div id="statusMsg" class="msg"></div>
                 
                 <form id="contentForm">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div class="form-group">
                             <label class="form-label">Título del Video</label>
                             <input type="text" id="vTitle" class="form-input" placeholder="Ej: Análisis del mercado" required>
@@ -375,8 +375,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">URL del Video</label>
+                            <label class="form-label">URL del Video (YouTube o Instagram)</label>
                             <input type="url" id="vUrl" class="form-input" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Portada (Imagen opcional)</label>
+                            <input type="file" id="vImage" class="form-input" accept="image/*" style="padding-top:10px;">
                         </div>
                     </div>
                     <div class="form-group">
@@ -593,8 +597,39 @@
             const desc = document.getElementById("vDesc").value;
             const url = document.getElementById("vUrl").value;
             const category = document.getElementById("vCategory").value;
+            const fileInput = document.getElementById("vImage");
             
-            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url, category }]);
+            let imageData = null;
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                try {
+                    imageData = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const img = new Image();
+                            img.onload = () => {
+                                const canvas = document.createElement("canvas");
+                                const maxW = 640; const maxH = 360;
+                                let w = img.width; let h = img.height;
+                                if (w > maxW) { h *= maxW / w; w = maxW; }
+                                if (h > maxH) { w *= maxH / h; h = maxH; }
+                                canvas.width = w; canvas.height = h;
+                                const ctx = canvas.getContext("2d");
+                                ctx.drawImage(img, 0, 0, w, h);
+                                resolve(canvas.toDataURL("image/jpeg", 0.6));
+                            };
+                            img.onerror = reject;
+                            img.src = e.target.result;
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                } catch (err) {
+                    console.error("Error comprimiendo imagen", err);
+                }
+            }
+            
+            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url, category, image_data: imageData }]);
             
             if (error) {
                 msg.textContent = "Error: " + error.message;
