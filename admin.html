@@ -597,7 +597,11 @@
                 console.error("No se encontró el video con id:", id);
                 return;
             }
-            editingVideoId = v.id; // Guarda el ID con su tipo original (entero)
+            editingVideoId = v.id;
+            
+            // 1. Abrir el panel del formulario (por si está cerrado)
+            document.getElementById('uploadFormWrapper').style.display = 'block';
+            
             document.getElementById("vTitle").value = v.title;
             document.getElementById("vCategory").value = v.category || 'otros';
             document.getElementById("vUrl").value = v.url;
