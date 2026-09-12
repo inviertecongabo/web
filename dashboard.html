@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel | Invierte con Gabo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --accent: #F0B90B; --accent-glow: rgba(240,185,11,0.15);
+            --accent-gradient: linear-gradient(135deg, #F0B90B 0%, #FFD60A 100%);
+            --bg: #0D0D0F; --sidebar-bg: #111113;
+            --card-bg: rgba(255,255,255,0.04); --card-border: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.08); --text-primary: #F1F5F9;
+            --text-muted: #94A3B8; --text-dark: #0D0D0F;
+            --font-heading: "Outfit", sans-serif; --font-body: "Inter", sans-serif;
+            --radius-sm: 10px; --radius-md: 14px; --radius-lg: 20px;
+            --sidebar-w: 260px; --topbar-h: 68px; --transition: all 0.25s ease;
+        }
+        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; display: flex; }
+
+        /* SIDEBAR */
+        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 100; }
+        .sidebar-logo { padding: 24px 24px 20px; border-bottom: 1px solid var(--border); }
+        .sidebar-logo a { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); text-decoration: none; }
+        .sidebar-logo a span { color: var(--accent); }
+        .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+        .sub-nav { display: none; flex-direction: column; gap: 4px; padding-left: 44px; padding-right: 12px; padding-bottom: 8px; }
+        .sub-nav.open { display: flex; }
+        .sub-nav-item { background: none; border: none; text-align: left; color: var(--text-muted); font-family: var(--font-heading); font-weight: 600; font-size: 0.85rem; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); width: 100%; }
+        .sub-nav-item:hover, .sub-nav-item.active { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: var(--radius-sm); color: var(--text-muted); text-decoration: none; font-family: var(--font-heading); font-weight: 600; font-size: 0.95rem; transition: var(--transition); cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+        .nav-item.active { background: var(--accent-glow); color: var(--accent); }
+        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .nav-item-content { display: flex; align-items: center; gap: 12px; }
+        .chevron { width: 16px !important; height: 16px !important; transition: transform 0.3s ease; }
+        .sidebar-user { padding: 16px; border-top: 1px solid var(--border); }
+        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 1rem; color: var(--text-dark); flex-shrink: 0; overflow: hidden; position: relative; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-name { font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-role { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
+        .btn-logout { width: 100%; padding: 9px 14px; background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-logout:hover { border-color: #EF4444; color: #EF4444; }
+
+        /* MAIN */
+        .dash-main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+        .topbar { height: var(--topbar-h); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: rgba(13,13,15,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
+        .topbar-title { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .btc-ticker { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 50px; font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; }
+        .btc-logo { color: var(--accent); }
+        .btc-price { color: var(--accent); }
+        .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 0.9rem; color: var(--text-dark); overflow: hidden; position: relative; }
+        .topbar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .dash-content { padding: 32px; flex: 1; }
+        .dash-section { display: none; }
+        .dash-section.active { display: block; }
+        .dash-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 24px; }
+
+        /* INICIO */
+        .welcome-block { margin-bottom: 32px; }
+        .welcome-block h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; opacity: 0; transition: opacity 0.4s ease; }
+        .welcome-block h2 span { color: var(--accent); }
+        .welcome-block p { color: var(--text-muted); margin-top: 4px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 20px 24px; }
+        .stat-icon { font-size: 1.5rem; margin-bottom: 10px; }
+        .stat-value { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+        .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .quick-action-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 24px; cursor: pointer; transition: var(--transition); text-decoration: none; color: var(--text-primary); display: block; }
+        .quick-action-card:hover { border-color: var(--accent); background: var(--accent-glow); transform: translateY(-2px); }
+        .qa-icon { font-size: 2rem; margin-bottom: 12px; }
+        .qa-title { font-family: var(--font-heading); font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+        .qa-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* CONTENIDO */
+        .section-heading { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+        .section-sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px; line-height: 1.6; }
+        .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+        .filter-chip { padding: 8px 18px; border-radius: 50px; border: 1px solid var(--border); background: none; color: var(--text-muted); font-family: var(--font-heading); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition); }
+        .filter-chip.active, .filter-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); overflow: hidden; transition: var(--transition); }
+        .video-card:hover { border-color: rgba(240,185,11,0.3); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .video-thumb { height: 190px; background: #0D0D0F; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid var(--border); }
+        .thumb-cat { position: absolute; top: 12px; left: 12px; padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; font-family: var(--font-heading); background: var(--accent); color: var(--text-dark); }
+        .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: var(--transition); }
+        .video-card:hover .play-icon { background: var(--accent); color: var(--text-dark); transform: translate(-50%, -50%) scale(1.1); }
+        .video-body { padding: 18px; }
+        .video-cat-tag { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 0.05em; }
+        .video-title { font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; margin: 6px 0 8px; line-height: 1.4; }
+        .video-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 14px; }
+        .video-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: var(--accent); text-decoration: none; font-family: var(--font-heading); }
+        .video-link:hover { text-decoration: underline; }
+
+        /* HERRAMIENTAS */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 26px; transition: var(--transition); }
+        .tool-card.featured { border-color: rgba(240,185,11,0.3); }
+        .tool-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        .tool-icon { font-size: 2.2rem; margin-bottom: 14px; }
+        .tool-name { font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; }
+        .tool-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 50px; font-family: var(--font-heading); font-weight: 700; font-size: 0.8rem; }
+        .status-inactive { background: rgba(156,163,175,0.1); border: 1px solid rgba(156,163,175,0.2); color: #94A3B8; }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #94A3B8; display: inline-block; }
+        .tag-soon { display: inline-block; padding: 4px 10px; background: var(--accent-glow); border: 1px solid rgba(240,185,11,0.2); color: var(--accent); font-size: 0.75rem; font-weight: 700; font-family: var(--font-heading); border-radius: 50px; margin-bottom: 12px; }
+        .tool-stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+        .tool-stat-row:last-child { border-bottom: none; }
+        .tool-stat-label { color: var(--text-muted); }
+        .tool-stat-value { font-family: var(--font-heading); font-weight: 700; color: var(--accent); }
+
+        /* PERFIL */
+        .perfil-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+        .avatar-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 36px 24px; }
+        .big-avatar { width: 110px; height: 110px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 2.8rem; color: var(--text-dark); margin-bottom: 16px; overflow: hidden; position: relative; cursor: pointer; border: 3px solid var(--accent); }
+        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: var(--transition); font-size: 1.5rem; border-radius: 50%; }
+        .big-avatar:hover .avatar-overlay { opacity: 1; }
+        .avatar-name { font-family: var(--font-heading); font-weight: 800; font-size: 1.3rem; margin-bottom: 4px; }
+        .avatar-email { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 20px; }
+        .btn-upload { padding: 10px 22px; background: var(--accent-gradient); color: var(--text-dark); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: var(--transition); margin-bottom: 10px; }
+        .btn-upload:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(240,185,11,0.3); }
+        .avatar-hint { font-size: 0.8rem; color: var(--text-muted); }
+        .profile-forms { display: flex; flex-direction: column; gap: 24px; }
+        .profile-section-title { font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+        .profile-form { display: flex; flex-direction: column; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 0.875rem; font-weight: 500; color: var(--text-muted); }
+        .form-input { padding: 13px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: var(--transition); }
+        .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .form-input:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-save { padding: 13px 28px; background: var(--accent-gradient); color: var(--text-dark); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); align-self: flex-start; }
+        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(240,185,11,0.3); }
+        .msg-ok { color: #10B981; font-size: 0.875rem; font-weight: 600; display: none; }
+        .msg-err { color: #EF4444; font-size: 0.875rem; font-weight: 600; display: none; }
+
+        /* MOBILE */
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--sidebar-bg); border-top: 1px solid var(--border); padding: 8px 0; z-index: 200; }
+        .mobile-nav-items { display: flex; justify-content: space-around; }
+        .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 12px; color: var(--text-muted); font-size: 0.65rem; font-family: var(--font-heading); font-weight: 600; cursor: pointer; transition: var(--transition); border: none; background: none; }
+        .mobile-nav-item.active { color: var(--accent); }
+        .mobile-nav-item svg { width: 22px; height: 22px; }
+
+        /* TOGGLE SWITCH */
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; border: 1px solid var(--border); }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: var(--text-muted); transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(22px); background-color: var(--text-dark); }
+        select.form-input { appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394A3B8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto; padding-right: 32px; }
+        select.form-input option { background: var(--sidebar-bg); color: var(--text-primary); }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .dash-main { margin-left: 0; padding-bottom: 70px; }
+            .mobile-nav { display: block; }
+            .topbar { padding: 0 20px; }
+            .dash-content { padding: 20px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .quick-actions { grid-template-columns: 1fr; }
+            .perfil-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .video-grid { grid-template-columns: 1fr; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-logo"><a href="index.html">invierte<span>con</span>gabo</a></div>
+    <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="inicio">
+            <div class="nav-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Inicio
+            </div>
+        </button>
+        <button class="nav-item" data-section="contenido">
+            <div class="nav-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Contenido Educativo
+            </div>
+        </button>
+        <div class="nav-group">
+            <button class="nav-item" onclick="toggleTools()">
+                <div class="nav-item-content">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    Herramientas
+                </div>
+                <svg id="toolsChevron" class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="sub-nav" id="toolsSubNav">
+                <button class="sub-nav-item" data-section="herramientas">Todas las herramientas</button>
+                <button class="sub-nav-item" data-section="tool-bot">GaboBot (Compras BTC)</button>
+                <button class="sub-nav-item" data-section="tool-alertas">Alertas de Precio</button>
+            </div>
+        </div>
+        <button class="nav-item" data-section="perfil">
+            <div class="nav-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Mi Perfil
+            </div>
+        </button>
+    </nav>
+    <div class="sidebar-user">
+        <div class="user-info" onclick="switchSection(event, 'perfil')" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+            <div class="user-avatar" id="sidebarAvatar">
+                <span id="sidebarAvatarInitial">G</span>
+                <img id="sidebarAvatarImg" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div>
+                <div class="user-name" id="sidebarName">...</div>
+                <div class="user-role">Miembro</div>
+            </div>
+        </div>
+        <button class="btn-logout" id="btnLogout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Cerrar Sesion
+        </button>
+    </div>
+</aside>
+
+<main class="dash-main">
+    <header class="topbar">
+        <h1 class="topbar-title" id="topbarTitle">Inicio</h1>
+        <div class="topbar-right">
+            <div class="btc-ticker">
+                <span class="btc-logo">&#8383;</span>
+                <span class="btc-price" id="btcPrice">---</span>
+            </div>
+            <div class="topbar-avatar" id="topbarAvatar" onclick="switchSection(event, 'perfil')" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+                <span id="topbarAvatarInitial">G</span>
+                <img id="topbarAvatarImg" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover;">
+            </div>
+        </div>
+    </header>
+
+    <div class="dash-content">
+
+        <!-- INICIO -->
+        <section class="dash-section active" id="sec-inicio">
+            <div class="welcome-block">
+                <h2 id="greetingTitle">Hola, <span id="userName">...</span> &#128075;</h2>
+                <p>Bienvenido a tu panel de control personal.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">&#8383;</div>
+                    <div class="stat-value" style="color:var(--accent)">-- BTC</div>
+                    <div class="stat-label">Total acumulado</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">&#128197;</div>
+                    <div class="stat-value">--</div>
+                    <div class="stat-label">Ultima compra</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">&#129302;</div>
+                    <div class="stat-value" style="color:#94A3B8">INACTIVO</div>
+                    <div class="stat-label">Estado GaboBot</div>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <a class="quick-action-card" href="#" onclick="switchSection(event,'contenido')">
+                    <div class="qa-icon">&#127916;</div>
+                    <div class="qa-title">Contenido Educativo</div>
+                    <div class="qa-desc">Videos y guias sobre Binance, Trading y Acciones Venezolanas organizados por categoria.</div>
+                </a>
+                <a class="quick-action-card" href="#" onclick="switchSection(event,'herramientas')">
+                    <div class="qa-icon">&#128296;</div>
+                    <div class="qa-title">Mis Herramientas</div>
+                    <div class="qa-desc">GaboBot y las proximas herramientas de automatizacion y analisis de portafolio.</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- CONTENIDO -->
+        <section class="dash-section" id="sec-contenido">
+            <h2 class="section-heading">Contenido Educativo</h2>
+            <p class="section-sub">Videos y guias organizados por categoria. Filtra lo que necesitas aprender hoy.</p>
+            <div class="filter-row">
+                <button class="filter-chip active" data-vcat="all">Recientes</button>
+                <button class="filter-chip" data-vcat="binance">Binance</button>
+                <button class="filter-chip" data-vcat="trading">Trading</button>
+                <button class="filter-chip" data-vcat="bolsa">Acciones Venezolanas</button>
+            </div>
+            <div class="video-grid" id="videoGrid">
+                <div class="video-card" data-vcat="binance">
+                    <div class="video-thumb">
+                        <div style="position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; background: url('assets/binance_aid_cover.jpg') center/cover; filter: blur(12px); opacity: 0.4;"></div>
+                        <div style="position: absolute; inset: 0; background: url('assets/binance_aid_cover.jpg') center/contain no-repeat;"></div>
+                        <div class="thumb-cat" style="z-index: 2;">DESTACADO</div>
+                        <div class="play-icon" style="z-index: 2;">&#9654;</div>
+                    </div>
+                    <div class="video-body">
+                        <div class="video-cat-tag">Binance</div>
+                        <h3 class="video-title">Como reclamar los $20 USD de ayuda humanitaria de Binance</h3>
+                        <p class="video-desc">Guia rapida para activar el cupon de $20 USD que Binance esta distribuyendo en Venezuela. Aprende los requisitos y como reclamarlo paso a paso.</p>
+                        <a class="video-link" href="https://www.instagram.com/reel/DaEcLYuRSr5/" target="_blank">Ver en Instagram &#8594;</a>
+                    </div>
+                </div>
+                <div class="video-card" data-vcat="all trading bolsa">
+                    <div class="video-thumb">
+                        <div style="position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; background: url('assets/proximamente.jpg') center/cover; filter: blur(12px); opacity: 0.4;"></div>
+                        <div style="position: absolute; inset: 0; background: url('assets/proximamente.jpg') center/contain no-repeat;"></div>
+                        <div class="play-icon" style="opacity:0.3; z-index: 2;">&#9654;</div>
+                    </div>
+                    <div class="video-body">
+                        <div class="video-cat-tag" style="color:var(--text-muted)">Proximamente</div>
+                        <h3 class="video-title">Nuevos videos en camino</h3>
+                        <p class="video-desc">Estoy preparando nuevos analisis de Acciones Venezolanas, tutoriales de Trading y alertas de Airdrops. Sigueme en Instagram para no perderte nada.</p>
+                        <a class="video-link" href="https://www.instagram.com/inviertecongabove" target="_blank">Seguir @inviertecongabove &#8594;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HERRAMIENTAS -->
+        <section class="dash-section" id="sec-herramientas">
+            <h2 class="section-heading">Mis Herramientas</h2>
+            <p class="section-sub">Automatizaciones y utilidades para hacer crecer tu portafolio en piloto automatico.</p>
+            <div class="tools-grid">
+                <div class="tool-card featured">
+                    <div class="tool-icon">&#129302;</div>
+                    <div class="tool-name">GaboBot - Ahorro en BTC</div>
+                    <div class="tool-desc">Compras automaticas de BTC con ordenes Limit al mejor precio. Menor comision que comprar a precio de mercado.</div>
+                    <span class="status-badge status-inactive"><span class="status-dot"></span> INACTIVO</span>
+                    <div style="margin-top:16px">
+                        <div class="tool-stat-row"><span class="tool-stat-label">BTC acumulado</span><span class="tool-stat-value">-- BTC</span></div>
+                        <div class="tool-stat-row"><span class="tool-stat-label">Ultima compra</span><span class="tool-stat-value">--</span></div>
+                        <div class="tool-stat-row"><span class="tool-stat-label">Comisiones ahorradas</span><span class="tool-stat-value">-- USDT</span></div>
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <span class="tag-soon">Proximamente</span>
+                    <div class="tool-icon">&#128276;</div>
+                    <div class="tool-name">Alertas de Precio</div>
+                    <div class="tool-desc">Recibe notificaciones por Telegram cuando BTC o cualquier activo alcance el precio que tu configures.</div>
+                </div>
+                <div class="tool-card">
+                    <span class="tag-soon">Proximamente</span>
+                    <div class="tool-icon">&#129518;</div>
+                    <div class="tool-name">Calculadora de Retornos</div>
+                    <div class="tool-desc">Simula cuanto habrias ganado si hubieras comprado BTC en cualquier fecha pasada. DCA vs lump sum.</div>
+                </div>
+                <div class="tool-card">
+                    <span class="tag-soon">Proximamente</span>
+                    <div class="tool-icon">&#128200;</div>
+                    <div class="tool-name">Analisis de Portafolio</div>
+                    <div class="tool-desc">Conecta tu Binance de solo lectura y visualiza la distribucion y rendimiento de tus activos.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GABOBOT -->
+        <section class="dash-section" id="sec-tool-bot">
+            <h2 class="section-heading">Compras BTC (GaboBot)</h2>
+            <p class="section-sub">Configura tu plan de ahorro automatizado en Binance.</p>
+            
+            <!-- ONBOARDING GABOBOT -->
+            <div id="botOnboarding" class="dash-card" style="max-width: 600px; margin-bottom: 24px; display: none;">
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="font-size:3rem; margin-bottom:8px;">⚠️</div>
+                    <h3 style="font-family:var(--font-heading); font-size: 1.3rem;">Términos de Seguridad</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Instrucciones obligatorias para conectar Binance</p>
+                </div>
+                <div style="background: rgba(240,185,11,0.08); border: 1px solid rgba(240,185,11,0.3); padding: 20px; border-radius: var(--radius-sm); margin-bottom: 24px;">
+                    <p style="font-size: 0.95rem; margin-bottom: 14px; line-height: 1.5; color:#FFFFFF; font-weight: 600;">Para que GaboBot pueda ejecutar tus compras, debes crear una conexión API. Sigue estos pasos:</p>
+                    <ol style="font-size: 0.9rem; color: #E2E8F0; margin-left: 20px; line-height: 1.7; margin-bottom: 0;">
+                        <li style="margin-bottom: 6px;">Ve a tu app de Binance y entra a <strong style="color:#FFF;">Gestión de API</strong>.</li>
+                        <li style="margin-bottom: 6px;">Crea una nueva clave y guárdala en un lugar seguro.</li>
+                        <li style="margin-bottom: 6px;">Edita las restricciones de la API y marca <strong style="color:var(--accent);">únicamente</strong> "Habilitar Spot & Margin Trading".</li>
+                        <li><strong style="color:#FF6B6B;">Bajo ninguna circunstancia habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</li>
+                    </ol>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap: 14px; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1);">
+                    <input type="checkbox" id="botTermsCheck" style="margin-top: 2px; transform: scale(1.3); accent-color: var(--accent); cursor:pointer;">
+                    <label for="botTermsCheck" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.5;">
+                        Declaro que entiendo los riesgos, asumo la responsabilidad de mi cuenta y <strong style="color:var(--accent);">confirmo que he creado una API Key SIN permisos de retiro</strong>.
+                    </label>
+                </div>
+                <button class="btn-save" id="btnAcceptBotTerms" disabled style="width:100%; opacity:0.5;">Aceptar y Continuar</button>
+            </div>
+
+            <!-- PANEL DE CONFIGURACION -->
+            <div class="dash-card" id="botConfigPanel" style="max-width: 600px; margin-bottom: 24px; display: none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+                    <div>
+                        <h3 style="font-family:var(--font-heading); font-size: 1.1rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                            Estado del Bot
+                            <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.7rem;"><span class="status-dot"></span> INACTIVO</span>
+                        </h3>
+                        <p style="color:var(--text-muted); font-size:0.85rem;">Enciende o apaga las compras automatizadas.</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="botToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="profile-section-title">Configuración de Binance</div>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px; line-height: 1.5;">Ingresa tus llaves API de solo lectura y trading (Spot). <strong style="color:var(--accent);">No habilites permisos de retiro.</strong></p>
+                
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label class="form-label">API Key</label>
+                        <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key de Binance">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Secret Key</label>
+                        <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key">
+                    </div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Monto (USDT)</label>
+                            <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="10">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Frecuencia</label>
+                            <select class="form-input" id="botFrequency">
+                                <option value="weekly">Semanal</option>
+                                <option value="biweekly">Quincenal</option>
+                                <option value="monthly">Mensual</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-save" id="btnSaveBot" style="margin-top: 8px;">Guardar Configuración</button>
+                    <div id="botMsg" class="msg-ok">Configuración guardada correctamente.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALERTAS -->
+        <section class="dash-section" id="sec-tool-alertas">
+            <h2 class="section-heading">Alertas de Precio</h2>
+            <p class="section-sub">Notificaciones automáticas por Telegram.</p>
+            <div class="dash-card" style="text-align:center; padding: 60px 20px;">
+                <div style="font-size:3rem; margin-bottom:16px;">🔔</div>
+                <h3 style="font-family:var(--font-heading); margin-bottom:8px;">Herramienta en desarrollo</h3>
+                <p style="color:var(--text-muted); max-width:400px; margin:0 auto;">Podrás crear alertas personalizadas para que te avisemos cuando BTC toque el precio que esperas.</p>
+            </div>
+        </section>
+
+        <!-- PERFIL -->
+        <section class="dash-section" id="sec-perfil">
+            <h2 class="section-heading">Mi Perfil</h2>
+            <p class="section-sub">Actualiza tu informacion personal y foto de perfil.</p>
+            <div class="perfil-grid">
+                <div class="dash-card avatar-card">
+                    <div class="big-avatar" id="bigAvatar" onclick="document.getElementById('avatarInput').click()">
+                        <span id="bigAvatarInitial">G</span>
+                        <img id="bigAvatarImg" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover;">
+                        <div class="avatar-overlay">&#128247;</div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none">
+                    <div class="avatar-name" id="profileDisplayName">...</div>
+                    <div class="avatar-email" id="profileDisplayEmail">...</div>
+                    <button class="btn-upload" onclick="document.getElementById('avatarInput').click()">Cambiar foto</button>
+                    <div class="avatar-hint">JPG, PNG o GIF. Max 2MB.</div>
+                    <div id="avatarMsg" class="msg-ok" style="margin-top:8px"></div>
+                </div>
+                <div class="profile-forms">
+                    <div class="dash-card">
+                        <div class="profile-section-title">Informacion Personal</div>
+                        <div class="profile-form">
+                            <div class="form-group">
+                                <label class="form-label">Nombre completo</label>
+                                <input type="text" class="form-input" id="editName" placeholder="Tu nombre">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Correo electronico</label>
+                                <input type="email" class="form-input" id="editEmail" disabled>
+                            </div>
+                            <button class="btn-save" id="btnSaveName">Guardar cambios</button>
+                            <div id="nameMsg" class="msg-ok">Nombre actualizado.</div>
+                        </div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="profile-section-title">Cambiar Contrasena</div>
+                        <div class="profile-form">
+                            <div class="form-group">
+                                <label class="form-label">Nueva contrasena</label>
+                                <input type="password" class="form-input" id="newPassword" placeholder="Minimo 6 caracteres">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmar contrasena</label>
+                                <input type="password" class="form-input" id="confirmPassword" placeholder="Repite la contrasena">
+                            </div>
+                            <button class="btn-save" id="btnSavePassword">Actualizar contrasena</button>
+                            <div id="pwMsg" class="msg-ok">Contrasena actualizada.</div>
+                            <div id="pwErrMsg" class="msg-err">Las contrasenas no coinciden.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<nav class="mobile-nav">
+    <div class="mobile-nav-items">
+        <button class="mobile-nav-item active" data-section="inicio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Inicio
+        </button>
+        <button class="mobile-nav-item" data-section="contenido">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            Contenido
+        </button>
+        <button class="mobile-nav-item" data-section="herramientas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Herramientas
+        </button>
+        <button class="mobile-nav-item" data-section="perfil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Perfil
+        </button>
+    </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+    const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sectionTitles = { inicio:"Inicio", contenido:"Contenido Educativo", herramientas:"Mis Herramientas", "tool-bot":"Compras BTC (GaboBot)", "tool-alertas":"Alertas de Precio", perfil:"Mi Perfil" };
+
+    function toggleTools() {
+        const nav = document.getElementById("toolsSubNav");
+        const chevron = document.getElementById("toolsChevron");
+        nav.classList.toggle("open");
+        chevron.style.transform = nav.classList.contains("open") ? "rotate(180deg)" : "rotate(0deg)";
+    }
+
+    // AUTH
+    sb.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+            setTimeout(() => {
+                sb.auth.getSession().then(({ data: { session: s2 } }) => {
+                    if (!s2) window.location.href = "login.html";
+                    else initDash(s2.user);
+                });
+            }, 800);
+            return;
+        }
+        initDash(session.user);
+    });
+    sb.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_OUT") window.location.href = "login.html"; });
+
+    function updateAvatars(url) {
+        ["big","sidebar","topbar"].forEach(prefix => {
+            const img = document.getElementById(prefix + "AvatarImg");
+            const ini = document.getElementById(prefix + "AvatarInitial");
+            if(img && ini) {
+                img.src = url;
+                img.style.display = "block";
+                ini.style.display = "none";
+            }
+        });
+    }
+
+    function updateBotStatusBadge(isActive) {
+        const badge = document.getElementById("botStatusBadge");
+        if (!badge) return;
+        if (isActive) {
+            badge.className = "status-badge";
+            badge.style.background = "rgba(16, 185, 129, 0.1)";
+            badge.style.border = "1px solid rgba(16, 185, 129, 0.2)";
+            badge.style.color = "#10B981";
+            badge.innerHTML = '<span class="status-dot" style="background:#10B981;"></span> ACTIVO';
+        } else {
+            badge.className = "status-badge status-inactive";
+            badge.style = "";
+            badge.innerHTML = '<span class="status-dot"></span> INACTIVO';
+        }
+    }
+
+    function initDash(user) {
+        const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email.split("@")[0];
+        const initial = name.charAt(0).toUpperCase();
+        document.getElementById("userName").textContent = name;
+        document.getElementById("greetingTitle").style.opacity = "1";
+        document.getElementById("sidebarName").textContent = name;
+        document.getElementById("profileDisplayName").textContent = name;
+        document.getElementById("profileDisplayEmail").textContent = user.email;
+        document.getElementById("editName").value = name;
+        document.getElementById("editEmail").value = user.email;
+        
+        ["sidebarAvatarInitial","topbarAvatarInitial","bigAvatarInitial"].forEach(id => {
+            if(document.getElementById(id)) document.getElementById(id).textContent = initial;
+        });
+
+        const avatarUrl = user.user_metadata?.avatar_url;
+        if (avatarUrl) {
+            updateAvatars(avatarUrl);
+        }
+
+        // Cargar config del bot
+        const botConfig = user.user_metadata?.bot_config || {};
+        
+        if (document.getElementById("botOnboarding")) {
+            // MODO DESARROLLO: Siempre mostrar los términos al recargar para poder revisarlos/mejorarlos
+            document.getElementById("botOnboarding").style.display = "block";
+            document.getElementById("botConfigPanel").style.display = "none";
+            
+            // Cuando esté listo para producción, descomentar esto y borrar las 2 líneas de arriba:
+            /*
+            if (botConfig.termsAccepted) {
+                document.getElementById("botOnboarding").style.display = "none";
+                document.getElementById("botConfigPanel").style.display = "block";
+            } else {
+                document.getElementById("botOnboarding").style.display = "block";
+                document.getElementById("botConfigPanel").style.display = "none";
+            }
+            */
+        }
+
+        const isActive = botConfig.active === true;
+        if (document.getElementById("botToggle")) {
+            document.getElementById("botToggle").checked = isActive;
+            updateBotStatusBadge(isActive);
+            if (botConfig.ak) document.getElementById("botApiKey").value = botConfig.ak;
+            if (botConfig.sk) document.getElementById("botSecretKey").value = botConfig.sk;
+            if (botConfig.amount) document.getElementById("botAmount").value = botConfig.amount;
+            if (botConfig.frequency) document.getElementById("botFrequency").value = botConfig.frequency;
+        }
+    }
+
+    // NAVIGATION
+    function switchSection(e, id) {
+        if (e) e.preventDefault();
+        if (!id) return; // Prevent errors if clicked on parent dropdown
+        document.querySelectorAll(".dash-section").forEach(s => s.classList.remove("active"));
+        document.querySelectorAll(".nav-item,.mobile-nav-item,.sub-nav-item").forEach(n => n.classList.remove("active"));
+        document.getElementById("sec-" + id).classList.add("active");
+        document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
+        document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+    }
+    document.querySelectorAll(".nav-item,.mobile-nav-item,.sub-nav-item").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const section = btn.getAttribute("data-section");
+            if(section) switchSection(e, section);
+        });
+    });
+
+    // BTC PRICE
+    async function fetchBTC() {
+        try {
+            const r = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT");
+            const d = await r.json();
+            const p = parseFloat(d.price).toLocaleString("en-US", {minimumFractionDigits:0,maximumFractionDigits:0});
+            document.getElementById("btcPrice").textContent = "$" + p;
+        } catch(e) {}
+    }
+    fetchBTC();
+    setInterval(fetchBTC, 30000);
+
+    // VIDEO FILTERS
+    document.querySelectorAll(".filter-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+            document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+            chip.classList.add("active");
+            const cat = chip.getAttribute("data-vcat");
+            document.querySelectorAll(".video-card").forEach(card => {
+                const cc = card.getAttribute("data-vcat") || "";
+                card.style.display = (cat === "all" || cc.includes(cat)) ? "block" : "none";
+            });
+        });
+    });
+
+    // BOT CONFIG
+    document.getElementById("botTermsCheck")?.addEventListener("change", (e) => {
+        const btn = document.getElementById("btnAcceptBotTerms");
+        if(btn) {
+            btn.disabled = !e.target.checked;
+            btn.style.opacity = e.target.checked ? "1" : "0.5";
+        }
+    });
+
+    document.getElementById("btnAcceptBotTerms")?.addEventListener("click", async () => {
+        const btn = document.getElementById("btnAcceptBotTerms");
+        btn.textContent = "Cargando...";
+        btn.disabled = true;
+        const { data: { user } } = await sb.auth.getUser();
+        const botConfig = user?.user_metadata?.bot_config || {};
+        botConfig.termsAccepted = true;
+        await sb.auth.updateUser({ data: { bot_config: botConfig } });
+        
+        document.getElementById("botOnboarding").style.display = "none";
+        document.getElementById("botConfigPanel").style.display = "block";
+        btn.textContent = "Aceptar y Continuar";
+    });
+
+    document.getElementById("botToggle")?.addEventListener("change", async (e) => {
+        const isActive = e.target.checked;
+        updateBotStatusBadge(isActive);
+        const { data: { user } } = await sb.auth.getUser();
+        const botConfig = user?.user_metadata?.bot_config || {};
+        botConfig.active = isActive;
+        await sb.auth.updateUser({ data: { bot_config: botConfig } });
+    });
+
+    document.getElementById("btnSaveBot")?.addEventListener("click", async () => {
+        const btn = document.getElementById("btnSaveBot");
+        btn.textContent = "Guardando...";
+        btn.disabled = true;
+        
+        const apiKey = document.getElementById("botApiKey").value.trim();
+        const secretKey = document.getElementById("botSecretKey").value.trim();
+        const amount = document.getElementById("botAmount").value;
+        const frequency = document.getElementById("botFrequency").value;
+        
+        const { data: { user } } = await sb.auth.getUser();
+        const botConfig = user?.user_metadata?.bot_config || {};
+        
+        botConfig.ak = apiKey;
+        botConfig.sk = secretKey;
+        botConfig.amount = amount;
+        botConfig.frequency = frequency;
+        
+        const { data, error } = await sb.auth.updateUser({ data: { bot_config: botConfig } });
+        const msg = document.getElementById("botMsg");
+        
+        if (error) {
+            msg.textContent = "Error: " + error.message;
+            msg.className = "msg-err";
+            console.error("Supabase error:", error);
+        } else {
+            msg.textContent = "Configuración guardada correctamente.";
+            msg.className = "msg-ok";
+        }
+        
+        btn.textContent = "Guardar Configuración";
+        btn.disabled = false;
+        msg.style.display = "block";
+        setTimeout(() => msg.style.display = "none", 3000);
+    });
+
+    // SAVE NAME
+    document.getElementById("btnSaveName").addEventListener("click", async () => {
+        const n = document.getElementById("editName").value.trim();
+        if (!n) return;
+        const { error } = await sb.auth.updateUser({ data: { full_name: n } });
+        const msg = document.getElementById("nameMsg");
+        if (!error) {
+            ["sidebarName","userName","profileDisplayName"].forEach(id => document.getElementById(id).textContent = n);
+            const initial = n.charAt(0).toUpperCase();
+            ["sidebarAvatarInitial","topbarAvatarInitial","bigAvatarInitial"].forEach(id => {
+                if(document.getElementById(id)) document.getElementById(id).textContent = initial;
+            });
+            msg.style.display = "block";
+            setTimeout(() => msg.style.display = "none", 3000);
+        }
+    });
+
+    // SAVE PASSWORD
+    document.getElementById("btnSavePassword").addEventListener("click", async () => {
+        const pw = document.getElementById("newPassword").value;
+        const pw2 = document.getElementById("confirmPassword").value;
+        const ok = document.getElementById("pwMsg");
+        const err = document.getElementById("pwErrMsg");
+        ok.style.display = "none"; err.style.display = "none";
+        if (pw !== pw2 || pw.length < 6) { err.textContent = pw.length < 6 ? "Minimo 6 caracteres." : "Las contrasenas no coinciden."; err.style.display = "block"; return; }
+        const { error } = await sb.auth.updateUser({ password: pw });
+        if (!error) { ok.style.display = "block"; document.getElementById("newPassword").value = ""; document.getElementById("confirmPassword").value = ""; setTimeout(() => ok.style.display = "none", 3000); }
+    });
+
+    // AVATAR UPLOAD
+    document.getElementById("avatarInput").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const msg = document.getElementById("avatarMsg");
+        if (file.size > 2 * 1024 * 1024) { msg.textContent = "Max 2MB."; msg.className = "msg-err"; msg.style.display = "block"; return; }
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+            const b64 = ev.target.result;
+            updateAvatars(b64);
+            const { error } = await sb.auth.updateUser({ data: { avatar_url: b64 } });
+            msg.textContent = error ? "Error al guardar." : "Foto actualizada.";
+            msg.className = error ? "msg-err" : "msg-ok";
+            msg.style.display = "block";
+            setTimeout(() => msg.style.display = "none", 3000);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // LOGOUT
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+        await sb.auth.signOut();
+        window.location.href = "index.html";
+    });
+</script>
+</body>
+</html>

@@ -179,4 +179,25 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => {
         revealObserver.observe(el);
     });
+
+    // --- Interacción Acordeón FAQ ---
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        if (question) {
+            question.addEventListener('click', () => {
+                const isOpen = item.classList.contains('active');
+                
+                // Cerrar todos los demás ítems para mantener la vista limpia
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+                
+                // Si el item no estaba abierto, abrirlo
+                if (!isOpen) {
+                    item.classList.add('active');
+                }
+            });
+        }
+    });
 });
