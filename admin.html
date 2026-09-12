@@ -549,7 +549,11 @@
             else loadDashboardData();
         }
 
+        let allVideos = [];
+        let editingVideoId = null;
+
         function renderVideos(videos) {
+            allVideos = videos;
             const tbody = document.getElementById("videosTable");
             tbody.innerHTML = "";
             
@@ -574,7 +578,10 @@
                     </td>
                     <td><a href="${v.url}" target="_blank" style="color:var(--accent);">Enlace <i class="ph ph-arrow-square-out"></i></a></td>
                     <td>${dateStr}</td>
-                    <td>
+                    <td style="display:flex; gap:8px;">
+                        <button class="btn-icon" style="color:var(--text-muted); background:rgba(255,255,255,0.05);" onclick="editVideo('${v.id}')" title="Editar">
+                            <i class="ph ph-pencil"></i>
+                        </button>
                         <button class="btn-icon-danger" onclick="deleteVideo('${v.id}')" title="Eliminar">
                             <i class="ph ph-trash"></i>
                         </button>
@@ -584,6 +591,44 @@
             });
         }
 
+        function editVideo(id) {
+            const v = allVideos.find(x => x.id === id);
+            if(!v) return;
+            editingVideoId = id;
+            document.getElementById("vTitle").value = v.title;
+            document.getElementById("vCategory").value = v.category || 'otros';
+            document.getElementById("vUrl").value = v.url;
+            document.getElementById("vDesc").value = v.description || '';
+            // El input file de imagen no se puede pre-llenar, pero si suben algo nuevo se reemplazará
+            
+            const btn = document.getElementById("btnSubmit");
+            btn.innerHTML = `<i class="ph ph-check"></i> Guardar Cambios`;
+            
+            let cancelBtn = document.getElementById("btnCancelEdit");
+            if(!cancelBtn) {
+                cancelBtn = document.createElement("button");
+                cancelBtn.id = "btnCancelEdit";
+                cancelBtn.type = "button";
+                cancelBtn.className = "btn-secondary";
+                cancelBtn.style = "margin-left:10px; padding: 12px 24px; border-radius: var(--radius-sm); border:1px solid var(--border); background:transparent; color:#fff; cursor:pointer;";
+                cancelBtn.innerHTML = "Cancelar";
+                cancelBtn.onclick = cancelEdit;
+                btn.parentNode.appendChild(cancelBtn);
+            }
+            cancelBtn.style.display = "inline-block";
+            
+            // Hacer scroll hasta el formulario
+            document.getElementById("contentForm").scrollIntoView({behavior: 'smooth'});
+        }
+
+        function cancelEdit() {
+            editingVideoId = null;
+            document.getElementById("contentForm").reset();
+            const btn = document.getElementById("btnSubmit");
+            btn.innerHTML = `Publicar Ahora`;
+            document.getElementById("btnCancelEdit").style.display = "none";
+        }
+
         // Formularios y Acciones
         document.getElementById("contentForm").addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -591,7 +636,7 @@
             const msg = document.getElementById("statusMsg");
             
             btn.disabled = true;
-            btn.innerHTML = `<i class="ph ph-spinner-gap"></i> Publicando...`;
+            btn.innerHTML = `<i class="ph ph-spinner-gap"></i> Procesando...`;
             
             const title = document.getElementById("vTitle").value;
             const desc = document.getElementById("vDesc").value;
@@ -629,22 +674,30 @@
                 }
             }
             
-            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url, category, image_data: imageData }]);
+            let error = null;
+            if (editingVideoId) {
+                let payload = { title, description: desc, url, category };
+                if (imageData) payload.image_data = imageData;
+                const res = await sb.from('educational_content').update(payload).eq('id', editingVideoId);
+                error = res.error;
+            } else {
+                const res = await sb.from('educational_content').insert([{ title, description: desc, url, category, image_data: imageData }]);
+                error = res.error;
+            }
             
             if (error) {
                 msg.textContent = "Error: " + error.message;
-                msg.className = "msg err";
+                msg.className = "msg-err";
             } else {
-                msg.textContent = "¡Video publicado con éxito!";
-                msg.className = "msg ok";
-                document.getElementById("contentForm").reset();
-                loadDashboardData(); // Recargar tablas
+                msg.textContent = editingVideoId ? "¡Video actualizado con éxito!" : "¡Video publicado con éxito!";
+                msg.className = "msg-ok";
+                cancelEdit(); // Reset form
+                loadDashboardData();
             }
-            
             msg.style.display = "block";
             btn.disabled = false;
             btn.innerHTML = `<i class="ph ph-upload-simple"></i> Publicar Ahora`;
-            setTimeout(() => { msg.style.display = "none"; }, 4000);
+            setTimeout(() => { msg.style.display = "none"; }, 3000);
         });
 
         async function deleteVideo(id) {
