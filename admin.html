@@ -9,7 +9,7 @@
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background-color: var(--bg-dark); color: var(--text-primary); font-family: var(--font-body); margin: 0; padding: 20px; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); margin: 0; padding: 20px; }
         .admin-container { max-width: 800px; margin: 0 auto; background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 40px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
         .admin-title { font-family: var(--font-heading); font-size: 1.8rem; color: var(--accent); margin: 0; }
@@ -65,7 +65,7 @@
     <!-- Supabase Initialization -->
     <script>
         const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5cmNzZnNxemt5d3JncmprdmJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ1MjA3ODgsImV4cCI6MjAzMDE5Njc4OH0.i6L_-O6eB1i1z_4Jc2j6bJ4a8Bf8tV_T4O_cR-YvI5E";
+        const SUPABASE_KEY = "sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa";
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         let currentUser = null;
