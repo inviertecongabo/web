@@ -610,6 +610,9 @@
         // Cargar config del bot
         const botConfig = user.user_metadata?.bot_config || {};
         
+        // Cargar contenido dinamico
+        loadEducationalContent();
+        
         if (document.getElementById("botOnboarding")) {
             // MODO DESARROLLO: Siempre mostrar los términos al recargar para poder revisarlos/mejorarlos
             document.getElementById("botOnboarding").style.display = "block";

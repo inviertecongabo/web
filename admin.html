@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador | Invierte con Gabo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: var(--bg-dark); color: var(--text-primary); font-family: var(--font-body); margin: 0; padding: 20px; }
+        .admin-container { max-width: 800px; margin: 0 auto; background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 40px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+        .admin-title { font-family: var(--font-heading); font-size: 1.8rem; color: var(--accent); margin: 0; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 0.95rem; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 12px; background-color: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-family: var(--font-body); }
+        .form-input:focus { border-color: var(--accent); outline: none; }
+        .btn-publish { padding: 14px 24px; background: var(--accent-gradient); color: var(--text-dark); border: none; border-radius: var(--radius-sm); font-family: var(--font-heading); font-weight: 700; font-size: 1rem; cursor: pointer; transition: var(--transition-fast); }
+        .btn-publish:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
+        .content-list { margin-top: 40px; }
+        .content-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); margin-bottom: 12px; }
+        .content-info h4 { margin: 0 0 4px 0; font-family: var(--font-heading); font-size: 1.1rem; }
+        .content-info p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+        .btn-delete { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .btn-delete:hover { background-color: rgba(239, 68, 68, 0.2); }
+        .msg { padding: 12px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .msg.err { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+    </style>
+</head>
+<body>
+    <div class="admin-container" id="adminPanel" style="display: none;">
+        <div class="admin-header">
+            <h1 class="admin-title">Panel de Administrador</h1>
+            <a href="dashboard.html" style="color: var(--text-muted); text-decoration: none;">Volver al Dashboard</a>
+        </div>
+        
+        <div id="statusMsg" class="msg"></div>
+
+        <h3>Publicar Nuevo Contenido</h3>
+        <form id="contentForm">
+            <div class="form-group">
+                <label class="form-label">Título del Video</label>
+                <input type="text" id="vTitle" class="form-input" placeholder="Ej: Análisis del mercado de esta semana" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripción</label>
+                <textarea id="vDesc" class="form-input" rows="3" placeholder="Breve resumen del contenido..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">URL del Video (YouTube o Instagram)</label>
+                <input type="url" id="vUrl" class="form-input" placeholder="Ej: https://www.youtube.com/watch?v=..." required>
+            </div>
+            <button type="submit" class="btn-publish" id="btnSubmit">Publicar Contenido</button>
+        </form>
+
+        <div class="content-list">
+            <h3>Contenido Publicado</h3>
+            <div id="videosList">Cargando contenido...</div>
+        </div>
+    </div>
+
+    <!-- Supabase Initialization -->
+    <script>
+        const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5cmNzZnNxemt5d3JncmprdmJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ1MjA3ODgsImV4cCI6MjAzMDE5Njc4OH0.i6L_-O6eB1i1z_4Jc2j6bJ4a8Bf8tV_T4O_cR-YvI5E";
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let currentUser = null;
+        const ADMIN_EMAILS = ["gabo088@gmail.com", "gabo099@gmail.com"];
+
+        async function initAdmin() {
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session) {
+                window.location.href = "login.html";
+                return;
+            }
+            currentUser = session.user;
+            
+            // Verificar si es administrador
+            if (!ADMIN_EMAILS.includes(currentUser.email)) {
+                alert("No tienes permisos de administrador.");
+                window.location.href = "dashboard.html";
+                return;
+            }
+            
+            document.getElementById("adminPanel").style.display = "block";
+            loadContent();
+        }
+
+        async function loadContent() {
+            const list = document.getElementById("videosList");
+            const { data, error } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                list.innerHTML = `<div style="color:red">Error cargando videos: ${error.message}</div>`;
+                return;
+            }
+            
+            if (data.length === 0) {
+                list.innerHTML = "<p style='color:var(--text-muted)'>No hay contenido publicado aún.</p>";
+                return;
+            }
+            
+            list.innerHTML = "";
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'content-item';
+                div.innerHTML = `
+                    <div class="content-info">
+                        <h4>${item.title}</h4>
+                        <p>${item.description}</p>
+                        <a href="${item.url}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none; margin-top:8px; display:inline-block;">Ver enlace</a>
+                    </div>
+                    <button class="btn-delete" onclick="deleteContent('${item.id}')">Eliminar</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        document.getElementById("contentForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("btnSubmit");
+            const msg = document.getElementById("statusMsg");
+            
+            btn.disabled = true;
+            btn.textContent = "Publicando...";
+            msg.style.display = "none";
+            
+            const title = document.getElementById("vTitle").value;
+            const desc = document.getElementById("vDesc").value;
+            const url = document.getElementById("vUrl").value;
+            
+            const { data, error } = await sb.from('educational_content').insert([
+                { title, description: desc, url }
+            ]);
+            
+            if (error) {
+                msg.textContent = "Error: " + error.message;
+                msg.className = "msg err";
+            } else {
+                msg.textContent = "¡Contenido publicado con éxito!";
+                msg.className = "msg ok";
+                document.getElementById("contentForm").reset();
+                loadContent(); // Recargar lista
+            }
+            
+            msg.style.display = "block";
+            btn.disabled = false;
+            btn.textContent = "Publicar Contenido";
+            setTimeout(() => msg.style.display = "none", 5000);
+        });
+
+        async function deleteContent(id) {
+            if (!confirm("¿Estás seguro de que quieres eliminar este contenido?")) return;
+            
+            const { error } = await sb.from('educational_content').delete().eq('id', id);
+            if (error) {
+                alert("Error al eliminar: " + error.message);
+            } else {
+                loadContent(); // Recargar lista
+            }
+        }
+
+        initAdmin();
+    </script>
+</body>
+</html>
