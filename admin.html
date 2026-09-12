@@ -360,13 +360,22 @@
                 <div id="statusMsg" class="msg"></div>
                 
                 <form id="contentForm">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
                         <div class="form-group">
                             <label class="form-label">Título del Video</label>
                             <input type="text" id="vTitle" class="form-input" placeholder="Ej: Análisis del mercado" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">URL del Video (YouTube / Instagram)</label>
+                            <label class="form-label">Categoría</label>
+                            <select id="vCategory" class="form-input" required>
+                                <option value="binance">Tutoriales Binance</option>
+                                <option value="sesiones">Sesiones Venezolanas</option>
+                                <option value="psicologia">Psicología de Trading</option>
+                                <option value="general">General / Otros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL del Video</label>
                             <input type="url" id="vUrl" class="form-input" placeholder="https://..." required>
                         </div>
                     </div>
@@ -547,10 +556,16 @@
             
             videos.forEach(v => {
                 const dateStr = new Date(v.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+                const catMap = { 'binance': 'Binance', 'sesiones': 'Sesiones Vzla', 'psicologia': 'Psicología', 'general': 'General' };
+                const catName = catMap[v.category] || 'General';
+                
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>
-                        <strong style="display:block; margin-bottom:4px;">${v.title}</strong>
+                        <strong style="display:block; margin-bottom:4px;">
+                            <span class="badge" style="background:var(--accent-glow); color:var(--accent); font-size:0.7rem; margin-right:6px;">${catName.toUpperCase()}</span>
+                            ${v.title}
+                        </strong>
                         <span style="color:var(--text-muted); font-size:0.85rem;">${v.description}</span>
                     </td>
                     <td><a href="${v.url}" target="_blank" style="color:var(--accent);">Enlace <i class="ph ph-arrow-square-out"></i></a></td>
@@ -577,8 +592,9 @@
             const title = document.getElementById("vTitle").value;
             const desc = document.getElementById("vDesc").value;
             const url = document.getElementById("vUrl").value;
+            const category = document.getElementById("vCategory").value;
             
-            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url }]);
+            const { error } = await sb.from('educational_content').insert([{ title, description: desc, url, category }]);
             
             if (error) {
                 msg.textContent = "Error: " + error.message;
