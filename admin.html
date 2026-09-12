@@ -333,6 +333,7 @@
                         <th>Email</th>
                         <th>Estado GaboBot</th>
                         <th>Fecha de Registro</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="allUsersTable">
@@ -473,7 +474,7 @@
             tbodyRecent.innerHTML = "";
             
             if(users.length === 0) {
-                tbodyAll.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
+                tbodyAll.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
                 tbodyRecent.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
                 return;
             }
@@ -481,15 +482,29 @@
             users.forEach((u, index) => {
                 const dateStr = new Date(u.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
                 const botBadge = u.bot_active ? '<span class="badge active">ACTIVO</span>' : '<span class="badge inactive">APAGADO</span>';
-                const name = u.full_name || "Sin nombre";
                 
+                let nameHtml = `<strong>${u.full_name || "Sin nombre"}</strong>`;
+                if (u.role === 'admin') nameHtml += ` <span class="badge" style="background:var(--accent); color:#000; margin-left:8px; font-size:0.7rem;">ADMIN</span>`;
+                if (u.is_banned) nameHtml += ` <span class="badge inactive" style="margin-left:8px; font-size:0.7rem;">BLOQUEADO</span>`;
+
+                // Botones de acción
+                const isMe = u.email === ADMIN_EMAIL;
+                const banBtn = isMe ? '' : `<button class="btn-icon-danger" style="${u.is_banned ? 'background:#10B981; color:#fff;' : ''}" onclick="toggleBan('${u.id}', ${u.is_banned})" title="${u.is_banned ? 'Desbloquear' : 'Bloquear'}">
+                    <i class="ph ${u.is_banned ? 'ph-check-circle' : 'ph-prohibit'}"></i>
+                </button>`;
+                
+                const roleBtn = isMe ? '' : `<button class="btn-icon-danger" style="background:rgba(240, 185, 11, 0.15); color:var(--accent);" onclick="toggleRole('${u.id}', '${u.role}')" title="${u.role==='admin' ? 'Quitar Admin' : 'Hacer Admin'}">
+                    <i class="ph ${u.role==='admin' ? 'ph-user-minus' : 'ph-crown'}"></i>
+                </button>`;
+
                 // Tabla Principal
                 const trAll = document.createElement('tr');
                 trAll.innerHTML = `
-                    <td><strong>${name}</strong></td>
+                    <td>${nameHtml}</td>
                     <td style="color:var(--text-muted);">${u.email}</td>
                     <td>${botBadge}</td>
                     <td>${dateStr}</td>
+                    <td style="display:flex; gap:8px;">${banBtn} ${roleBtn}</td>
                 `;
                 tbodyAll.appendChild(trAll);
                 
@@ -497,13 +512,28 @@
                 if(index < 5) {
                     const trRecent = document.createElement('tr');
                     trRecent.innerHTML = `
-                        <td><strong>${name}</strong></td>
+                        <td><strong>${u.full_name || "Sin nombre"}</strong></td>
                         <td style="color:var(--text-muted);">${u.email}</td>
                         <td>${dateStr}</td>
                     `;
                     tbodyRecent.appendChild(trRecent);
                 }
             });
+        }
+
+        async function toggleBan(id, isBanned) {
+            if (!confirm(`¿Seguro que deseas ${isBanned ? 'DESBLOQUEAR' : 'BLOQUEAR'} a este usuario?`)) return;
+            const { error } = await sb.from('profiles').update({ is_banned: !isBanned }).eq('id', id);
+            if(error) alert("Error de base de datos: " + error.message);
+            else loadDashboardData();
+        }
+
+        async function toggleRole(id, currentRole) {
+            const newRole = currentRole === 'admin' ? 'cliente' : 'admin';
+            if (!confirm(`¿Seguro que deseas convertir a este usuario en ${newRole.toUpperCase()}?`)) return;
+            const { error } = await sb.from('profiles').update({ role: newRole }).eq('id', id);
+            if(error) alert("Error de base de datos: " + error.message);
+            else loadDashboardData();
         }
 
         function renderVideos(videos) {
