@@ -621,8 +621,16 @@
 
         // Cargar config del bot
         const botConfig = user.user_metadata?.bot_config || {};
-        
-        // Cargar contenido dinamico
+        // Fetch user from DB to check if banned
+        const { data: profile } = await sb.from('profiles').select('is_banned').eq('id', user.id).single();
+        if (profile && profile.is_banned) {
+            alert("Tu cuenta ha sido suspendida por el administrador.");
+            await sb.auth.signOut();
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Llenar datos básicos del DOMinamico
         loadEducationalContent();
         
         if (document.getElementById("botOnboarding")) {
