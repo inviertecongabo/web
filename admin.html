@@ -368,10 +368,10 @@
                         <div class="form-group">
                             <label class="form-label">Categoría</label>
                             <select id="vCategory" class="form-input" required>
-                                <option value="binance">Tutoriales Binance</option>
-                                <option value="sesiones">Sesiones Venezolanas</option>
-                                <option value="psicologia">Psicología de Trading</option>
-                                <option value="general">General / Otros</option>
+                                <option value="binance">Binance</option>
+                                <option value="trading">Trading</option>
+                                <option value="acciones">Acciones Venezolanas</option>
+                                <option value="otros">Otros</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -556,8 +556,8 @@
             
             videos.forEach(v => {
                 const dateStr = new Date(v.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-                const catMap = { 'binance': 'Binance', 'sesiones': 'Sesiones Vzla', 'psicologia': 'Psicología', 'general': 'General' };
-                const catName = catMap[v.category] || 'General';
+                const catMap = { 'binance': 'Binance', 'trading': 'Trading', 'acciones': 'Acciones Vzla', 'otros': 'Otros' };
+                const catName = catMap[v.category] || 'Otros';
                 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
