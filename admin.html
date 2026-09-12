@@ -448,10 +448,13 @@
         async function loadDashboardData() {
             // 1. Cargar Perfiles (Usuarios)
             const { data: users, error: errU } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
+            if (errU) console.error("Error cargando usuarios:", errU);
+            
             // 2. Cargar Videos
             const { data: videos, error: errV } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
+            if (errV) console.error("Error cargando videos:", errV);
             
-            if(!errU && users) {
+            if(users) {
                 renderUsers(users);
                 document.getElementById("statUsers").textContent = users.length;
                 document.getElementById("statBots").textContent = users.filter(u => u.bot_active).length;
