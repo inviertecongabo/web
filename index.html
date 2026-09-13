@@ -230,58 +230,50 @@
 
                     <!-- SLIDE 1: El Gancho Emocional (Interactivo) -->
                     <div class="tools-slide tools-hook" id="toolsHookSlide">
-                        <div class="quiz-layout">
+                        <div class="quiz-narrow-container">
+                            <h2 class="hook-title">Si te pregunto cuál es tu<br>mejor activo... ¿qué me dirías?</h2>
+                            
+                            <div class="hook-options vertical-options" id="quizOptions">
+                                <button class="hook-option quiz-btn" data-answer="A">
+                                    <span class="hook-option-letter">A</span>
+                                    <span class="hook-option-icon">💰</span>
+                                    <span>Tu dinero ahorrado</span>
+                                </button>
+                                <button class="hook-option quiz-btn" data-answer="B">
+                                    <span class="hook-option-letter">B</span>
+                                    <span class="hook-option-icon">📈</span>
+                                    <span>Tus inversiones</span>
+                                </button>
+                                <button class="hook-option quiz-btn" data-answer="C" id="correctOption">
+                                    <span class="hook-option-letter">C</span>
+                                    <span class="hook-option-icon">⏱️</span>
+                                    <span>Tu <strong>tiempo</strong></span>
+                                </button>
+                                <button class="hook-option quiz-btn" data-answer="D">
+                                    <span class="hook-option-letter">D</span>
+                                    <span class="hook-option-icon">🧠</span>
+                                    <span>Tu conocimiento</span>
+                                </button>
+                            </div>
 
-                            <!-- Columna Izquierda: Pregunta + Opciones -->
-                            <div class="quiz-left">
-                                <h2 class="hook-title">Si te pregunto cuál es tu mejor activo... ¿qué me dirías?</h2>
-                                <div class="hook-options" id="quizOptions">
-                                    <button class="hook-option quiz-btn" data-answer="A">
-                                        <span class="hook-option-letter">A</span>
-                                        <span class="hook-option-icon">💰</span>
-                                        <span>Tu dinero ahorrado</span>
-                                    </button>
-                                    <button class="hook-option quiz-btn" data-answer="B">
-                                        <span class="hook-option-letter">B</span>
-                                        <span class="hook-option-icon">📈</span>
-                                        <span>Tus inversiones</span>
-                                    </button>
-                                    <button class="hook-option quiz-btn" data-answer="C" id="correctOption">
-                                        <span class="hook-option-letter">C</span>
-                                        <span class="hook-option-icon">⏱️</span>
-                                        <span>Tu <strong>tiempo</strong></span>
-                                        <span class="hook-option-badge">Tu activo real</span>
-                                    </button>
-                                    <button class="hook-option quiz-btn" data-answer="D">
-                                        <span class="hook-option-letter">D</span>
-                                        <span class="hook-option-icon">🧠</span>
-                                        <span>Tu conocimiento</span>
+                            <div class="quiz-placeholder-vertical" id="quizPlaceholder">
+                                Selecciona tu respuesta <span class="quiz-placeholder-icon">👆</span>
+                            </div>
+
+                            <div id="quizReveal" class="quiz-reveal-hidden">
+                                <div class="quiz-answer-card">
+                                    <span class="quiz-answer-label">✓ La respuesta correcta es la C</span>
+                                    <p class="hook-answer">
+                                        El dinero se recupera. Las inversiones suben y bajan.<br>
+                                        <strong>El tiempo que pierdes nunca vuelve.</strong><br>
+                                        Por eso creamos herramientas que invierten por ti.
+                                    </p>
+                                    <button class="hook-cta" id="hookCta">
+                                        Por eso te recomiendo estas herramientas
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Columna Derecha: Respuesta (oculta hasta que seleccionen) -->
-                            <div class="quiz-right">
-                                <div id="quizReveal" class="quiz-reveal-hidden">
-                                    <div class="quiz-answer-card">
-                                        <span class="quiz-answer-label">✓ La respuesta correcta es C</span>
-                                        <p class="hook-answer">
-                                            El dinero se recupera. Las inversiones suben y bajan.<br>
-                                            <strong>El tiempo que pierdes nunca vuelve.</strong><br>
-                                            Por eso creamos herramientas que invierten por ti.
-                                        </p>
-                                        <button class="hook-cta" id="hookCta">
-                                            Por eso te recomiendo estas herramientas
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="quiz-placeholder" id="quizPlaceholder">
-                                    <span class="quiz-placeholder-icon">👆</span>
-                                    <p>Selecciona tu respuesta</p>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
 

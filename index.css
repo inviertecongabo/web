@@ -1592,89 +1592,94 @@ body {
     border-top: 1px solid rgba(240,185,11,0.08);
 }
 
-/* ====== Two-Column Quiz Layout ====== */
-.tools-hook {
-    padding: 48px 40px !important; /* Override the 72px, make it more compact */
-}
-
-.quiz-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: center;
-    max-width: 900px;
+/* ====== Compact Vertical Quiz Layout ====== */
+.tools-slider-wrapper {
+    max-width: 650px;
     margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-    .quiz-layout {
-        grid-template-columns: 1fr;
-        gap: 28px;
-    }
+.tools-hook {
+    padding: 48px 30px !important; 
 }
 
-.quiz-left .hook-title {
-    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
-    margin-bottom: 24px;
-    text-align: left;
-}
-
-.quiz-left .hook-options {
+.quiz-narrow-container {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-bottom: 0;
-    justify-content: flex-start;
+    align-items: center;
 }
 
-.quiz-left .hook-option {
+.quiz-narrow-container .hook-title {
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    margin-bottom: 30px;
+    line-height: 1.25;
+}
+
+.vertical-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     width: 100%;
-    border-radius: 12px;
-    justify-content: flex-start;
+    margin-bottom: 24px;
 }
 
-/* Right column */
-.quiz-right {
-    position: relative;
-    min-height: 240px;
+.vertical-options .hook-option {
+    width: 100%;
+    justify-content: flex-start;
+    border-radius: 12px;
+    padding: 14px 20px 14px 14px;
+}
+
+/* Placeholder below options */
+.quiz-placeholder-vertical {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.quiz-placeholder {
-    text-align: center;
-    color: rgba(255,255,255,0.15);
+    gap: 10px;
+    color: rgba(255,255,255,0.3);
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 5px;
     transition: opacity 0.3s;
 }
 
-.quiz-placeholder-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: 10px;
-    animation: float 2s ease-in-out infinite;
+.quiz-placeholder-vertical .quiz-placeholder-icon {
+    font-size: 1.3rem;
+    animation: pointUp 1.5s infinite;
 }
 
-.quiz-placeholder p {
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
+@keyframes pointUp {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
 
-.quiz-placeholder.hidden {
+.quiz-placeholder-vertical.hidden {
     display: none;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-6px); }
+/* Reveal styling inside narrow container */
+.quiz-narrow-container .quiz-reveal-hidden {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Answer card */
+.quiz-narrow-container .quiz-reveal-visible {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+    margin-top: 10px;
+}
+
 .quiz-answer-card {
-    background: rgba(240,185,11,0.06);
-    border: 1px solid rgba(240,185,11,0.2);
+    background: rgba(240,185,11,0.04);
+    border: 1px solid rgba(240,185,11,0.15);
     border-radius: 20px;
-    padding: 28px;
+    padding: 24px;
 }
 
 .quiz-answer-label {
@@ -1690,29 +1695,15 @@ body {
     margin-bottom: 16px;
 }
 
-/* Override reveal transition for side panel */
-.quiz-right .quiz-reveal-hidden {
-    position: absolute;
-    width: 100%;
-    max-height: none;
-    overflow: visible;
-}
-
-.quiz-right .quiz-reveal-visible {
-    position: relative;
-    margin-top: 0;
-    max-height: none;
-}
-
-.quiz-right .hook-answer {
-    font-size: 0.97rem;
+.quiz-answer-card .hook-answer {
+    font-size: 0.95rem;
     margin-bottom: 20px;
-    text-align: left;
+    line-height: 1.6;
 }
 
-.quiz-right .hook-cta {
-    font-size: 0.92rem;
-    padding: 13px 22px;
+.quiz-answer-card .hook-cta {
+    font-size: 0.95rem;
+    padding: 14px 24px;
     width: 100%;
     justify-content: center;
 }
