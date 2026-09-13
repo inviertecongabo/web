@@ -1165,3 +1165,27 @@ body {
 .gated-modal-title { font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-primary); margin-bottom: 12px; }
 .gated-modal-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; font-size: 0.95rem; }
 .gated-modal-btn { width: 100%; display: block; font-size: 1.1rem; padding: 14px; }
+
+/* Tools Section */
+.tools-section { padding: 100px 0; background: var(--bg-dark); position: relative; overflow: hidden; }
+.tool-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; margin-top: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+@media (min-width: 992px) { .tool-card { flex-direction: row; } }
+.tool-content { padding: 48px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.tool-title { font-family: var(--font-heading); font-size: 2rem; color: var(--text-primary); margin-bottom: 24px; }
+.tool-features { list-style: none; padding: 0; margin: 0 0 40px 0; display: flex; flex-direction: column; gap: 16px; }
+.tool-features li { display: flex; align-items: flex-start; gap: 12px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.5; }
+.tool-features svg { flex-shrink: 0; margin-top: 2px; }
+.tool-features strong { color: var(--text-primary); }
+.tool-visual { flex: 1; background: linear-gradient(135deg, #11141c 0%, #0a0c10 100%); padding: 48px; display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--card-border); }
+@media (max-width: 991px) { .tool-visual { border-left: none; border-top: 1px solid var(--card-border); padding: 32px 24px; } }
+.bot-mockup { width: 100%; max-width: 400px; background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.bot-header { background: #1a1b26; padding: 10px 16px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+.bot-title-bar { margin-left: auto; margin-right: auto; color: #888; font-size: 0.8rem; letter-spacing: 0.5px; }
+.bot-body { padding: 24px 20px; color: #a9b1d6; line-height: 1.8; }
+.code-line { margin: 0 0 8px 0; }
+.code-line.success { color: #9ece6a; }
+.code-line.highlight { color: #e0af68; font-weight: bold; }
