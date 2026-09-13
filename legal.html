@@ -61,17 +61,19 @@
             <nav class="nav-menu" id="navMenu">
                 <ul>
                     <li><a href="index.html#inicio" class="nav-link">Inicio</a></li>
-                    <li><a href="index.html#quien-soy" class="nav-link">Quien Soy</a></li>
+                    <li><a href="index.html#quien-soy" class="nav-link">Quién Soy</a></li>
                     <li><a href="index.html#contenido" class="nav-link">Contenido</a></li>
-                    <li><a href="legal.html" class="nav-link active">Legal / FAQ</a></li>
                     <li><a href="index.html#comunidad" class="nav-link">Comunidad</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <a href="https://www.instagram.com/inviertecongabove" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">
-                        Seguir en Instagram
+                    <a href="login.html" class="btn btn-sm btn-outline" id="navLoginBtn">
+                        Iniciar Sesión
                     </a>
-                    <a href="login.html" class="btn btn-sm btn-primary" id="navAuthBtn">
-                        Iniciar Sesion
+                    <a href="login.html" class="btn btn-sm btn-primary" id="navRegisterBtn">
+                        Registrarse
+                    </a>
+                    <a href="dashboard.html" class="btn btn-sm btn-primary" id="navPanelBtn" style="display: none;">
+                        Mi Panel
                     </a>
                 </div>
             </nav>
@@ -254,6 +256,26 @@
                 });
             }
         });
+    </script>
+    <!-- Supabase: detectar sesion para cambiar botones de navbar -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+        (async () => {
+            const sb = supabase.createClient(
+                'https://uyrcsfsqzkywrgrjkvbr.supabase.co',
+                'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa'
+            );
+            const { data } = await sb.auth.getSession();
+            const loginBtn = document.getElementById('navLoginBtn');
+            const registerBtn = document.getElementById('navRegisterBtn');
+            const panelBtn = document.getElementById('navPanelBtn');
+            
+            if (data.session) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (panelBtn) panelBtn.style.display = 'inline-flex';
+            }
+        })();
     </script>
 </body>
 </html>
