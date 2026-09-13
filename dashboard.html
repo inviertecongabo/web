@@ -377,25 +377,41 @@
             <!-- ONBOARDING GABOBOT -->
             <div id="botOnboarding" class="dash-card" style="max-width: 600px; margin-bottom: 24px; display: none;">
                 <div style="text-align: center; margin-bottom: 24px;">
-                    <div style="font-size:3rem; margin-bottom:8px;">⚠️</div>
-                    <h3 style="font-family:var(--font-heading); font-size: 1.3rem;">Términos de Seguridad</h3>
-                    <p style="color:var(--text-muted); font-size:0.9rem;">Instrucciones obligatorias para conectar Binance</p>
+                    <div style="font-size:3rem; margin-bottom:8px; display:flex; justify-content:center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M8 11l3 3 5-5"></path></svg>
+                    </div>
+                    <h3 style="font-family:var(--font-heading); font-size: 1.4rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos para habilitar a GaboBot sin comprometer tus fondos.</p>
                 </div>
-                <div style="background: rgba(240,185,11,0.08); border: 1px solid rgba(240,185,11,0.3); padding: 20px; border-radius: var(--radius-sm); margin-bottom: 24px;">
-                    <p style="font-size: 0.95rem; margin-bottom: 14px; line-height: 1.5; color:#FFFFFF; font-weight: 600;">Para que GaboBot pueda ejecutar tus compras, debes crear una conexión API. Sigue estos pasos:</p>
-                    <ol style="font-size: 0.9rem; color: #E2E8F0; margin-left: 20px; line-height: 1.7; margin-bottom: 0;">
-                        <li style="margin-bottom: 6px;">Ve a tu app de Binance y entra a <strong style="color:#FFF;">Gestión de API</strong>.</li>
-                        <li style="margin-bottom: 6px;">Crea una nueva clave y guárdala en un lugar seguro.</li>
-                        <li style="margin-bottom: 6px;">Edita las restricciones de la API y marca <strong style="color:var(--accent);">únicamente</strong> "Habilitar Spot & Margin Trading".</li>
-                        <li><strong style="color:#FF6B6B;">Bajo ninguna circunstancia habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</li>
-                    </ol>
+                
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 24px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+                    <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
+                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
+                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
+                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y marca <strong>Únicamente</strong> "Habilitar Spot & Margin Trading".</span></li>
+                        <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
+                    </ul>
                 </div>
-                <div style="display:flex; align-items:flex-start; gap: 14px; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1);">
-                    <input type="checkbox" id="botTermsCheck" style="margin-top: 2px; transform: scale(1.3); accent-color: var(--accent); cursor:pointer;">
-                    <label for="botTermsCheck" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.5;">
-                        Declaro que entiendo los riesgos, asumo la responsabilidad de mi cuenta y <strong style="color:var(--accent);">confirmo que he creado una API Key SIN permisos de retiro</strong>.
-                    </label>
+                
+                <div style="text-align:center; margin-bottom:30px;">
+                    <a href="herramientas-info.html" target="_blank" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: underline; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">¿Tienes dudas sobre cómo funciona o por qué es seguro? Descubre todas las ventajas aquí.</a>
                 </div>
+
+                <div style="display:flex; flex-direction:column; gap: 12px; margin-bottom: 24px; background: rgba(240,185,11,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(240,185,11,0.15);">
+                    <div style="display:flex; align-items:flex-start; gap: 12px;">
+                        <input type="checkbox" id="botTermsCheck1" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+                        <label for="botTermsCheck1" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
+                            Confirmo que he creado mi API Key en Binance <strong>únicamente</strong> con permisos de "Lectura" y "Trading Spot", y me he asegurado de NO habilitar retiros.
+                        </label>
+                    </div>
+                    <div style="display:flex; align-items:flex-start; gap: 12px; margin-top:8px;">
+                        <input type="checkbox" id="botTermsCheck2" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+                        <label for="botTermsCheck2" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
+                            He leído y acepto los <a href="legal.html?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">Términos y Condiciones de uso de GaboBot</a>.
+                        </label>
+                    </div>
+                </div>
+                
                 <button class="btn-save" id="btnAcceptBotTerms" disabled style="width:100%; opacity:0.5;">Aceptar y Continuar</button>
             </div>
 
