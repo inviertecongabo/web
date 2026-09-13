@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal y Ayuda | Invierte con Gabo</title>
+    <title>Centro de Ayuda | Invierte con Gabo</title>
+    
+    <!-- Google Fonts: Outfit & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Link al archivo CSS principal -->
+    <link rel="stylesheet" href="index.css">
+
     <style>
         .legal-page { padding-top: 120px; padding-bottom: 60px; min-height: 80vh; }
         .legal-container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
@@ -35,34 +40,31 @@
         .faq-item.active { border-color: rgba(240,185,11,0.3); background: rgba(240,185,11,0.02); }
         .faq-item.active .faq-icon { transform: rotate(180deg); color: var(--accent); }
         .faq-item.active .faq-question { color: var(--accent); }
-
-        /* Ajustes de Footer para parecerse a Fenix */
-        .footer-fenix { border-top: 1px solid var(--border); padding: 32px 0; background: var(--bg-dark); margin-top: auto; }
-        .footer-fenix-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-        .footer-fenix-copy { color: var(--text-muted); font-size: 0.85rem; }
-        .footer-fenix-links { display: flex; gap: 24px; flex-wrap: wrap; }
-        .footer-fenix-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition); }
-        .footer-fenix-links a:hover { color: var(--accent); }
-
-        @media (max-width: 768px) {
-            .footer-fenix-content { flex-direction: column; text-align: center; justify-content: center; }
-            .footer-fenix-links { justify-content: center; }
-        }
     </style>
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <!-- Fondo decorativo con gradiente dinámico -->
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
-    
+
+    <!-- Barra de navegación -->
     <header class="header">
         <div class="container header-container">
-            <a href="index.html" class="logo">invierte<span>con</span>gabo</a>
-            <nav class="nav">
+            <a href="index.html" class="logo">
+                invierte<span>con</span>gabo
+            </a>
+            
+            <button class="nav-toggle" aria-label="Abrir menú" id="navToggle">
+                <span class="hamburger"></span>
+            </button>
+
+            <nav class="nav" id="navMenu">
                 <a href="index.html#inicio" class="nav-link">Inicio</a>
                 <a href="index.html#metodo" class="nav-link">El Método</a>
                 <a href="index.html#contenido" class="nav-link">Contenido</a>
                 <a href="index.html#comunidad" class="nav-link">Comunidad</a>
             </nav>
+
             <div class="nav-actions">
                 <a href="login.html" class="btn btn-primary" id="navAuthBtn">Iniciar Sesión</a>
             </div>
@@ -169,20 +171,25 @@
         </div>
     </main>
 
-    <!-- Footer Fenix Style -->
-    <footer class="footer-fenix">
-        <div class="container footer-fenix-content">
-            <div class="footer-fenix-copy">
-                &copy; 2026 Invierte con Gabo. Todos los derechos reservados.
-            </div>
-            <div class="footer-fenix-links">
-                <a href="legal.html?tab=faq">Preguntas Frecuentes</a>
-                <a href="legal.html?tab=terms">Términos y Condiciones</a>
-                <a href="legal.html?tab=privacy">Política de Privacidad</a>
-                <a href="legal.html?tab=cookies">Cookies</a>
+    <!-- Footer Original -->
+    <footer class="footer" style="margin-top: auto;">
+        <div class="container footer-container">
+            <p class="footer-brand">invierte<span>con</span>gabo</p>
+            <p class="footer-copy">&copy; 2026 inviertecongabo. Creado con pasión para Venezuela.</p>
+            <p class="footer-disclaimer">
+                <strong>Advertencia legal:</strong> El contenido de esta página es puramente educativo y no constituye asesoría financiera formal. Las inversiones conllevan riesgos. Invierte solo el capital que estés dispuesto a perder.
+            </p>
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+                <a href="legal.html?tab=faq" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Preguntas Frecuentes</a>
+                <a href="legal.html?tab=terms" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Términos y Condiciones</a>
+                <a href="legal.html?tab=privacy" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Política de Privacidad</a>
+                <a href="legal.html?tab=cookies" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Cookies</a>
             </div>
         </div>
     </footer>
+
+    <!-- Script de interacciA3n base -->
+    <script src="index.js"></script>
 
     <!-- Script para TABS y ACORDEÓN -->
     <script>
