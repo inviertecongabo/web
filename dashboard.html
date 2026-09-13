@@ -1538,11 +1538,20 @@
 
     // NAVIGATION
 
+    
+        // Read hash on load and switch if needed
+        const hash = window.location.hash.replace('#', '');
+        if (hash && document.getElementById("sec-" + hash)) {
+            switchSection(null, hash);
+        }
+
     function switchSection(e, id) {
 
         if (e) e.preventDefault();
 
         if (!id) return; // Prevent errors if clicked on parent dropdown
+        
+        window.location.hash = id;
 
         document.querySelectorAll(".dash-section").forEach(s => s.classList.remove("active"));
 
