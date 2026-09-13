@@ -1580,40 +1580,37 @@
 
         document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
 
-        
-    // Show/hide breadcrumb back button
-    const btnBack = document.getElementById("btnBackBreadcrumb");
-    if (btnBack) {
-        if (id === "inicio") {
-            btnBack.style.display = "none";
-            document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
-        } else if (id === "tool-bot") {
-            const configVisible = document.getElementById("botConfigPanel").style.display === "block";
-            if (configVisible) {
-                btnBack.style.display = "flex";
-                btnBack.innerHTML = "&#8249; Términos";
-                btnBack.onclick = () => {
-                    document.getElementById("botConfigPanel").style.display = "none";
-                    document.getElementById("botOnboarding").style.display = "block";
-                    // re-trigger the switch to update breadcrumb
-                    switchSection(null, 'tool-bot');
-                };
-                document.getElementById("topbarTitle").textContent = "Configuración";
+
+        // Show/hide breadcrumb back button
+        const btnBack = document.getElementById("btnBackBreadcrumb");
+        if (btnBack) {
+            if (id === "inicio") {
+                btnBack.style.display = "none";
+                document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+            } else if (id === "tool-bot") {
+                const configVisible = document.getElementById("botConfigPanel").style.display === "block";
+                if (configVisible) {
+                    btnBack.style.display = "flex";
+                    btnBack.innerHTML = "&#8249; Términos";
+                    btnBack.onclick = () => {
+                        document.getElementById("botConfigPanel").style.display = "none";
+                        document.getElementById("botOnboarding").style.display = "block";
+                        switchSection(null, 'tool-bot');
+                    };
+                    document.getElementById("topbarTitle").textContent = "Configuración";
+                } else {
+                    btnBack.style.display = "flex";
+                    btnBack.innerHTML = "&#8249; Volver";
+                    btnBack.onclick = () => window.history.back();
+                    document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+                }
             } else {
                 btnBack.style.display = "flex";
                 btnBack.innerHTML = "&#8249; Volver";
                 btnBack.onclick = () => window.history.back();
                 document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
             }
-        } else {
-            btnBack.style.display = "flex";
-            btnBack.innerHTML = "&#8249; Volver";
-            btnBack.onclick = () => window.history.back();
-            document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
         }
-    }
-
-
     }
 
     document.querySelectorAll(".nav-item,.mobile-nav-item,.sub-nav-item").forEach(btn => {
