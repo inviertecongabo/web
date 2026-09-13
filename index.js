@@ -273,9 +273,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (wrapper && slide1 && slide2) {
+        if (wrapper && slide1 && slide2) {
         // Init height shortly after load to ensure fonts/layout are ready
-        setTimeout(() => updateSliderHeight(slide1), 50);
+        setTimeout(() => {
+            updateSliderHeight(slide1);
+            slide1.style.opacity = '1';
+            slide2.style.opacity = '0';
+        }, 50);
 
         // Resize observer
         if (window.ResizeObserver) {
@@ -325,12 +329,16 @@ document.addEventListener('DOMContentLoaded', () => {
     hookCta.addEventListener('click', () => {
         track.style.transform = 'translateX(-100%)';
         updateSliderHeight(slide2);
+        slide1.style.opacity = '0';
+        slide2.style.opacity = '1';
     });
 
     if (hookBack) {
         hookBack.addEventListener('click', () => {
             track.style.transform = 'translateX(0)';
             updateSliderHeight(slide1);
+            slide1.style.opacity = '1';
+            slide2.style.opacity = '0';
         });
     }
 });

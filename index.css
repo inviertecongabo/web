@@ -1387,6 +1387,7 @@ body {
 .tools-slide {
     flex: 0 0 100%;
     min-width: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
 /* Hook (slide 1) */
@@ -1569,7 +1570,6 @@ body {
 /* The tool-card inside slide 2 has no outer border (wrapper provides it) */
 .tools-card-slide .tool-card {
     position: relative;
-    overflow: hidden;
     border-radius: 24px;
     border: 1px solid rgba(240,185,11,0.12);
     background: linear-gradient(135deg, rgba(18,24,36,0.95) 0%, rgba(10,14,23,0.98) 100%);
@@ -1725,3 +1725,4 @@ body {
     margin: 0 auto;
     transition: height 0.4s ease-in-out;
 }
+
