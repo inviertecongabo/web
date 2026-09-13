@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramientas y Automatización | Invierte con Gabo</title>
+    <meta name="description" content="Conoce las herramientas exclusivas de Invierte con Gabo. Descubre las ventajas de automatizar tus inversiones con GaboBot y cómo configurarlo paso a paso.">
+    
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Link al archivo CSS -->
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .page-hero {
+            padding: 140px 0 60px;
+            text-align: center;
+        }
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 20px;
+        }
+        .page-title span {
+            color: var(--accent);
+        }
+        .page-subtitle {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .vs-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: left;
+        }
+        .vs-card.bad {
+            border-top: 4px solid #ef4444;
+        }
+        .vs-card.good {
+            border-top: 4px solid var(--accent);
+            background: rgba(240,185,11,0.02);
+        }
+        .vs-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .vs-card.bad .vs-title { color: #fca5a5; }
+        .vs-card.good .vs-title { color: var(--accent); }
+        .vs-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .vs-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        .vs-card.bad .vs-list li::before {
+            content: "✕";
+            color: #ef4444;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+        }
+        .vs-card.good .vs-list li::before {
+            content: "✓";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+        }
+
+        .tools-catalog {
+            padding: 80px 0;
+        }
+        .tool-detail-card {
+            background: linear-gradient(135deg, rgba(18,24,36,0.95) 0%, rgba(10,14,23,0.98) 100%);
+            border: 1px solid rgba(240,185,11,0.12);
+            border-radius: 24px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .guide-section {
+            padding: 60px 0 100px;
+        }
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .step-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: left;
+            position: relative;
+        }
+        .step-number {
+            display: inline-flex;
+            width: 40px; height: 40px;
+            background: rgba(240,185,11,0.15);
+            color: var(--accent);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .step-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .step-text {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .security-alert {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .security-alert svg {
+            color: #22c55e;
+            flex-shrink: 0;
+        }
+        .security-alert p {
+            margin: 0;
+            color: #dcfce7;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .gated-blur {
+            filter: blur(8px);
+            user-select: none;
+            pointer-events: none;
+        }
+        .gated-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10,14,23,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            z-index: 10;
+        }
+
+        @media (max-width: 900px) {
+            .vs-grid, .tool-detail-card, .step-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Barra de navegación -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                invierte<span>con</span>gabo
+            </a>
+            
+            <button class="nav-toggle" aria-label="Abrir menú" id="navToggle">
+                <span class="hamburger"></span>
+            </button>
+
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="index.html#inicio" class="nav-link">Inicio</a></li>
+                    <li><a href="index.html#quien-soy" class="nav-link">Quién Soy</a></li>
+                    <li><a href="index.html#contenido" class="nav-link">Contenido</a></li>
+                    <li><a href="index.html#herramientas" class="nav-link active">Herramientas</a></li>
+                    <li><a href="index.html#comunidad" class="nav-link">Comunidad</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="login.html" class="btn btn-sm btn-outline" id="navLoginBtn">Iniciar Sesión</a>
+                    <a href="register.html" class="btn btn-sm btn-primary" id="navRegisterBtn">Registrarse</a>
+                    <a href="dashboard.html" class="btn btn-sm btn-primary" id="navPanelBtn" style="display:none;">Mi Panel</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="page-hero container">
+            <h1 class="page-title">Automatiza tu <span>Éxito</span></h1>
+            <p class="page-subtitle">Descubre cómo la tecnología te permite invertir con cabeza fría, reducir riesgos y enfocarte en lo que de verdad importa: tu tiempo.</p>
+            
+            <div class="vs-grid">
+                <!-- Manual -->
+                <div class="vs-card bad">
+                    <h3 class="vs-title">Comprar en Spot (Manual)</h3>
+                    <ul class="vs-list">
+                        <li><strong>Pierdes horas</strong> revisando gráficas esperando "el mejor momento".</li>
+                        <li><strong>Peores comisiones:</strong> Si usas órdenes a precio de mercado (Market), el exchange te cobra más caro.</li>
+                        <li><strong>Factor emocional:</strong> Terminas comprando caro por FOMO o vendiendo en pánico.</li>
+                        <li>Requiere constancia manual; si lo olvidas, rompes tu estrategia.</li>
+                    </ul>
+                </div>
+                <!-- Con Bot -->
+                <div class="vs-card good">
+                    <h3 class="vs-title">Usar GaboBot (DCA Engine)</h3>
+                    <ul class="vs-list">
+                        <li><strong>Tu tiempo es tuyo:</strong> Funciona 24/7 en la nube sin que muevas un dedo.</li>
+                        <li><strong>Comisiones óptimas:</strong> Programa órdenes pasivas (Maker) con la mejor tarifa disponible.</li>
+                        <li><strong>Cero emociones:</strong> Ejecuta tu estrategia Dollar Cost Averaging a la perfección, sin importar la noticia del día.</li>
+                        <li>100% disciplina garantizada. Acumulación constante a largo plazo.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catálogo de Herramientas -->
+        <section class="tools-catalog container">
+            <div class="content-header" style="text-align: center; margin-bottom: 50px;">
+                <span class="section-tag">Nuestro Catálogo</span>
+                <h2 class="section-title">Tecnología a tu favor</h2>
+            </div>
+
+            <!-- GaboBot Card -->
+            <div class="tool-detail-card">
+                <!-- Bloqueador si no está logueado -->
+                <div class="gated-overlay" id="toolGatedOverlay">
+                    <h3 style="font-family: var(--font-heading); margin-bottom: 10px; font-size: 1.5rem;">Crea tu cuenta para acceder</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 24px;">Las herramientas de automatización son exclusivas para miembros de Invierte con Gabo.</p>
+                    <a href="login.html" class="btn btn-primary">Iniciar sesión o Registrarme</a>
+                </div>
+
+                <div class="tool-info gated-blur" id="toolInfoContent">
+                    <span class="section-tag" style="margin-bottom: 15px;">DCA Engine v1.0</span>
+                    <h3 style="font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 20px;">GaboBot</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">
+                        GaboBot es un script en Python desplegado en la nube que se conecta de forma segura a tu cuenta de Binance. Está programado exclusivamente para comprar la cantidad que definas, en el periodo que definas.
+                    </p>
+                    <ul style="list-style:none; padding:0; margin-bottom: 30px;">
+                        <li style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
+                            <span style="color:var(--accent);">✓</span> Compra periódica automatizada (DCA).
+                        </li>
+                        <li style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
+                            <span style="color:var(--accent);">✓</span> Reporte instantáneo a tu correo en cada ejecución.
+                        </li>
+                        <li style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;">
+                            <span style="color:var(--accent);">✓</span> Funciona 100% en pasivo.
+                        </li>
+                    </ul>
+                    <a href="dashboard.html" class="btn btn-primary">
+                        Ir a configuración del Bot
+                    </a>
+                </div>
+                <div class="tool-preview gated-blur" id="toolPreviewContent">
+                    <!-- Terminal mock -->
+                    <div style="background:#080b12; border: 1px solid rgba(255,255,255,0.1); border-radius:12px; padding:20px; font-family:monospace; color:#10b981; line-height:1.8;">
+                        > Starting GaboBot DCA Engine...<br>
+                        > Verifying Binance API Keys... [OK]<br>
+                        > USDT Balance: $500.00<br>
+                        > BTC Price: $65,400.00<br>
+                        > Executing $50 buy order (Maker)...<br>
+                        > Order filled successfully.<br>
+                        > Sending email report to user...<br>
+                        > Sleeping until next week...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tutorial / Guía -->
+        <section class="guide-section container">
+            <div class="content-header" style="text-align: center;">
+                <h2 class="section-title">Cómo conectar tu API de forma Segura</h2>
+                <p class="section-subtitle" style="max-width: 600px; margin: 0 auto;">No necesitas saber de programación. Solo conectar tu cuenta de Binance de forma restringida para que el bot pueda operar por ti.</p>
+            </div>
+
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4 class="step-title">Genera las claves en Binance</h4>
+                    <p class="step-text">Ve a "Gestión de API" en la configuración de tu cuenta Binance. Haz clic en "Crear API" y asígnale un nombre como "GaboBot". Te darán un <strong>API Key</strong> y un <strong>Secret Key</strong>.</p>
+                </div>
+                <div class="step-card" style="border-top: 4px solid #22c55e;">
+                    <div class="step-number" style="background: rgba(34,197,94,0.15); color: #22c55e;">2</div>
+                    <h4 class="step-title">Restringe los Permisos (Vital)</h4>
+                    <p class="step-text">Al configurar la API, habilita <strong>ÚNICAMENTE</strong> "Lectura" y "Habilitar Spot & Margin Trading".</p>
+                    <div class="security-alert">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <p><strong>NUNCA</strong> marques la casilla de retiros. Así tu dinero siempre está a salvo, el bot no puede sacar fondos.</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4 class="step-title">Conecta la Herramienta</h4>
+                    <p class="step-text">Pega tus claves (API y Secret) en el panel de configuración de GaboBot en nuestra web. Define tu monto, criptomoneda (ej. BTC) y cada cuánto tiempo quieres comprar (ej. 7 días). ¡Listo!</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="index.html" class="logo">invierte<span>con</span>gabo</a>
+                <p class="footer-desc">
+                    Educación financiera real para quienes quieren dominar sus finanzas en Venezuela y el mundo. Sin promesas de dinero rápido, solo estrategia y disciplina.
+                </p>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#quien-soy">Quién Soy</a></li>
+                    <li><a href="index.html#contenido">Contenido</a></li>
+                    <li><a href="index.html#herramientas">Herramientas</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="legal.html?tab=terminos">Términos y Condiciones</a></li>
+                    <li><a href="legal.html?tab=privacidad">Política de Privacidad</a></li>
+                    <li><a href="legal.html?tab=cookies">Política de Cookies</a></li>
+                    <li><a href="legal.html?tab=faq">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Redes Sociales</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="#" aria-label="Telegram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Invierte con Gabo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JS Nav y Mobile menu (simplificado) -->
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        if(navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+    </script>
+    
+    <!-- Supabase Auth Check para el Gated Content -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+        (async () => {
+            const sb = supabase.createClient(
+                'https://uyrcsfsqzkywrgrjkvbr.supabase.co',
+                'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa'
+            );
+            const { data } = await sb.auth.getSession();
+            const loginBtn = document.getElementById('navLoginBtn');
+            const registerBtn = document.getElementById('navRegisterBtn');
+            const panelBtn = document.getElementById('navPanelBtn');
+            
+            const gatedOverlay = document.getElementById('toolGatedOverlay');
+            const toolInfo = document.getElementById('toolInfoContent');
+            const toolPreview = document.getElementById('toolPreviewContent');
+            
+            if (data.session) {
+                // Actualizar Navbar
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (panelBtn) panelBtn.style.display = 'inline-flex';
+                
+                // Desbloquear contenido (quitar overlay y blur)
+                if (gatedOverlay) gatedOverlay.style.display = 'none';
+                if (toolInfo) toolInfo.classList.remove('gated-blur');
+                if (toolPreview) toolPreview.classList.remove('gated-blur');
+            } else {
+                // Mantener blur (aplicarlo dinámicamente si no está)
+                if (toolInfo && !toolInfo.classList.contains('gated-blur')) {
+                    toolInfo.classList.add('gated-blur');
+                }
+                if (toolPreview && !toolPreview.classList.contains('gated-blur')) {
+                    toolPreview.classList.add('gated-blur');
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
