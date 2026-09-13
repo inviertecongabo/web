@@ -1375,12 +1375,7 @@ body {
 }
 
 /* ====== Hook Slider ====== */
-.tools-slider-wrapper {
-    position: relative;
-    overflow: hidden;
-    max-width: 650px;
-    margin: 0 auto;
-}
+
 
 
 /* Both slides are in a flex row, the wrapper clips them */
@@ -1592,10 +1587,7 @@ body {
 }
 
 /* ====== Compact Vertical Quiz Layout ====== */
-.tools-slider-wrapper {
-    max-width: 650px;
-    margin: 0 auto;
-}
+
 
 .tools-hook { padding: 10px; }
 
@@ -1722,4 +1714,6 @@ body {
     width: 100%;
     justify-content: center;
 }
+
+
 

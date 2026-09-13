@@ -261,6 +261,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizReveal = document.getElementById('quizReveal');
     const correctOption = document.getElementById('correctOption');
 
+    // Dynamic Slider Height Setup
+    const wrapper = document.getElementById('toolsSliderWrapper');
+    const slide1 = document.getElementById('toolsHookSlide');
+    const slide2 = document.getElementById('toolsCardSlide');
+    const track  = document.getElementById('toolsSlidesTrack');
+
+    function updateSliderHeight(activeSlide) {
+        if (wrapper && activeSlide) {
+            wrapper.style.height = activeSlide.offsetHeight + 'px';
+        }
+    }
+
+    if (wrapper && slide1 && slide2) {
+        // Init height shortly after load to ensure fonts/layout are ready
+        setTimeout(() => updateSliderHeight(slide1), 50);
+
+        // Resize observer
+        if (window.ResizeObserver) {
+            const ro = new ResizeObserver(() => {
+                const isSlide2 = track.style.transform === 'translateX(-100%)';
+                updateSliderHeight(isSlide2 ? slide2 : slide1);
+            });
+            ro.observe(slide1);
+            ro.observe(slide2);
+        } else {
+            window.addEventListener('resize', () => {
+                const isSlide2 = track.style.transform === 'translateX(-100%)';
+                updateSliderHeight(isSlide2 ? slide2 : slide1);
+            });
+        }
+    }
+
     if (quizOptions.length > 0) {
         quizOptions.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -278,12 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 quizReveal.classList.remove('quiz-reveal-hidden');
                 quizReveal.classList.add('quiz-reveal-visible');
+                
+                // Height will auto-update because of ResizeObserver
             });
         });
     }
 
     // --- Slider Logic ---
-    const track  = document.getElementById('toolsSlidesTrack');
     const hookCta = document.getElementById('hookCta');
     const hookBack = document.getElementById('hookBack');
 
@@ -291,11 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hookCta.addEventListener('click', () => {
         track.style.transform = 'translateX(-100%)';
+        updateSliderHeight(slide2);
     });
 
     if (hookBack) {
         hookBack.addEventListener('click', () => {
             track.style.transform = 'translateX(0)';
+            updateSliderHeight(slide1);
         });
     }
 });
