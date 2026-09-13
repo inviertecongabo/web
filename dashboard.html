@@ -592,11 +592,11 @@
 
         <section class="dash-section" id="sec-contenido">
 
-            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
                 <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
                     <span>/</span>
-                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
                 </span>
             </div>
             <h2 class="section-heading">Contenido Educativo</h2>
@@ -755,11 +755,11 @@
 
         <section class="dash-section" id="sec-tool-bot">
 
-            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
                 <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
                     <span>/</span>
-                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
                 </span>
             </div>
             <h2 class="section-heading">Compras BTC (GaboBot)</h2>
@@ -1036,11 +1036,11 @@
 
         <section class="dash-section" id="sec-tool-alertas">
 
-            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
                 <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
                     <span>/</span>
-                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
                 </span>
             </div>
             <h2 class="section-heading">Alertas de Precio</h2>
@@ -1065,11 +1065,11 @@
 
         <section class="dash-section" id="sec-perfil">
 
-            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
                 <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
                     <span>/</span>
-                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
                 </span>
             </div>
             <h2 class="section-heading">Mi Perfil</h2>
@@ -1608,34 +1608,37 @@
 
         // Update breadcrumbs inside sections
         document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
-        const crumb = document.getElementById("sectionBreadcrumb");
-        const crumbSub = document.getElementById("breadcrumbSub");
-        const crumbSubLink = document.getElementById("breadcrumbSubLink");
-        if (crumb) {
-            if (id === "inicio") {
-                crumb.style.display = "none";
-            } else if (id === "tool-bot") {
-                const configVisible = document.getElementById("botConfigPanel").style.display === "block";
-                if (configVisible) {
-                    crumb.style.display = "flex";
-                    if (crumbSub) crumbSub.style.display = "flex";
-                    if (crumbSubLink) {
-                        crumbSubLink.textContent = "Términos";
-                        crumbSubLink.onclick = (ev) => {
-                            ev.preventDefault();
-                            document.getElementById("botConfigPanel").style.display = "none";
-                            document.getElementById("botOnboarding").style.display = "block";
-                            switchSection(null, 'tool-bot');
-                        };
+        const activeSec = document.getElementById("sec-" + id);
+        if (activeSec) {
+            const crumb = activeSec.querySelector(".section-breadcrumb");
+            const crumbSub = activeSec.querySelector(".breadcrumb-sub");
+            const crumbSubLink = activeSec.querySelector(".breadcrumb-sub-link");
+            if (crumb) {
+                if (id === "inicio") {
+                    crumb.style.display = "none";
+                } else if (id === "tool-bot") {
+                    const configVisible = document.getElementById("botConfigPanel").style.display === "block";
+                    if (configVisible) {
+                        crumb.style.display = "flex";
+                        if (crumbSub) crumbSub.style.display = "flex";
+                        if (crumbSubLink) {
+                            crumbSubLink.textContent = "Términos";
+                            crumbSubLink.onclick = (ev) => {
+                                ev.preventDefault();
+                                document.getElementById("botConfigPanel").style.display = "none";
+                                document.getElementById("botOnboarding").style.display = "block";
+                                switchSection(null, 'tool-bot');
+                            };
+                        }
+                        document.getElementById("topbarTitle").textContent = "Configuración";
+                    } else {
+                        crumb.style.display = "flex";
+                        if (crumbSub) crumbSub.style.display = "none";
                     }
-                    document.getElementById("topbarTitle").textContent = "Configuración";
                 } else {
                     crumb.style.display = "flex";
                     if (crumbSub) crumbSub.style.display = "none";
                 }
-            } else {
-                crumb.style.display = "flex";
-                if (crumbSub) crumbSub.style.display = "none";
             }
         }
     }
