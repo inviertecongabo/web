@@ -89,6 +89,9 @@
                                 </svg>
                             </button>
                         </div>
+                        <div style="text-align: right; margin-top: 6px;">
+                            <a href="#" id="linkForgotPassword" style="color: var(--accent); font-size: 0.85rem; text-decoration: none;">¿Olvidaste tu contraseña?</a>
+                        </div>
                     </div>
                     <button class="btn-auth" id="btnLogin">Iniciar Sesion &rarr;</button>
                 </div>
@@ -143,6 +146,53 @@
                     <button class="btn-auth" id="btnRegister">Crear mi Cuenta &rarr;</button>
                 </div>
             </div>
+
+            <!-- Olvide Contrasena -->
+            <div class="tab-content" id="forgotForm">
+                <div class="auth-form">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; line-height: 1.4;">Ingresa tu correo registrado y te enviaremos un enlace para restablecer tu contraseña.</p>
+                    <div class="form-group">
+                        <label class="form-label" for="forgotEmail">Correo electrónico</label>
+                        <input type="email" id="forgotEmail" class="form-input" placeholder="tu@correo.com">
+                    </div>
+                    <button class="btn-auth" id="btnSendForgot">Enviar Enlace &rarr;</button>
+                    <div style="text-align: center; margin-top: 14px;">
+                        <a href="#" id="linkBackToLogin" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">&larr; Volver al inicio de sesión</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Restablecer Contrasena (Cuando viene del correo) -->
+            <div class="tab-content" id="resetPasswordForm">
+                <div class="auth-form">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; line-height: 1.4;">Crea una nueva contraseña para tu cuenta.</p>
+                    <div class="form-group">
+                        <label class="form-label" for="newPassword">Nueva contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" class="form-input" placeholder="Mínimo 6 caracteres">
+                            <button type="button" class="toggle-password" data-target="newPassword" aria-label="Mostrar u ocultar contraseña">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="confirmNewPassword">Confirmar nueva contraseña</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmNewPassword" class="form-input" placeholder="Repite tu nueva contraseña">
+                            <button type="button" class="toggle-password" data-target="confirmNewPassword" aria-label="Mostrar u ocultar contraseña">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn-auth" id="btnSaveNewPassword">Guardar Nueva Contraseña &rarr;</button>
+                </div>
+            </div>
             
             <div class="auth-footer">
                 <a href="index.html">&larr; Volver a la pagina principal</a>
@@ -159,13 +209,106 @@
         const tabRegister = document.getElementById('tabRegister');
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
+        const forgotForm = document.getElementById('forgotForm');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const authTabsHeader = document.querySelector('.auth-tabs');
         const authMessage = document.getElementById('authMessage');
         
         function showMsg(text, type) { authMessage.textContent = text; authMessage.className = 'auth-message ' + type; }
         function clearMsg() { authMessage.className = 'auth-message'; authMessage.textContent = ''; }
         
-        tabLogin.addEventListener('click', () => { tabLogin.classList.add('active'); tabRegister.classList.remove('active'); loginForm.classList.add('active'); registerForm.classList.remove('active'); clearMsg(); });
-        tabRegister.addEventListener('click', () => { tabRegister.classList.add('active'); tabLogin.classList.remove('active'); registerForm.classList.add('active'); loginForm.classList.remove('active'); clearMsg(); });
+        function hideAllForms() {
+            loginForm.classList.remove('active');
+            registerForm.classList.remove('active');
+            forgotForm.classList.remove('active');
+            resetPasswordForm.classList.remove('active');
+        }
+
+        tabLogin.addEventListener('click', () => { 
+            tabLogin.classList.add('active'); 
+            tabRegister.classList.remove('active'); 
+            hideAllForms(); 
+            loginForm.classList.add('active'); 
+            clearMsg(); 
+        });
+
+        tabRegister.addEventListener('click', () => { 
+            tabRegister.classList.add('active'); 
+            tabLogin.classList.remove('active'); 
+            hideAllForms(); 
+            registerForm.classList.add('active'); 
+            clearMsg(); 
+        });
+        
+        // --- Navegación a "Olvidé mi contraseña" ---
+        document.getElementById('linkForgotPassword').addEventListener('click', (e) => {
+            e.preventDefault();
+            authTabsHeader.style.display = 'none';
+            hideAllForms();
+            forgotForm.classList.add('active');
+            clearMsg();
+        });
+
+        document.getElementById('linkBackToLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            authTabsHeader.style.display = 'flex';
+            hideAllForms();
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            loginForm.classList.add('active');
+            clearMsg();
+        });
+
+        // --- Enviar Correo de Recuperación ---
+        document.getElementById('btnSendForgot').addEventListener('click', async () => {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const btn = document.getElementById('btnSendForgot');
+            if (!email) { showMsg('Por favor ingresa tu correo electrónico.', 'error'); return; }
+
+            btn.disabled = true; btn.textContent = 'Enviando...'; clearMsg();
+            const redirectUrl = window.location.href.split('?')[0].split('#')[0];
+            const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
+            
+            if (error) {
+                showMsg(error.message || 'Error al enviar el correo.', 'error');
+                btn.disabled = false; btn.textContent = 'Enviar Enlace ->';
+            } else {
+                showMsg('¡Enlace enviado! Revisa tu correo electrónico para restablecer tu contraseña.', 'success');
+                btn.textContent = 'Enlace enviado';
+            }
+        });
+
+        // --- Escuchar evento de Recuperación de Contraseña de Supabase ---
+        sb.auth.onAuthStateChange((event, session) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                authTabsHeader.style.display = 'none';
+                hideAllForms();
+                resetPasswordForm.classList.add('active');
+                showMsg('Por favor ingresa tu nueva contraseña.', 'success');
+            }
+        });
+
+        // --- Guardar Nueva Contraseña ---
+        document.getElementById('btnSaveNewPassword').addEventListener('click', async () => {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            const btn = document.getElementById('btnSaveNewPassword');
+
+            if (!newPassword || !confirmNewPassword) { showMsg('Por favor completa todos los campos.', 'error'); return; }
+            if (newPassword.length < 6) { showMsg('La contraseña debe tener al menos 6 caracteres.', 'error'); return; }
+            if (newPassword !== confirmNewPassword) { showMsg('Las contraseñas no coinciden.', 'error'); return; }
+
+            btn.disabled = true; btn.textContent = 'Guardando...'; clearMsg();
+            const { error } = await sb.auth.updateUser({ password: newPassword });
+
+            if (error) {
+                showMsg(error.message || 'Error al actualizar la contraseña.', 'error');
+                btn.disabled = false; btn.textContent = 'Guardar Nueva Contraseña ->';
+            } else {
+                showMsg('¡Contraseña actualizada con éxito! Redirigiendo...', 'success');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+            }
+        });
         
         // --- Ojitos para ver contrasena ---
         document.querySelectorAll('.toggle-password').forEach(btn => {
