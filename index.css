@@ -1591,3 +1591,128 @@ body {
     background: transparent;
     border-top: 1px solid rgba(240,185,11,0.08);
 }
+
+/* ====== Two-Column Quiz Layout ====== */
+.tools-hook {
+    padding: 48px 40px !important; /* Override the 72px, make it more compact */
+}
+
+.quiz-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .quiz-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+
+.quiz-left .hook-title {
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.quiz-left .hook-options {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 0;
+    justify-content: flex-start;
+}
+
+.quiz-left .hook-option {
+    width: 100%;
+    border-radius: 12px;
+    justify-content: flex-start;
+}
+
+/* Right column */
+.quiz-right {
+    position: relative;
+    min-height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-placeholder {
+    text-align: center;
+    color: rgba(255,255,255,0.15);
+    transition: opacity 0.3s;
+}
+
+.quiz-placeholder-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+    animation: float 2s ease-in-out infinite;
+}
+
+.quiz-placeholder p {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+.quiz-placeholder.hidden {
+    display: none;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+}
+
+/* Answer card */
+.quiz-answer-card {
+    background: rgba(240,185,11,0.06);
+    border: 1px solid rgba(240,185,11,0.2);
+    border-radius: 20px;
+    padding: 28px;
+}
+
+.quiz-answer-label {
+    display: inline-block;
+    background: rgba(240,185,11,0.15);
+    color: #F0B90B;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+}
+
+/* Override reveal transition for side panel */
+.quiz-right .quiz-reveal-hidden {
+    position: absolute;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+}
+
+.quiz-right .quiz-reveal-visible {
+    position: relative;
+    margin-top: 0;
+    max-height: none;
+}
+
+.quiz-right .hook-answer {
+    font-size: 0.97rem;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.quiz-right .hook-cta {
+    font-size: 0.92rem;
+    padding: 13px 22px;
+    width: 100%;
+    justify-content: center;
+}

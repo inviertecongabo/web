@@ -266,14 +266,16 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 if(quizContainer.classList.contains('answered')) return;
 
-                // Bloquear opciones
+                // Lock options
                 quizContainer.classList.add('answered');
 
-                // Si seleccionó una incorrecta, podemos ponerle un estilo (opcional), 
-                // pero definitivamente resaltamos la correcta:
+                // Highlight the correct answer (C = time)
                 correctOption.classList.add('reveal-correct');
 
-                // Mostrar la respuesta y el botón de CTA
+                // Hide placeholder, show answer
+                const placeholder = document.getElementById('quizPlaceholder');
+                if (placeholder) placeholder.classList.add('hidden');
+
                 quizReveal.classList.remove('quiz-reveal-hidden');
                 quizReveal.classList.add('quiz-reveal-visible');
             });
