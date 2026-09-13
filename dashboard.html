@@ -1580,12 +1580,37 @@
 
         document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
 
-        document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+        
     // Show/hide breadcrumb back button
     const btnBack = document.getElementById("btnBackBreadcrumb");
     if (btnBack) {
-        btnBack.style.display = (id === "inicio") ? "none" : "flex";
-        btnBack.onclick = () => window.history.back();
+        if (id === "inicio") {
+            btnBack.style.display = "none";
+            
+        } else if (id === "tool-bot") {
+            const configVisible = document.getElementById("botConfigPanel").style.display === "block";
+            if (configVisible) {
+                btnBack.style.display = "flex";
+                btnBack.innerHTML = "&#8249; Términos";
+                btnBack.onclick = () => {
+                    document.getElementById("botConfigPanel").style.display = "none";
+                    document.getElementById("botOnboarding").style.display = "block";
+                    // re-trigger the switch to update breadcrumb
+                    switchSection(null, 'tool-bot');
+                };
+                document.getElementById("topbarTitle").textContent = "Configuración";
+            } else {
+                btnBack.style.display = "flex";
+                btnBack.innerHTML = "&#8249; Volver";
+                btnBack.onclick = () => window.history.back();
+                
+            }
+        } else {
+            btnBack.style.display = "flex";
+            btnBack.innerHTML = "&#8249; Volver";
+            btnBack.onclick = () => window.history.back();
+            
+        }
     }
 
 
@@ -1712,10 +1737,9 @@
         
 
         document.getElementById("botOnboarding").style.display = "none";
-
         document.getElementById("botConfigPanel").style.display = "block";
-
         btn.textContent = "Aceptar y Continuar";
+        switchSection(null, 'tool-bot');
 
     });
 
