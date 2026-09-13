@@ -1430,32 +1430,46 @@ body {
     flex-wrap: wrap;
     gap: 16px;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 0; /* Changed to 0 so the reveal can take over */
 }
 
 .hook-option {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 22px;
+    padding: 12px 22px 12px 12px; /* Less left padding to accommodate letter */
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 100px;
     color: var(--text-muted);
     font-size: 1rem;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    cursor: pointer;
+    font-family: var(--font-body);
+}
+
+.hook-option:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
+
+.hook-option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: all 0.3s;
 }
 
 .hook-option-icon { font-size: 1.3rem; }
-
-.hook-option-highlight {
-    background: rgba(240,185,11,0.1);
-    border-color: rgba(240,185,11,0.35);
-    color: var(--text-primary);
-    font-weight: 600;
-    padding-right: 12px;
-}
 
 .hook-option-badge {
     background: #F0B90B;
@@ -1467,13 +1481,60 @@ body {
     padding: 3px 10px;
     border-radius: 100px;
     margin-left: 4px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s 0.2s; /* delays for reveal */
+}
+
+/* Interactivity (when answered) */
+.hook-options.answered .hook-option {
+    pointer-events: none;
+    opacity: 0.4;
+    transform: translateY(0);
+}
+
+.hook-options.answered .hook-option.reveal-correct {
+    opacity: 1;
+    background: rgba(240,185,11,0.1);
+    border-color: rgba(240,185,11,0.35);
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: 0 0 24px rgba(240,185,11,0.15);
+}
+
+.hook-options.answered .hook-option.reveal-correct .hook-option-letter {
+    background: #F0B90B;
+    color: #000;
+}
+
+.hook-options.answered .hook-option.reveal-correct .hook-option-badge {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* The reveal area */
+.quiz-reveal-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.quiz-reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    max-height: 400px; /* enough to show answer and button */
+    margin-top: 40px;
 }
 
 .hook-answer {
     color: var(--text-muted);
     line-height: 1.7;
     font-size: 1.05rem;
-    margin-bottom: 44px;
+    margin-bottom: 30px;
 }
 .hook-answer strong { color: var(--text-primary); }
 

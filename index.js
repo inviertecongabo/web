@@ -253,8 +253,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Hook Slider Logic
+// Hook Slider & Quiz Logic
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Quiz Logic ---
+    const quizOptions = document.querySelectorAll('.quiz-btn');
+    const quizContainer = document.getElementById('quizOptions');
+    const quizReveal = document.getElementById('quizReveal');
+    const correctOption = document.getElementById('correctOption');
+
+    if (quizOptions.length > 0) {
+        quizOptions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(quizContainer.classList.contains('answered')) return;
+
+                // Bloquear opciones
+                quizContainer.classList.add('answered');
+
+                // Si seleccionó una incorrecta, podemos ponerle un estilo (opcional), 
+                // pero definitivamente resaltamos la correcta:
+                correctOption.classList.add('reveal-correct');
+
+                // Mostrar la respuesta y el botón de CTA
+                quizReveal.classList.remove('quiz-reveal-hidden');
+                quizReveal.classList.add('quiz-reveal-visible');
+            });
+        });
+    }
+
+    // --- Slider Logic ---
     const track  = document.getElementById('toolsSlidesTrack');
     const hookCta = document.getElementById('hookCta');
     const hookBack = document.getElementById('hookBack');
