@@ -1586,7 +1586,7 @@
     if (btnBack) {
         if (id === "inicio") {
             btnBack.style.display = "none";
-            
+            document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
         } else if (id === "tool-bot") {
             const configVisible = document.getElementById("botConfigPanel").style.display === "block";
             if (configVisible) {
@@ -1603,13 +1603,13 @@
                 btnBack.style.display = "flex";
                 btnBack.innerHTML = "&#8249; Volver";
                 btnBack.onclick = () => window.history.back();
-                
+                document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
             }
         } else {
             btnBack.style.display = "flex";
             btnBack.innerHTML = "&#8249; Volver";
             btnBack.onclick = () => window.history.back();
-            
+            document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
         }
     }
 
