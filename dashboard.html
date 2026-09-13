@@ -484,7 +484,10 @@
 
     <header class="topbar">
 
-        <h1 class="topbar-title" id="topbarTitle">Inicio</h1>
+        <div style="display:flex; align-items:center; gap: 12px;">
+            <button id="btnBackBreadcrumb" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1rem; display:none; align-items:center; gap:4px; font-family:var(--font-heading); font-weight:600; padding-right:12px; border-right:1px solid rgba(255,255,255,0.1); transition: opacity 0.2s;">&#8249; Volver</button>
+            <h1 class="topbar-title" id="topbarTitle" style="margin:0;">Inicio</h1>
+        </div>
 
         <div class="topbar-right">
 
@@ -1556,7 +1559,9 @@
 
         if (!id) return; // Prevent errors if clicked on parent dropdown
         
-        window.location.hash = id;
+        if (window.location.hash !== '#' + id) {
+            window.location.hash = id;
+        }
         
         // Reset bot terms if navigating away
         if (id !== 'tool-bot') {
@@ -1576,6 +1581,13 @@
         document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
 
         document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+    // Show/hide breadcrumb back button
+    const btnBack = document.getElementById("btnBackBreadcrumb");
+    if (btnBack) {
+        btnBack.style.display = (id === "inicio") ? "none" : "flex";
+        btnBack.onclick = () => window.history.back();
+    }
+
 
     }
 
@@ -1592,6 +1604,14 @@
     });
 
 
+
+    
+    // Listen to browser back/forward buttons natively
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash) switchSection(null, hash);
+        else switchSection(null, 'inicio');
+    });
 
     // BTC PRICE
 
