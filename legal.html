@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal y Ayuda | Invierte con Gabo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .legal-page { padding-top: 120px; padding-bottom: 60px; min-height: 80vh; }
+        .legal-container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        
+        .legal-tabs { display: flex; gap: 16px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 16px; overflow-x: auto; scrollbar-width: none; }
+        .legal-tabs::-webkit-scrollbar { display: none; }
+        .legal-tab { background: transparent; border: none; color: var(--text-muted); font-family: var(--font-heading); font-weight: 600; font-size: 1rem; cursor: pointer; padding: 8px 16px; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; }
+        .legal-tab:hover { color: var(--text-primary); }
+        .legal-tab.active { background: rgba(240,185,11,0.1); color: var(--accent); }
+        
+        .legal-section { display: none; }
+        .legal-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        
+        .legal-content h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 16px; margin-top: 32px; color: var(--text-primary); }
+        .legal-content p { color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+        
+        /* Acordeón FAQ */
+        .faq-accordion { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+        .faq-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); overflow: hidden; transition: var(--transition); }
+        .faq-question { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: transparent; border: none; color: var(--text-primary); font-family: var(--font-heading); font-weight: 600; font-size: 1.05rem; text-align: left; cursor: pointer; transition: var(--transition); }
+        .faq-question:hover { color: var(--accent); }
+        .faq-icon { width: 20px; height: 20px; transition: var(--transition); flex-shrink: 0; margin-left: 16px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(0,0,0,0.2); }
+        .faq-answer p { padding: 0 24px 20px 24px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+        .faq-item.active { border-color: rgba(240,185,11,0.3); background: rgba(240,185,11,0.02); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); color: var(--accent); }
+        .faq-item.active .faq-question { color: var(--accent); }
+
+        /* Ajustes de Footer para parecerse a Fenix */
+        .footer-fenix { border-top: 1px solid var(--border); padding: 32px 0; background: var(--bg-dark); margin-top: auto; }
+        .footer-fenix-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .footer-fenix-copy { color: var(--text-muted); font-size: 0.85rem; }
+        .footer-fenix-links { display: flex; gap: 24px; flex-wrap: wrap; }
+        .footer-fenix-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition); }
+        .footer-fenix-links a:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .footer-fenix-content { flex-direction: column; text-align: center; justify-content: center; }
+            .footer-fenix-links { justify-content: center; }
+        }
+    </style>
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">invierte<span>con</span>gabo</a>
+            <nav class="nav">
+                <a href="index.html#inicio" class="nav-link">Inicio</a>
+                <a href="index.html#metodo" class="nav-link">El Método</a>
+                <a href="index.html#contenido" class="nav-link">Contenido</a>
+                <a href="index.html#comunidad" class="nav-link">Comunidad</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-primary" id="navAuthBtn">Iniciar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="legal-page">
+        <div class="legal-container">
+            <div class="section-tag" style="margin-bottom: 12px; display: inline-block;">Legal y Soporte</div>
+            <h1 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 32px;">Centro de Ayuda</h1>
+            
+            <div class="legal-tabs">
+                <button class="legal-tab active" data-target="faq-sec">Preguntas Frecuentes</button>
+                <button class="legal-tab" data-target="terms-sec">Términos y Condiciones</button>
+                <button class="legal-tab" data-target="privacy-sec">Política de Privacidad</button>
+                <button class="legal-tab" data-target="cookies-sec">Cookies</button>
+            </div>
+
+            <!-- Preguntas Frecuentes -->
+            <div id="faq-sec" class="legal-section active">
+                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 700; margin-bottom: 8px;">Dudas Frecuentes</h2>
+                <p style="color: var(--text-muted);">Respuestas claras a las dudas más comunes sobre el contenido, la comunidad y cómo dar tus primeros pasos.</p>
+                
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿El contenido educativo y las guías son totalmente gratis?</span>
+                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sí, 100% gratis. Mi misión es crear contenido educativo real, transparente y accesible sobre finanzas, acciones venezolanas y criptomonedas sin venderte cursos ni falsas promesas.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Qué necesito para empezar a invertir desde Venezuela?</span>
+                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Solo necesitas conexión a internet, ganas de aprender y constancia. Tanto para la Bolsa de Valores de Caracas (BVC) como para criptomonedas, puedes dar tus primeros pasos con montos muy accesibles y aprender de forma gradual.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Tengo que darte acceso a mi dinero o tus canales son de asesoría?</span>
+                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>¡Jamás! Nunca te pediré acceso a tus cuentas, ni llaves privadas, ni dinero para gestionártelo. Todo lo que comparto es estrictamente educativo para que tú mismo tomes el control de tus finanzas.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Por dónde me recomiendas empezar si no sé nada del tema?</span>
+                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Te sugiero revisar los videos organizados en la sección de <strong>Contenido</strong> de esta web o unirte a mi canal de <strong>Telegram</strong> y boletín por correo, donde explico los conceptos desde cero y sin enredos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Términos y Condiciones -->
+            <div id="terms-sec" class="legal-section legal-content">
+                <h2>Términos y Condiciones</h2>
+                <p>Última actualización: Septiembre 2026</p>
+                <h3>1. Aceptación de los términos</h3>
+                <p>Al acceder y utilizar Invierte con Gabo, aceptas estar sujeto a estos términos y condiciones. Todo el contenido proporcionado en esta plataforma es de carácter estrictamente educativo.</p>
+                <h3>2. No es asesoría financiera</h3>
+                <p>Toda la información, videos, análisis y comentarios compartidos no constituyen asesoramiento financiero. Las inversiones en los mercados financieros conllevan riesgos significativos y debes hacer tu propia investigación (DYOR) antes de tomar decisiones con tu capital.</p>
+            </div>
+
+            <!-- Política de Privacidad -->
+            <div id="privacy-sec" class="legal-section legal-content">
+                <h2>Política de Privacidad</h2>
+                <p>Última actualización: Septiembre 2026</p>
+                <h3>1. Recopilación de datos</h3>
+                <p>Recopilamos la información básica que nos proporcionas al registrarte, como tu nombre, correo electrónico e imagen de perfil, para brindarte acceso al Dashboard y al contenido protegido.</p>
+                <h3>2. Uso de la información</h3>
+                <p>Tus datos son utilizados exclusivamente para autenticación, envío de correos importantes relacionados con tu cuenta y notificaciones sobre actualizaciones de contenido educativo. No vendemos ni compartimos tus datos con terceros.</p>
+            </div>
+
+            <!-- Cookies -->
+            <div id="cookies-sec" class="legal-section legal-content">
+                <h2>Política de Cookies</h2>
+                <p>Última actualización: Septiembre 2026</p>
+                <h3>1. ¿Qué son las cookies?</h3>
+                <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas nuestra página web para mejorar tu experiencia de usuario y mantener tu sesión activa.</p>
+                <h3>2. ¿Cómo las utilizamos?</h3>
+                <p>Utilizamos cookies estrictamente necesarias para el funcionamiento del inicio de sesión y para guardar tus preferencias. No usamos cookies intrusivas de rastreo publicitario de terceros.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Fenix Style -->
+    <footer class="footer-fenix">
+        <div class="container footer-fenix-content">
+            <div class="footer-fenix-copy">
+                &copy; 2026 Invierte con Gabo. Todos los derechos reservados.
+            </div>
+            <div class="footer-fenix-links">
+                <a href="legal.html?tab=faq">Preguntas Frecuentes</a>
+                <a href="legal.html?tab=terms">Términos y Condiciones</a>
+                <a href="legal.html?tab=privacy">Política de Privacidad</a>
+                <a href="legal.html?tab=cookies">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script para TABS y ACORDEÓN -->
+    <script>
+        // Lógica de Tabs
+        const tabs = document.querySelectorAll('.legal-tab');
+        const sections = document.querySelectorAll('.legal-section');
+
+        function activateTab(targetId) {
+            tabs.forEach(t => t.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            const tabToActivate = document.querySelector(`.legal-tab[data-target="${targetId}"]`);
+            const sectionToActivate = document.getElementById(targetId);
+            
+            if(tabToActivate && sectionToActivate) {
+                tabToActivate.classList.add('active');
+                sectionToActivate.classList.add('active');
+            }
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                activateTab(tab.getAttribute('data-target'));
+                const url = new URL(window.location);
+                let tabName = tab.getAttribute('data-target').replace('-sec','');
+                url.searchParams.set('tab', tabName);
+                window.history.pushState({}, '', url);
+            });
+        });
+
+        // Leer parámetro de URL al cargar
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        if(tabParam) {
+            activateTab(tabParam + '-sec');
+        }
+
+        // Lógica del Acordeón FAQ
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            if (question) {
+                question.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('active');
+                    faqItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        const answer = otherItem.querySelector('.faq-answer');
+                        if(answer) answer.style.maxHeight = null;
+                    });
+                    if (!isOpen) {
+                        item.classList.add('active');
+                        const answer = item.querySelector('.faq-answer');
+                        if(answer) answer.style.maxHeight = answer.scrollHeight + "px";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+
+/* Ajustes de Footer Fenix Style */
+.footer-fenix { border-top: 1px solid var(--border); padding: 32px 0; background: var(--bg-dark); margin-top: auto; }
+.footer-fenix-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-fenix-copy { color: var(--text-muted); font-size: 0.85rem; }
+.footer-fenix-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-fenix-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition); }
+.footer-fenix-links a:hover { color: var(--accent); }
+@media (max-width: 768px) { .footer-fenix-content { flex-direction: column; text-align: center; justify-content: center; } .footer-fenix-links { justify-content: center; } }
