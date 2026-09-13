@@ -375,22 +375,34 @@
             <p class="section-sub">Configura tu plan de ahorro automatizado en Binance.</p>
             
             <!-- ONBOARDING GABOBOT -->
-            <div id="botOnboarding" class="dash-card" style="max-width: 600px; margin-bottom: 24px; display: none;">
-                <div style="text-align: center; margin-bottom: 24px;">
+            <div id="botOnboarding" class="dash-card" style="max-width: 900px; margin-bottom: 24px; display: none;">
+                <div style="text-align: center; margin-bottom: 30px;">
                     <div style="font-size:3rem; margin-bottom:8px; display:flex; justify-content:center;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M8 11l3 3 5-5"></path></svg>
                     </div>
-                    <h3 style="font-family:var(--font-heading); font-size: 1.4rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
-                    <p style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos para habilitar a GaboBot sin comprometer tus fondos.</p>
+                    <h3 style="font-family:var(--font-heading); font-size: 1.5rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
+                    <p style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos o mira el tutorial para habilitar a GaboBot sin comprometer tus fondos.</p>
                 </div>
                 
-                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 24px; border-radius: var(--radius-sm); margin-bottom: 20px;">
-                    <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
-                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
-                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
-                        <li style="margin-bottom: 12px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y marca <strong>Únicamente</strong> "Habilitar Spot & Margin Trading".</span></li>
-                        <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
-                    </ul>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
+                    <!-- Columna Izquierda: Instrucciones -->
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 24px; border-radius: var(--radius-sm); display: flex; flex-direction: column; justify-content: center;">
+                        <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y marca <strong>Únicamente</strong> "Habilitar Spot & Margin Trading".</span></li>
+                            <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Columna Derecha: Video -->
+                    <div style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(240,185,11,0.4); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 16/9; position: relative; overflow: hidden; padding: 20px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: rgba(240,185,11,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 2px solid rgba(240,185,11,0.3);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                        <h4 style="color: #F8FAFC; margin-bottom: 8px; font-family: var(--font-heading);">Video Tutorial</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">Aquí irá tu video de 2 minutos explicando el proceso paso a paso.</p>
+                    </div>
                 </div>
                 
                 <div style="text-align:center; margin-bottom:30px; display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.9rem;">
