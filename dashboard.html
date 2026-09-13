@@ -484,10 +484,7 @@
 
     <header class="topbar">
 
-        <div style="display:flex; align-items:center; gap: 12px;">
-            <button id="btnBackBreadcrumb" style="background:none; border:none; color:var(--accent); cursor:pointer; font-size:1rem; display:none; align-items:center; gap:4px; font-family:var(--font-heading); font-weight:600; padding-right:12px; border-right:1px solid rgba(255,255,255,0.1); transition: opacity 0.2s;">&#8249; Volver</button>
-            <h1 class="topbar-title" id="topbarTitle" style="margin:0;">Inicio</h1>
-        </div>
+        <h1 class="topbar-title" id="topbarTitle">Inicio</h1>
 
         <div class="topbar-right">
 
@@ -595,6 +592,13 @@
 
         <section class="dash-section" id="sec-contenido">
 
+            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
+                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                    <span>/</span>
+                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                </span>
+            </div>
             <h2 class="section-heading">Contenido Educativo</h2>
 
             <p class="section-sub">Videos y guias organizados por categoria. Filtra lo que necesitas aprender hoy.</p>
@@ -751,6 +755,13 @@
 
         <section class="dash-section" id="sec-tool-bot">
 
+            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
+                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                    <span>/</span>
+                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                </span>
+            </div>
             <h2 class="section-heading">Compras BTC (GaboBot)</h2>
 
             <p class="section-sub">Configura tu estrategia de inversión automatizada (DCA) en Binance.</p>
@@ -1025,6 +1036,13 @@
 
         <section class="dash-section" id="sec-tool-alertas">
 
+            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
+                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                    <span>/</span>
+                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                </span>
+            </div>
             <h2 class="section-heading">Alertas de Precio</h2>
 
             <p class="section-sub">Notificaciones automáticas por Telegram.</p>
@@ -1047,6 +1065,13 @@
 
         <section class="dash-section" id="sec-perfil">
 
+            <div id="sectionBreadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
+                <span id="breadcrumbSub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+                    <span>/</span>
+                    <a id="breadcrumbSubLink" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+                </span>
+            </div>
             <h2 class="section-heading">Mi Perfil</h2>
 
             <p class="section-sub">Actualiza tu informacion personal y foto de perfil.</p>
@@ -1581,34 +1606,36 @@
         document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
 
 
-        // Show/hide breadcrumb back button
-        const btnBack = document.getElementById("btnBackBreadcrumb");
-        if (btnBack) {
+        // Update breadcrumbs inside sections
+        document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+        const crumb = document.getElementById("sectionBreadcrumb");
+        const crumbSub = document.getElementById("breadcrumbSub");
+        const crumbSubLink = document.getElementById("breadcrumbSubLink");
+        if (crumb) {
             if (id === "inicio") {
-                btnBack.style.display = "none";
-                document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+                crumb.style.display = "none";
             } else if (id === "tool-bot") {
                 const configVisible = document.getElementById("botConfigPanel").style.display === "block";
                 if (configVisible) {
-                    btnBack.style.display = "flex";
-                    btnBack.innerHTML = "&#8249; Términos";
-                    btnBack.onclick = () => {
-                        document.getElementById("botConfigPanel").style.display = "none";
-                        document.getElementById("botOnboarding").style.display = "block";
-                        switchSection(null, 'tool-bot');
-                    };
+                    crumb.style.display = "flex";
+                    if (crumbSub) crumbSub.style.display = "flex";
+                    if (crumbSubLink) {
+                        crumbSubLink.textContent = "Términos";
+                        crumbSubLink.onclick = (ev) => {
+                            ev.preventDefault();
+                            document.getElementById("botConfigPanel").style.display = "none";
+                            document.getElementById("botOnboarding").style.display = "block";
+                            switchSection(null, 'tool-bot');
+                        };
+                    }
                     document.getElementById("topbarTitle").textContent = "Configuración";
                 } else {
-                    btnBack.style.display = "flex";
-                    btnBack.innerHTML = "&#8249; Volver";
-                    btnBack.onclick = () => window.history.back();
-                    document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+                    crumb.style.display = "flex";
+                    if (crumbSub) crumbSub.style.display = "none";
                 }
             } else {
-                btnBack.style.display = "flex";
-                btnBack.innerHTML = "&#8249; Volver";
-                btnBack.onclick = () => window.history.back();
-                document.getElementById("topbarTitle").textContent = sectionTitles[id] || id;
+                crumb.style.display = "flex";
+                if (crumbSub) crumbSub.style.display = "none";
             }
         }
     }
