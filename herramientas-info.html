@@ -410,37 +410,44 @@
                 </div>
             </div>
         </section>
-            <!-- FAQ Section -->
+                    <!-- FAQ Section -->
         <section class="faq-section container">
             <div class="content-header" style="text-align: center; margin-bottom: 40px;">
                 <h2 class="section-title">Preguntas Frecuentes</h2>
             </div>
             
             <details class="faq-item">
-                <summary class="faq-question">¿Es seguro conectar mi cuenta de Binance?</summary>
+                <summary class="faq-question">¿Qué es el DCA (Dollar Cost Averaging)?</summary>
                 <div class="faq-answer">
-                    Sí, 100% seguro. La conexión se realiza mediante claves API. Al configurar estas claves, tú eliges qué permisos otorgar. Si habilitas únicamente "Lectura" y "Trading" y dejas desmarcada la opción de "Retiros", es imposible que el bot (o cualquier persona) pueda retirar o robar tus fondos.
+                    Es una estrategia de inversión comprobada que consiste en comprar una cantidad fija de un activo (como Bitcoin) de forma periódica (ej. $50 semanales), sin importar si el precio sube o baja. Esto te evita el estrés de tener que "adivinar" el mercado y promedia tu precio de entrada a largo plazo de forma segura y matemática.
                 </div>
             </details>
 
             <details class="faq-item">
-                <summary class="faq-question">¿Por qué si configuro , a veces compra montos como .92?</summary>
+                <summary class="faq-question">¿Es seguro conectar mi cuenta de Binance?</summary>
                 <div class="faq-answer">
-                    Esto es completamente normal. Binance tiene reglas estrictas sobre la cantidad de decimales permitidos para cada moneda (conocido como Lot Size). Como GaboBot utiliza órdenes pasivas (Limit) para asegurarte cero <em>spread</em> y las mejores comisiones, el sistema ajusta tu orden automáticamente al decimal más cercano permitido.
+                    Sí, 100% seguro. GaboBot funciona conectando una API Key con permisos estrictamente limitados a "Lectura" y "Trading Spot". Al no habilitar la opción de retiros, el bot jamás podrá sacar tus fondos. Tu dinero siempre se queda en tu cuenta de Binance.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué si configuro $100, a veces compra montos como $99.92?</summary>
+                <div class="faq-answer">
+                    Para protegerte de comisiones ocultas, el bot usa órdenes pasivas (Limit). Por las reglas de redondeo y tamaño de lote de Binance, el sistema calcula la fracción más cercana posible a tu monto original que garantice el mejor precio de compra en ese milisegundo. No es un error, es el bot optimizando tu capital.
                 </div>
             </details>
 
             <details class="faq-item">
                 <summary class="faq-question">¿Necesito dejar mi computadora encendida?</summary>
                 <div class="faq-answer">
-                    No. GaboBot está alojado y funciona en la nube 24/7. Una vez que guardas tu configuración, puedes apagar tus dispositivos o irte de viaje; el bot seguirá ejecutando tus compras automáticamente sin interrupciones.
+                    No. GaboBot está alojado y ejecutándose en nuestros servidores en la nube 24/7. Una vez que lo configuras, puedes apagar tu computadora, irte a dormir o de viaje, y el bot seguirá trabajando según tu estrategia.
                 </div>
             </details>
 
             <details class="faq-item">
                 <summary class="faq-question">¿Qué pasa si el mercado cae fuertemente?</summary>
                 <div class="faq-answer">
-                    El objetivo principal del bot es ejecutar la estrategia DCA (Promedio de Costo en Dólares) sin emociones. Si el mercado cae, el bot simplemente comprará más criptomonedas por la misma cantidad de dólares, lo que mejora tu precio promedio de compra a largo plazo.
+                    GaboBot está diseñado para estrategias DCA (Dollar Cost Averaging). Si el mercado cae, el bot seguirá ejecutando tus compras programadas, lo que te permite acumular más cantidad del activo a precios de descuento, promediando tu precio de entrada a la baja para cuando el mercado se recupere. No se asusta, solo ejecuta.
                 </div>
             </details>
         </section>
