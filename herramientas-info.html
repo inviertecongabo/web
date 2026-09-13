@@ -219,6 +219,47 @@
                 grid-template-columns: 1fr;
             }
         }
+    
+        .faq-section {
+            padding: 40px 0 100px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        .faq-question {
+            padding: 20px 24px;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+        }
+        .faq-question::-webkit-details-marker {
+            display: none;
+        }
+        .faq-question:after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+        details[open] .faq-question:after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 24px 24px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
@@ -364,6 +405,40 @@
                     <p class="step-text">Pega tus claves (API y Secret) en el panel de configuración de GaboBot en nuestra web. Define tu monto, criptomoneda (ej. BTC) y cada cuánto tiempo quieres comprar (ej. 7 días). ¡Listo!</p>
                 </div>
             </div>
+        </section>
+            <!-- FAQ Section -->
+        <section class="faq-section container">
+            <div class="content-header" style="text-align: center; margin-bottom: 40px;">
+                <h2 class="section-title">Preguntas Frecuentes</h2>
+            </div>
+            
+            <details class="faq-item">
+                <summary class="faq-question">¿Es seguro conectar mi cuenta de Binance?</summary>
+                <div class="faq-answer">
+                    Sí, 100% seguro. La conexión se realiza mediante claves API. Al configurar estas claves, tú eliges qué permisos otorgar. Si habilitas únicamente "Lectura" y "Trading" y dejas desmarcada la opción de "Retiros", es imposible que el bot (o cualquier persona) pueda retirar o robar tus fondos.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué si configuro , a veces compra montos como .92?</summary>
+                <div class="faq-answer">
+                    Esto es completamente normal. Binance tiene reglas estrictas sobre la cantidad de decimales permitidos para cada moneda (conocido como Lot Size). Como GaboBot utiliza órdenes pasivas (Limit) para asegurarte cero <em>spread</em> y las mejores comisiones, el sistema ajusta tu orden automáticamente al decimal más cercano permitido.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Necesito dejar mi computadora encendida?</summary>
+                <div class="faq-answer">
+                    No. GaboBot está alojado y funciona en la nube 24/7. Una vez que guardas tu configuración, puedes apagar tus dispositivos o irte de viaje; el bot seguirá ejecutando tus compras automáticamente sin interrupciones.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Qué pasa si el mercado cae fuertemente?</summary>
+                <div class="faq-answer">
+                    El objetivo principal del bot es ejecutar la estrategia DCA (Promedio de Costo en Dólares) sin emociones. Si el mercado cae, el bot simplemente comprará más criptomonedas por la misma cantidad de dólares, lo que mejora tu precio promedio de compra a largo plazo.
+                </div>
+            </details>
         </section>
     </main>
 
