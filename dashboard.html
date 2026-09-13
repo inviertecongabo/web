@@ -749,13 +749,19 @@
     });
 
     // BOT CONFIG
-    document.getElementById("botTermsCheck")?.addEventListener("change", (e) => {
+    const checkBotTerms = () => {
+        const check1 = document.getElementById("botTermsCheck1")?.checked;
+        const check2 = document.getElementById("botTermsCheck2")?.checked;
         const btn = document.getElementById("btnAcceptBotTerms");
         if(btn) {
-            btn.disabled = !e.target.checked;
-            btn.style.opacity = e.target.checked ? "1" : "0.5";
+            const isReady = check1 && check2;
+            btn.disabled = !isReady;
+            btn.style.opacity = isReady ? "1" : "0.5";
         }
-    });
+    };
+    
+    document.getElementById("botTermsCheck1")?.addEventListener("change", checkBotTerms);
+    document.getElementById("botTermsCheck2")?.addEventListener("change", checkBotTerms);
 
     document.getElementById("btnAcceptBotTerms")?.addEventListener("click", async () => {
         const btn = document.getElementById("btnAcceptBotTerms");
