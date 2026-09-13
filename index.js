@@ -252,3 +252,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Hook Slider Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const track  = document.getElementById('toolsSlidesTrack');
+    const hookCta = document.getElementById('hookCta');
+    const hookBack = document.getElementById('hookBack');
+
+    if (!track || !hookCta) return;
+
+    hookCta.addEventListener('click', () => {
+        track.style.transform = 'translateX(-100%)';
+    });
+
+    if (hookBack) {
+        hookBack.addEventListener('click', () => {
+            track.style.transform = 'translateX(0)';
+        });
+    }
+});
