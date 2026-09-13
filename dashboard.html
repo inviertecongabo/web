@@ -430,52 +430,81 @@
             </div>
 
             <!-- PANEL DE CONFIGURACION -->
-            <div class="dash-card" id="botConfigPanel" style="max-width: 600px; margin-bottom: 24px; display: none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+            <div class="dash-card" id="botConfigPanel" style="max-width: 800px; margin-bottom: 24px; display: none;">
+                <!-- STATUS HEADER -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
                     <div>
-                        <h3 style="font-family:var(--font-heading); font-size: 1.1rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
-                            Estado del Bot
-                            <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.7rem;"><span class="status-dot"></span> INACTIVO</span>
+                        <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                            Estado de Inversión
+                            <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
                         </h3>
-                        <p style="color:var(--text-muted); font-size:0.85rem;">Enciende o apaga las compras automatizadas.</p>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
                     </div>
-                    <label class="toggle-switch">
+                    <label class="toggle-switch" style="transform: scale(1.1);">
                         <input type="checkbox" id="botToggle">
                         <span class="slider"></span>
                     </label>
                 </div>
                 
-                <div class="profile-section-title">Configuración de Binance</div>
-                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px; line-height: 1.5;">Ingresa tus llaves API de solo lectura y trading (Spot). <strong style="color:var(--accent);">No habilites permisos de retiro.</strong></p>
-                
-                <div class="profile-form">
-                    <div class="form-group">
-                        <label class="form-label">API Key</label>
-                        <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key de Binance">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                    
+                    <!-- COLUMNA 1: API -->
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-sm);">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">API Key</label>
+                            <div style="position: relative;">
+                                <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key" style="padding-left: 36px;">
+                                <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Secret Key</label>
+                            <div style="position: relative;">
+                                <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key" style="padding-left: 36px;">
+                                <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Secret Key</label>
-                        <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key">
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <div class="form-group">
+
+                    <!-- COLUMNA 2: ESTRATEGIA -->
+                    <div style="background: rgba(240,185,11,0.03); border: 1px solid rgba(240,185,11,0.15); padding: 20px; border-radius: var(--radius-sm);">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Estrategia DCA</h4>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 16px;">
                             <label class="form-label">Monto (USDT)</label>
-                            <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="10">
+                            <div style="position: relative;">
+                                <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px; border-color: rgba(240,185,11,0.3);">
+                                <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
+                            </div>
+                            <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo recomendado:  USDT</small>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">Frecuencia</label>
-                            <select class="form-input" id="botFrequency">
-                                <option value="weekly">Semanal</option>
-                                <option value="biweekly">Quincenal</option>
-                                <option value="monthly">Mensual</option>
-                            </select>
+                            <div style="position: relative;">
+                                <select class="form-input" id="botFrequency" style="padding-left: 36px; border-color: rgba(240,185,11,0.3);">
+                                    <option value="weekly">Semanal</option>
+                                    <option value="biweekly">Quincenal</option>
+                                    <option value="monthly">Mensual</option>
+                                </select>
+                                <svg style="position: absolute; left: 10px; top: 10px; color: var(--accent);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            </div>
                         </div>
                     </div>
-                    <button class="btn-save" id="btnSaveBot" style="margin-top: 8px;">Guardar Configuración</button>
-                    <div id="botMsg" class="msg-ok">Configuración guardada correctamente.</div>
+                </div>
+
+                <div style="margin-top: 24px; display:flex; flex-direction:column; align-items:center;">
+                    <button class="btn-save" id="btnSaveBot" style="width: 100%; max-width: 300px; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
+                    <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">Configuración guardada correctamente.</div>
                 </div>
             </div>
-        </section>
 
         <!-- ALERTAS -->
         <section class="dash-section" id="sec-tool-alertas">
