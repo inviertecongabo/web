@@ -13,7 +13,7 @@
     
     <!-- Link al archivo CSS -->
     <link rel="stylesheet" href="index.css">
-        <style>
+    <style>
         .page-hero {
             padding: 140px 0 60px;
             text-align: center;
@@ -219,7 +219,7 @@
                 grid-template-columns: 1fr;
             }
         }
-    
+
         .faq-section {
             padding: 40px 0 100px;
             max-width: 800px;
@@ -308,7 +308,7 @@
                 <!-- Manual -->
                 <div class="vs-card bad">
                     <h3 class="vs-title">Comprar en Spot (Manual)</h3>
-                                        <ul class="vs-list">
+                    <ul class="vs-list">
                         <li><strong>Depende de tu tiempo:</strong> Pierdes horas revisando el mercado tratando de adivinar "el mejor momento" para comprar.</li>
                         <li><strong>Costos ocultos:</strong> Al comprar rápido (Market), pagas el <em>spread</em> del exchange y terminas comprando el activo más caro.</li>
                         <li><strong>Caos emocional:</strong> El miedo o el FOMO te hacen dudar, llevándote a comprar caro o a quedarte paralizado.</li>
@@ -318,7 +318,7 @@
                 <!-- Con Bot -->
                 <div class="vs-card good">
                     <h3 class="vs-title">Usar GaboBot (DCA Engine)</h3>
-                                        <ul class="vs-list">
+                    <ul class="vs-list">
                         <li><strong>Tu tiempo es tuyo:</strong> El bot opera 24/7 en la nube de forma 100% automática, mientras tú trabajas o descansas.</li>
                         <li><strong>Cero sobrecostos:</strong> Utiliza órdenes pasivas (Limit) garantizando que compres al precio exacto, sin perder dinero en <em>spread</em>.</li>
                         <li><strong>Mente fría (0% emociones):</strong> Ejecuta tu estrategia de compra matemáticamente, ignorando el ruido y el pánico del mercado.</li>
@@ -410,30 +410,17 @@
                 </div>
             </div>
         </section>
-                    <!-- FAQ Section -->
+
+        <!-- FAQ Section -->
         <section class="faq-section container">
             <div class="content-header" style="text-align: center; margin-bottom: 40px;">
                 <h2 class="section-title">Preguntas Frecuentes</h2>
             </div>
             
             <details class="faq-item">
-                <summary class="faq-question">¿Qué es el DCA (Dollar Cost Averaging)?</summary>
-                <div class="faq-answer">
-                    Es una estrategia de inversión comprobada que consiste en comprar una cantidad fija de un activo (como Bitcoin) de forma periódica (ej. $50 semanales), sin importar si el precio sube o baja. Esto te evita el estrés de tener que "adivinar" el mercado y promedia tu precio de entrada a largo plazo de forma segura y matemática.
-                </div>
-            </details>
-
-            <details class="faq-item">
                 <summary class="faq-question">¿Es seguro conectar mi cuenta de Binance?</summary>
                 <div class="faq-answer">
                     Sí, 100% seguro. GaboBot funciona conectando una API Key con permisos estrictamente limitados a "Lectura" y "Trading Spot". Al no habilitar la opción de retiros, el bot jamás podrá sacar tus fondos. Tu dinero siempre se queda en tu cuenta de Binance.
-                </div>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">¿Por qué si configuro $100, a veces compra montos como $99.92?</summary>
-                <div class="faq-answer">
-                    Para protegerte de comisiones ocultas, el bot usa órdenes pasivas (Limit). Por las reglas de redondeo y tamaño de lote de Binance, el sistema calcula la fracción más cercana posible a tu monto original que garantice el mejor precio de compra en ese milisegundo. No es un error, es el bot optimizando tu capital.
                 </div>
             </details>
 
@@ -445,9 +432,23 @@
             </details>
 
             <details class="faq-item">
+                <summary class="faq-question">¿Qué es el DCA (Dollar Cost Averaging)?</summary>
+                <div class="faq-answer">
+                    Es una estrategia de inversión comprobada que consiste en comprar una cantidad fija de un activo (como Bitcoin) de forma periódica (ej. $50 semanales), sin importar si el precio sube o baja. Esto te evita el estrés de tener que "adivinar" el mercado y promedia tu precio de entrada a largo plazo de forma segura y matemática.
+                </div>
+            </details>
+
+            <details class="faq-item">
                 <summary class="faq-question">¿Qué pasa si el mercado cae fuertemente?</summary>
                 <div class="faq-answer">
                     GaboBot está diseñado para estrategias DCA (Dollar Cost Averaging). Si el mercado cae, el bot seguirá ejecutando tus compras programadas, lo que te permite acumular más cantidad del activo a precios de descuento, promediando tu precio de entrada a la baja para cuando el mercado se recupere. No se asusta, solo ejecuta.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué si configuro 100$, a veces compra montos como 99,92$?</summary>
+                <div class="faq-answer">
+                    Para protegerte de comisiones ocultas, el bot usa órdenes pasivas (Limit). Por las reglas de redondeo y tamaño de lote de Binance, el sistema calcula la fracción más cercana posible a tu monto original que garantice el mejor precio de compra en ese milisegundo. No es un error, es el bot optimizando tu capital.
                 </div>
             </details>
         </section>
@@ -522,4 +523,3 @@
     </script>
 </body>
 </html>
-
