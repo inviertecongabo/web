@@ -832,7 +832,7 @@
 
                     <div style="display:flex; align-items:flex-start; gap: 12px;">
 
-                        <input type="checkbox" id="botTermsCheck1" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+                        <input type="checkbox" id="botTermsCheck1" autocomplete="off" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
 
                         <label for="botTermsCheck1" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
 
@@ -844,7 +844,7 @@
 
                     <div style="display:flex; align-items:flex-start; gap: 12px; margin-top:8px;">
 
-                        <input type="checkbox" id="botTermsCheck2" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+                        <input type="checkbox" id="botTermsCheck2" autocomplete="off" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
 
                         <label for="botTermsCheck2" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
 
@@ -1476,6 +1476,11 @@
 
         // Llenar datos básicos del DOM
 
+        // Reset bot onboarding checkboxes on load
+        if(document.getElementById("botTermsCheck1")) document.getElementById("botTermsCheck1").checked = false;
+        if(document.getElementById("botTermsCheck2")) document.getElementById("botTermsCheck2").checked = false;
+        if(typeof checkBotTerms === 'function') checkBotTerms();
+
         loadEducationalContent();
 
         
@@ -1552,6 +1557,15 @@
         if (!id) return; // Prevent errors if clicked on parent dropdown
         
         window.location.hash = id;
+        
+        // Reset bot terms if navigating away
+        if (id !== 'tool-bot') {
+            const c1 = document.getElementById("botTermsCheck1");
+            const c2 = document.getElementById("botTermsCheck2");
+            if(c1) c1.checked = false;
+            if(c2) c2.checked = false;
+            if(typeof checkBotTerms === 'function') checkBotTerms();
+        }
 
         document.querySelectorAll(".dash-section").forEach(s => s.classList.remove("active"));
 
