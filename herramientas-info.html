@@ -13,7 +13,7 @@
     
     <!-- Link al archivo CSS -->
     <link rel="stylesheet" href="index.css">
-    <style>
+        <style>
         .page-hero {
             padding: 140px 0 60px;
             text-align: center;
@@ -34,6 +34,12 @@
             line-height: 1.6;
         }
         
+        .vs-grid, .tool-detail-card, .step-grid {
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .vs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -57,7 +63,7 @@
         .vs-title {
             font-family: var(--font-heading);
             font-size: 1.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -71,30 +77,39 @@
         }
         .vs-list li {
             position: relative;
-            padding-left: 28px;
-            margin-bottom: 15px;
+            padding-left: 32px;
+            margin-bottom: 16px;
             color: var(--text-primary);
             line-height: 1.5;
         }
         .vs-card.bad .vs-list li::before {
-            content: "✕";
-            color: #ef4444;
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-weight: bold;
+            content: "";
+            position: absolute; left: 0; top: 2px;
+            width: 20px; height: 20px;
+            background-color: rgba(239, 68, 68, 0.15);
+            border-radius: 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+            background-size: 10px;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         .vs-card.good .vs-list li::before {
-            content: "✓";
-            color: var(--accent);
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-weight: bold;
+            content: "";
+            position: absolute; left: 0; top: 2px;
+            width: 20px; height: 20px;
+            background-color: rgba(240, 185, 11, 0.15);
+            border-radius: 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F0B90B' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            background-size: 12px;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .tools-catalog {
             padding: 80px 0;
+            background: linear-gradient(180deg, rgba(10,14,23,0) 0%, rgba(18,24,36,0.6) 50%, rgba(10,14,23,0) 100%);
+            border-top: 1px solid rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.02);
         }
         .tool-detail-card {
             background: linear-gradient(135deg, rgba(18,24,36,0.95) 0%, rgba(10,14,23,0.98) 100%);
@@ -108,6 +123,18 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             margin-bottom: 40px;
             position: relative;
+        }
+        
+        .tool-detail-card::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(240,185,11,0.08) 0%, transparent 60%);
+            border-radius: 24px;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .guide-section {
@@ -409,3 +436,4 @@
     </script>
 </body>
 </html>
+
