@@ -201,3 +201,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+// Gated Modal Logic
+const gatedTriggers = document.querySelectorAll('.gated-trigger');
+const gatedModal = document.getElementById('gatedModal');
+const gatedModalClose = document.getElementById('gatedModalClose');
+
+if (gatedModal) {
+    gatedTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            gatedModal.classList.add('active');
+        });
+    });
+    if (gatedModalClose) {
+        gatedModalClose.addEventListener('click', () => {
+            gatedModal.classList.remove('active');
+        });
+    }
+    // Cerrar al hacer clic fuera
+    gatedModal.addEventListener('click', (e) => {
+        if (e.target === gatedModal) {
+            gatedModal.classList.remove('active');
+        }
+    });
+}
