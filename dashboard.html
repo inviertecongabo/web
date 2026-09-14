@@ -11,15 +11,15 @@
     <title>Mi Panel | Invierte con Gabo</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
-
     <style>
-
+        /* --- Fondos con Brillo Decorativo (Glow Effects) --- */
+        .bg-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(150px); z-index: -1; pointer-events: none; opacity: 0.3; }
+        .bg-glow-1 { top: -200px; right: -100px; background: linear-gradient(135deg, #F0B90B 0%, #F8D347 100%); }
+        .bg-glow-2 { top: 50%; left: -200px; background: radial-gradient(circle, #F0B90B 0%, rgba(0,0,0,0) 70%); }
+        
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         :root {
 
             --accent: #F0B90B; --accent-glow: rgba(240,185,11,0.15);
@@ -357,6 +357,9 @@
 </head>
 
 <body>
+    <!-- Fondo decorativo con gradiente dinámico -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
 
 
 
