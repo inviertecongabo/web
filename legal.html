@@ -31,16 +31,24 @@
         
         /* Acordeón FAQ */
         .faq-accordion { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
-        .faq-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); overflow: hidden; transition: var(--transition); }
-        .faq-question { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: transparent; border: none; color: var(--text-primary); font-family: var(--font-heading); font-weight: 600; font-size: 1.05rem; text-align: left; cursor: pointer; transition: var(--transition); }
+        .faq-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); margin-bottom: 16px; overflow: hidden; transition: var(--transition); }
+        .faq-question { padding: 20px 24px; font-family: var(--font-heading); font-size: 1.05rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-primary); transition: var(--transition); }
         .faq-question:hover { color: var(--accent); }
-        .faq-icon { width: 20px; height: 20px; transition: var(--transition); flex-shrink: 0; margin-left: 16px; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(0,0,0,0.2); }
-        .faq-answer p { padding: 0 24px 20px 24px; color: var(--text-muted); line-height: 1.6; margin: 0; }
-        .faq-item.active { border-color: rgba(240,185,11,0.3); background: rgba(240,185,11,0.02); }
-        .faq-item.active .faq-icon { transform: rotate(180deg); color: var(--accent); }
-        .faq-item.active .faq-question { color: var(--accent); }
-        .faq-item.active .faq-answer { max-height: 1000px; }
+        .faq-question::-webkit-details-marker { display: none; }
+        .faq-question:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F0B90B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.3s ease;
+        }
+        details[open] .faq-question:after { transform: rotate(180deg); }
+        details[open] .faq-question { color: var(--accent); }
+        .faq-answer { padding: 0 24px 20px 24px; color: var(--text-muted); line-height: 1.6; max-height: none !important; overflow: visible !important; opacity: 1 !important; }
+        .faq-answer p { margin: 0; padding-bottom: 10px; }
     </style>
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh;">
@@ -99,53 +107,33 @@
                 <p style="color: var(--text-muted);">Respuestas claras a las dudas más comunes sobre el contenido, la comunidad y cómo dar tus primeros pasos.</p>
                 
                 <div class="faq-accordion">
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>¿El contenido educativo y las guías son totalmente gratis?</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">¿El contenido educativo y las guías son totalmente gratis?</summary>
                         <div class="faq-answer">
                             <p>Sí, 100% gratis. Mi misión es crear contenido educativo real, transparente y accesible sobre finanzas, acciones venezolanas y criptomonedas sin venderte cursos ni falsas promesas.</p>
                         </div>
-                    </div>
+                    </details>
 
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>¿Qué necesito para empezar a invertir desde Venezuela?</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">¿Qué necesito para empezar a invertir desde Venezuela?</summary>
                         <div class="faq-answer">
                             <p>Solo necesitas conexión a internet, ganas de aprender y constancia. Tanto para la Bolsa de Valores de Caracas (BVC) como para criptomonedas, puedes dar tus primeros pasos con montos muy accesibles y aprender de forma gradual.</p>
                         </div>
-                    </div>
+                    </details>
 
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>¿Tengo que darte acceso a mi dinero o tus canales son de asesoría?</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">¿Tengo que darte acceso a mi dinero o tus canales son de asesoría?</summary>
                         <div class="faq-answer">
                             <p>¡Jamás! Nunca te pediré acceso a tus cuentas, ni llaves privadas, ni dinero para gestionártelo. Todo lo que comparto es estrictamente educativo para que tú mismo tomes el control de tus finanzas.</p>
                         </div>
-                    </div>
+                    </details>
 
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>¿Por dónde me recomiendas empezar si no sé nada del tema?</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">¿Por dónde me recomiendas empezar si no sé nada del tema?</summary>
                         <div class="faq-answer">
                             <p>Te sugiero revisar los videos organizados en la sección de <strong>Contenido</strong> de esta web o unirte a mi canal de <strong>Telegram</strong> y boletín por correo, donde explico los conceptos desde cero y sin enredos.</p>
                         </div>
-                    </div>
+                    </details>
                 </div>
             </div>
 
@@ -153,30 +141,19 @@
             <div id="terms-sec" class="legal-section legal-content">
                 <h2>Términos y Condiciones</h2>
                 <p>Última actualización: Septiembre 2026</p>
-                
                 <div class="faq-accordion">
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>1. Aceptación de los términos</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">1. Aceptación de los términos</summary>
                         <div class="faq-answer">
                             <p>Al acceder y utilizar Invierte con Gabo, aceptas estar sujeto a estos términos y condiciones. Todo el contenido proporcionado en esta plataforma es de carácter estrictamente educativo.</p>
                         </div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>2. No es asesoría financiera</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">2. No es asesoría financiera</summary>
                         <div class="faq-answer">
                             <p>Toda la información, videos, análisis y comentarios compartidos no constituyen asesoramiento financiero. Las inversiones en los mercados financieros conllevan riesgos significativos y debes hacer tu propia investigación (DYOR) antes de tomar decisiones con tu capital.</p>
                         </div>
-                    </div>
+                    </details>
                 </div>
             </div>
 
@@ -184,43 +161,25 @@
             <div id="privacy-sec" class="legal-section legal-content">
                 <h2>Política de Privacidad</h2>
                 <p>Última actualización: Septiembre 2026</p>
-                
                 <div class="faq-accordion">
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>1. Recopilación de datos</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">1. Recopilación de datos</summary>
                         <div class="faq-answer">
                             <p>Solo guardamos la información estrictamente necesaria que nos proporcionas al registrarte (tu nombre y correo electrónico mediante Google), y eventualmente tu usuario de Telegram si decides activar las alertas de precio. No recopilamos datos invasivos.</p>
                         </div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>2. Seguridad de tus API Keys (Binance)</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">2. Seguridad de tus API Keys (Binance)</summary>
                         <div class="faq-answer">
                             <p>La seguridad es nuestra prioridad. Las API Keys de Binance que utilizas para el GaboBot se almacenan encriptadas con los más altos estándares de seguridad. Nosotros <strong>NO</strong> tenemos acceso a tus fondos. La plataforma exige que configures tu API <em>únicamente en modo lectura y trading Spot</em>, asegurando que <strong>los retiros estén siempre bloqueados</strong> por diseño.</p>
                         </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>3. Uso de la información</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">3. Uso de la información</summary>
                         <div class="faq-answer">
                             <p>Tus datos son utilizados exclusivamente para que puedas iniciar sesión, para el envío de correos importantes relacionados con tu cuenta y notificaciones sobre el GaboBot o nuevo contenido. <strong>Prometemos firmemente que no vendemos ni alquilamos tu información a terceros ni a agencias de publicidad.</strong></p>
                         </div>
-                    </div>
+                    </details>
                 </div>
             </div>
 
@@ -228,31 +187,19 @@
             <div id="cookies-sec" class="legal-section legal-content">
                 <h2>Política de Cookies</h2>
                 <p>Última actualización: Septiembre 2026</p>
-                
                 <div class="faq-accordion">
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>1. ¿Qué son las cookies y cuáles usamos?</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    <details class="faq-item">
+                        <summary class="faq-question">1. ¿Qué son las cookies y cuáles usamos?</summary>
                         <div class="faq-answer">
                             <p>Las cookies son pequeños archivos de texto que se guardan en tu navegador. Nosotros solo utilizamos <strong>cookies esenciales</strong>, que son estrictamente necesarias para el funcionamiento de la plataforma. Estas se encargan de mantener tu sesión iniciada de forma segura (a través de Supabase/Google) para que no tengas que meter tu clave cada vez que entras al Panel.</p>
                         </div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>2. Cero rastreo publicitario (Cero Ads)</span>
-                            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">2. Cero rastreo publicitario (Cero Ads)</summary>
                         <div class="faq-answer">
                             <p>Respetamos tu privacidad. <strong>No utilizamos cookies intrusivas de rastreo, ni Google Adsense, ni ningún tipo de tecnología para perseguirte con publicidad</strong> en otras páginas web. Tu actividad dentro de Invierte con Gabo se queda en Invierte con Gabo.</p>
                         </div>
-                    </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -314,17 +261,7 @@
             activateTab(tabParam + '-sec');
         }
 
-        // Lógica del Acordeón FAQ
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            if (question) {
-                question.addEventListener('click', () => {
-                    item.classList.toggle('active');
-                });
-            }
-        });
-    </script>
+        </script>
     <!-- Supabase: detectar sesion para cambiar botones de navbar -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script>
