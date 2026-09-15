@@ -368,7 +368,15 @@
             if (password !== confirmPassword) { showMsg('Las contrasenas no coinciden. Verificalas bien.', 'error'); return; }
             
             btn.disabled = true; btn.textContent = 'Creando cuenta...'; clearMsg();
-            const { error } = await sb.auth.signUp({ email, password, options: { data: { full_name: name } } });
+            const dashUrl = window.location.origin + '/dashboard';
+            const { error } = await sb.auth.signUp({ 
+                email, 
+                password, 
+                options: { 
+                    data: { full_name: name },
+                    emailRedirectTo: dashUrl
+                } 
+            });
             if (error) { showMsg(error.message || 'Error al crear cuenta. Intenta de nuevo.', 'error'); btn.disabled = false; btn.textContent = 'Crear mi Cuenta'; }
             else { 
                 clearMsg();
