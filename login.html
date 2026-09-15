@@ -328,8 +328,7 @@
         
         // --- Iniciar Sesion ---
         async function signInWithGoogle() {
-            const currentUrl = window.location.href;
-            const redirectUrl = currentUrl.replace('login.html', 'dashboard.html');
+            const redirectUrl = window.location.origin + '/dashboard';
             const { error } = await sb.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
