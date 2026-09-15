@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Registro Real al Boletín con Web3Forms ---
+    // --- Registro Real al Boletín con MailerLite (vía Vercel Serverless Function) ---
     const subscribeForm = document.getElementById('subscribeForm');
     const formMessage = document.getElementById('formMessage');
 
@@ -107,30 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
             formMessage.textContent = '';
             formMessage.className = 'form-message';
 
-            // Petición real a la API de Web3Forms
-            fetch('https://api.web3forms.com/submit', {
+            // Petición a nuestro backend en Vercel que se conecta con MailerLite
+            fetch('/api/subscribe', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    access_key: '325cfa7a-cff8-4928-9bfc-b3f24c2653e1',
-                    email: emailValue,
-                    from_name: 'Web de Invierte con Gabo',
-                    subject: '¡Nuevo Suscriptor en tu Web!'
+                    email: emailValue
                 })
             })
             .then(async (response) => {
                 let json = await response.json();
-                if (response.status === 200) {
+                if (response.ok && json.success) {
                     // Registro exitoso
-                    formMessage.textContent = '¡Listo! Te has unido a la comunidad con éxito.';
+                    formMessage.textContent = json.message || '¡Listo! Te has unido a la comunidad con éxito.';
                     formMessage.classList.add('success');
                     emailInput.value = '';
                 } else {
                     // Servidor responde con error
-                    formMessage.textContent = json.message || 'Ocurrió un error. Intenta de nuevo.';
+                    formMessage.textContent = json.error || 'Ocurrió un error. Intenta de nuevo.';
                     formMessage.classList.add('error');
                 }
             })
@@ -152,8 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-    // --- Scroll Reveal Animation ---
     const revealElements = document.querySelectorAll('.reveal');
     
     const revealObserver = new IntersectionObserver((entries, observer) => {
