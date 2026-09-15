@@ -308,6 +308,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Highlight the correct answer (C = time)
                 correctOption.classList.add('reveal-correct');
 
+                // If user selected a wrong answer, mark it
+                if (btn !== correctOption) {
+                    btn.classList.add('reveal-wrong');
+                    const letterSpan = btn.querySelector('.hook-option-letter');
+                    if (letterSpan) {
+                        letterSpan.innerHTML = '&#10006;'; // '✖'
+                    }
+                }
+
                 // Hide placeholder, show answer
                 const placeholder = document.getElementById('quizPlaceholder');
                 if (placeholder) placeholder.classList.add('hidden');

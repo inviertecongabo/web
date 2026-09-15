@@ -1726,3 +1726,16 @@ body {
     transition: height 0.4s ease-in-out;
 }
 
+
+.hook-options.answered .hook-option.reveal-wrong {
+    opacity: 1;
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.hook-options.answered .hook-option.reveal-wrong .hook-option-letter {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
+
