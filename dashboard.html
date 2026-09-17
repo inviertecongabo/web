@@ -264,6 +264,16 @@
         .qa-action-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); font-family: var(--font-heading); display: flex; align-items: center; gap: 6px; }
         .qa-action-link svg { width: 16px; height: 16px; }
 
+        /* FEEDBACK FORM */
+        .feedback-form { background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: var(--radius-md); max-width: 600px; }
+        .feedback-form .form-group { margin-bottom: 20px; }
+        .feedback-form label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+        .feedback-form select, .feedback-form textarea, .feedback-form input[type="file"] { width: 100%; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; }
+        .feedback-form select:focus, .feedback-form textarea:focus { border-color: var(--accent); outline: none; }
+        .feedback-form textarea { resize: vertical; min-height: 100px; }
+        .feedback-form .file-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; display: block; }
+        .feedback-form button { margin-top: 10px; }
+
         /* PERFIL */
 
         .perfil-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
@@ -448,15 +458,17 @@
         </div>
 
         <button class="nav-item" data-section="perfil">
-
             <div class="nav-item-content">
-
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-
                 Mi Perfil
-
             </div>
+        </button>
 
+        <button class="nav-item" data-section="sugerencias">
+            <div class="nav-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Buzón de Ideas
+            </div>
         </button>
 
         <a href="admin.html" class="nav-item" id="navAdmin" style="display:none; text-decoration:none; margin-top:10px; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px;">
@@ -572,8 +584,8 @@
                         <div class="stat-card-badge">Beta</div>
                     </div>
                     <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Buzón de ideas</div>
-                    <div class="stat-label">Valoramos tu opinión para mejorar la web</div>
-                    <a href="mailto:soporte@inviertecongabo.com?subject=Sugerencia%20de%20mejora%20para%20la%20plataforma" class="stat-card-action outline">Dejar sugerencia</a>
+                    <div class="stat-label" style="font-size:0.8rem; line-height:1.4;">En Invierte con Gabo valoramos tu opinión. Déjanos una reseña para mejorar.</div>
+                    <button class="stat-card-action outline" onclick="switchSection(event,'sugerencias')">Dejar sugerencia</button>
                 </div>
 
                 <div class="stat-card">
@@ -627,6 +639,43 @@
                 </a>
             </div>
 
+        </section>
+
+        <!-- SUGERENCIAS -->
+        <section class="dash-section" id="sec-sugerencias">
+            <h2 class="section-heading">Buzón de Ideas</h2>
+            <p class="section-sub">En Invierte con Gabo valoramos tu opinión. Selecciona una categoría y déjanos tu sugerencia o idea de mejora para la plataforma o el contenido.</p>
+            
+            <form id="feedbackForm" class="feedback-form" action="https://formsubmit.co/tu_correo@inviertecongabo.com" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_subject" value="Nueva sugerencia desde el Dashboard">
+                <input type="hidden" name="_next" value="https://www.inviertecongabo.com/dashboard?feedback=success">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="form-group">
+                    <label>¿A qué área corresponde tu sugerencia?</label>
+                    <select name="Categoría" required>
+                        <option value="" disabled selected>Selecciona un filtro...</option>
+                        <option value="Oratoria">Oratoria / Estilo de videos</option>
+                        <option value="Videos">Videos educativos nuevos que quieres ver</option>
+                        <option value="Herramientas">Herramientas o GaboBot</option>
+                        <option value="Pagina Web">Página Web (Errores o Diseño)</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Explícanos tu idea</label>
+                    <textarea name="Sugerencia" required placeholder="Escribe aquí tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Adjuntar Imagen (Opcional)</label>
+                    <input type="file" name="attachment" accept="image/*">
+                    <span class="file-hint">Sube una captura de pantalla si te ayuda a explicar mejor tu idea (Max 5MB).</span>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width:100%; padding:14px; font-size:1.1rem; border:none; border-radius:var(--radius-sm); font-weight:800; cursor:pointer;">Enviar Sugerencia</button>
+            </form>
         </section>
 
 
