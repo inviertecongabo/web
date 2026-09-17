@@ -1109,6 +1109,21 @@
 
                     </div>
 
+                    <!-- COLUMNA 3: INSTRUCCIONES -->
+                    <div class="config-box" style="background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent);">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
+                        </div>
+                        <ol style="color:var(--text-muted); font-size:0.85rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
+                            <li>Genera tus <strong>API Keys</strong> en Binance con permisos de "Spot & Margin Trading".</li>
+                            <li>Pega tus contraseñas en la primera columna (Conexión Binance).</li>
+                            <li>Define la frecuencia y la cantidad (mín. $6 USDT) a invertir en la segunda columna.</li>
+                            <li>Haz clic en <strong>Guardar Configuración</strong> y confirma con tu 2FA.</li>
+                            <li>Finalmente, mueve el <strong>interruptor superior</strong> para arrancar el bot.</li>
+                        </ol>
+                    </div>
+
                 </div>
 
 
@@ -2026,7 +2041,7 @@
         }
 
         if (!amount || parseFloat(amount) < 6) {
-            alert("El monto mínimo requerido para operar en Binance es de $6 USDT.");
+            alert("El monto mínimo requerido para activar el bot es de 6 USDT.");
             return;
         }
 
