@@ -1889,6 +1889,7 @@
 
     document.getElementById("btnCancelGlobalMfa")?.addEventListener("click", () => {
         document.getElementById("globalMfaModal").style.display = "none";
+        if (globalMfaResolve) globalMfaResolve(false);
     });
 
     document.getElementById("btnConfirmGlobalMfa")?.addEventListener("click", async () => {
@@ -1984,15 +1985,23 @@
         const isActive = e.target.checked;
         const checkbox = e.target;
 
+        const { data: { user } } = await sb.auth.getUser();
+        const botConfig = user?.user_metadata?.bot_config || {};
+
+        // Validación: Si intenta prenderlo y no hay API keys guardadas
+        if (isActive && (!botConfig.ak || !botConfig.sk)) {
+            checkbox.checked = false;
+            alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuración de abajo.");
+            return;
+        }
+
         require2FA(async () => {
             updateBotStatusBadge(isActive);
-            const { data: { user } } = await sb.auth.getUser();
-            const botConfig = user?.user_metadata?.bot_config || {};
             botConfig.active = isActive;
             await sb.auth.updateUser({ data: { bot_config: botConfig } });
         }).then(verified => {
             if (!verified) {
-                // If user cancelled or failed 2FA, revert checkbox
+                // If user cancelled or failed 2FA, revert checkbox visually
                 checkbox.checked = !isActive;
             }
         });
@@ -2000,74 +2009,47 @@
 
 
 
-    document.getElementById("btnSaveBot")?.addEventListener("click", async () => {
-
+    document.getElementById("btnSaveBot")?.addEventListener("click", () => {
         const btn = document.getElementById("btnSaveBot");
-
-        btn.textContent = "Guardando...";
-
-        btn.disabled = true;
-
-        
-
         const apiKey = document.getElementById("botApiKey").value.trim();
-
         const secretKey = document.getElementById("botSecretKey").value.trim();
-
         const amount = document.getElementById("botAmount").value;
-
         const frequency = document.getElementById("botFrequency").value;
 
-        
-
-        const { data: { user } } = await sb.auth.getUser();
-
-        const botConfig = user?.user_metadata?.bot_config || {};
-
-        
-
-        botConfig.ak = apiKey;
-
-        botConfig.sk = secretKey;
-
-        botConfig.amount = amount;
-
-        botConfig.frequency = frequency;
-
-        
-
-        const { data, error } = await sb.auth.updateUser({ data: { bot_config: botConfig } });
-
-        const msg = document.getElementById("botMsg");
-
-        
-
-        if (error) {
-
-            msg.textContent = "Error: " + error.message;
-
-            msg.className = "msg-err";
-
-            console.error("Supabase error:", error);
-
-        } else {
-
-            msg.textContent = "Configuración guardada correctamente.";
-
-            msg.className = "msg-ok";
-
+        if (!apiKey || !secretKey) {
+            alert("API Key y Secret Key son obligatorios para guardar la configuración.");
+            return;
         }
 
-        
+        require2FA(async () => {
+            btn.textContent = "Guardando...";
+            btn.disabled = true;
 
-        btn.textContent = "Guardar Configuración";
+            const { data: { user } } = await sb.auth.getUser();
+            const botConfig = user?.user_metadata?.bot_config || {};
 
-        btn.disabled = false;
+            botConfig.ak = apiKey;
+            botConfig.sk = secretKey;
+            botConfig.amount = amount;
+            botConfig.frequency = frequency;
 
-        msg.style.display = "block";
+            const { data, error } = await sb.auth.updateUser({ data: { bot_config: botConfig } });
+            const msg = document.getElementById("botMsg");
 
-        setTimeout(() => msg.style.display = "none", 3000);
+            if (error) {
+                msg.textContent = "Error: " + error.message;
+                msg.className = "msg-err";
+                console.error("Supabase error:", error);
+            } else {
+                msg.textContent = "Configuración guardada correctamente.";
+                msg.className = "msg-ok";
+            }
 
+            btn.textContent = "Guardar Configuración";
+            btn.disabled = false;
+            msg.style.display = "block";
+            setTimeout(() => msg.style.display = "none", 3000);
+        });
     });
 
 
