@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es">
+<html lang="es" style="background-color: #0D0D0F; color-scheme: dark;">
 
 <head>
 
@@ -42,7 +42,7 @@
 
         }
 
-        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; display: flex; }
+        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; display: flex; opacity: 0; transition: opacity 0.4s ease; }
 
 
 
@@ -1673,6 +1673,9 @@
                 }
             }
         }
+
+        // Mostrar el contenido con una transición suave
+        document.body.style.opacity = "1";
     }
 
 
