@@ -972,172 +972,104 @@
 
 
             <!-- PANEL DE CONFIGURACION -->
-
-            <div class="dash-card" id="botConfigPanel" style="max-width: 800px; margin-bottom: 24px; display: none;">
-
-                <!-- STATUS HEADER -->
-
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
-
-                    <div>
-
-                        <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
-
-                            Estado de Inversión
-
-                            <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
-
-                        </h3>
-
-                        <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
-
-                    </div>
-
-                    <label class="toggle-switch" style="transform: scale(1.1);">
-
-                        <input type="checkbox" id="botToggle">
-
-                        <span class="slider"></span>
-
-                    </label>
-
-                </div>
-
-                
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
-
+            <div id="botConfigPanel" style="display: none; width: 100%;">
+                <div style="display: flex; gap: 24px; align-items: flex-start; max-width: 1200px; flex-wrap: wrap;">
                     
-
-                    <!-- COLUMNA 1: API -->
-
-                    <div class="config-box">
-
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-
-                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
-
-                        </div>
-
+                    <!-- LADO IZQUIERDO: CONFIGURACION PRINCIPAL -->
+                    <div class="dash-card" style="flex: 2; min-width: 300px; margin-bottom: 24px;">
                         
-
-                        <div class="form-group" style="margin-bottom: 16px;">
-
-                            <label class="form-label">API Key</label>
-
-                            <div style="position: relative;">
-
-                                <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key" style="padding-left: 36px;">
-
-                                <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-
+                        <!-- STATUS HEADER -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                            <div>
+                                <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                                    Estado de Inversión
+                                    <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
+                                </h3>
+                                <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
+                            </div>
+                            <label class="toggle-switch" style="transform: scale(1.1);">
+                                <input type="checkbox" id="botToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                            
+                            <!-- COLUMNA 1: API -->
+                            <div class="config-box">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
+                                </div>
+                                
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label class="form-label">API Key</label>
+                                    <div style="position: relative;">
+                                        <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key" style="padding-left: 36px;">
+                                        <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label">Secret Key</label>
+                                    <div style="position: relative;">
+                                        <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key" style="padding-left: 36px;">
+                                        <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    </div>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 0;">
-
-                            <label class="form-label">Secret Key</label>
-
-                            <div style="position: relative;">
-
-                                <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key" style="padding-left: 36px;">
-
-                                <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-
+                            <!-- COLUMNA 2: ESTRATEGIA -->
+                            <div class="config-box">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Estrategia DCA</h4>
+                                </div>
+                                
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label class="form-label">Monto (USDT)</label>
+                                    <div style="position: relative;">
+                                        <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px;">
+                                        <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
+                                    </div>
+                                    <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label">Frecuencia</label>
+                                    <div style="position: relative;">
+                                        <select class="form-input" id="botFrequency" style="padding-left: 36px;">
+                                            <option value="weekly">Semanal</option>
+                                            <option value="biweekly">Quincenal</option>
+                                            <option value="monthly">Mensual</option>
+                                        </select>
+                                        <svg style="position: absolute; left: 10px; top: 10px; color: var(--accent);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
 
+                        <div style="margin-top: 24px;">
+                            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">⚠️ Nota: Guardar la configuración <b>no enciende</b> el bot automáticamente. Deberás encender el interruptor de arriba.</p>
+                            <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
+                            <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">Configuración guardada correctamente.</div>
+                        </div>
                     </div>
 
-
-
-                    <!-- COLUMNA 2: ESTRATEGIA -->
-
-                    <div class="config-box">
-
+                    <!-- LADO DERECHO: TUTORIAL -->
+                    <div class="dash-card" style="flex: 1; min-width: 280px; background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent);">
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-
-                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Estrategia DCA</h4>
-
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
                         </div>
-
-                        
-
-                        <div class="form-group" style="margin-bottom: 16px;">
-
-                            <label class="form-label">Monto (USDT)</label>
-
-                            <div style="position: relative;">
-
-                                <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px;">
-
-                                <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
-
-                            </div>
-
-                            <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
-
-                        </div>
-
-                        <div class="form-group" style="margin-bottom: 0;">
-
-                            <label class="form-label">Frecuencia</label>
-
-                            <div style="position: relative;">
-
-                                <select class="form-input" id="botFrequency" style="padding-left: 36px;">
-
-                                    <option value="weekly">Semanal</option>
-
-                                    <option value="biweekly">Quincenal</option>
-
-                                    <option value="monthly">Mensual</option>
-
-                                </select>
-
-                                <svg style="position: absolute; left: 10px; top: 10px; color: var(--accent);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- COLUMNA 3: INSTRUCCIONES -->
-                    <div class="config-box" style="background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent);">
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
-                        </div>
-                        <ol style="color:var(--text-muted); font-size:0.85rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
-                            <li>Genera tus <strong>API Keys</strong> en Binance con permisos de "Spot & Margin Trading".</li>
-                            <li>Pega tus contraseñas en la primera columna (Conexión Binance).</li>
-                            <li>Define la frecuencia y la cantidad (mín. $6 USDT) a invertir en la segunda columna.</li>
-                            <li>Haz clic en <strong>Guardar Configuración</strong> y confirma con tu 2FA.</li>
-                            <li>Finalmente, mueve el <strong>interruptor superior</strong> para arrancar el bot.</li>
+                        <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
+                            <li>Crea tus <strong>API Keys</strong> en tu cuenta de Binance. Recuerda activarles el permiso de "Spot & Margin Trading".</li>
+                            <li>Pega la API Key y la Secret Key en la sección de Conexión Binance.</li>
+                            <li>Define la cantidad en USDT (mínimo $6 USDT) y la frecuencia con la que quieres invertir.</li>
+                            <li>Haz clic en el botón amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
+                            <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de Inversión</strong> para que quede en Verde (ACTIVO).</li>
                         </ol>
                     </div>
 
                 </div>
-
-
-
-                <div style="margin-top: 24px;">
-
-                    <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">⚠️ Nota: Guardar la configuración <b>no enciende</b> el bot automáticamente. Deberás encender el interruptor de arriba.</p>
-
-                    <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
-
-                    <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">Configuración guardada correctamente.</div>
-
-                </div>
-
             </div>
 
 
