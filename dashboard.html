@@ -1081,7 +1081,7 @@
 
                             </div>
 
-                            <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo recomendado: $6 USDT</small>
+                            <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
 
                         </div>
 
@@ -1113,7 +1113,9 @@
 
 
 
-                <div style="margin-top: 24px; display:flex; flex-direction:column; align-items:center;">
+                <div style="margin-top: 24px;">
+
+                    <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">⚠️ Nota: Guardar la configuración <b>no enciende</b> el bot automáticamente. Deberás encender el interruptor de arriba.</p>
 
                     <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
 
@@ -2020,6 +2022,11 @@
 
         if (!apiKey || !secretKey) {
             alert("API Key y Secret Key son obligatorios para guardar la configuración.");
+            return;
+        }
+
+        if (!amount || parseFloat(amount) < 6) {
+            alert("El monto mínimo requerido para operar en Binance es de $6 USDT.");
             return;
         }
 
