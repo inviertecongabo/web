@@ -1048,9 +1048,9 @@
                                         </select>
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                     </div>
-                                    <div id="customDaysContainer" style="display: none; margin-top: 12px; position: relative;">
-                                        <input type="number" class="form-input" id="botCustomDays" placeholder="Ej: 3" min="1" max="365" style="padding-left: 12px; padding-right: 48px;">
-                                        <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; pointer-events: none;">días</span>
+                                    <div id="customDaysContainer" style="display: none; margin-top: 16px; position: relative;">
+                                        <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">Número de días</label>
+                                        <input type="number" class="form-input" id="botCustomDays" placeholder="Ej: 5" min="1" max="365">
                                     </div>
                                 </div>
                             </div>
@@ -1063,18 +1063,30 @@
                         </div>
                     </div>
 
-                    <!-- LADO DERECHO: TUTORIAL -->
-                    <div class="dash-card" style="flex: 1; min-width: 280px; background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent);">
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
+                    <!-- LADO DERECHO: TUTORIAL Y NOTAS -->
+                    <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 24px;">
+                        <div class="dash-card" style="background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent); margin-bottom: 0;">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
+                            </div>
+                            <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
+                                <li>Pega tu <strong>API Key</strong> y <strong>Secret Key</strong> en la sección de Conexión.</li>
+                                <li>Define la cantidad en USDT (mínimo $6) y la frecuencia con la que quieres invertir.</li>
+                                <li>Haz clic en el botón amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
+                                <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de Inversión</strong> para que quede en Verde (ACTIVO).</li>
+                            </ol>
                         </div>
-                        <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
-                            <li>Pega tu <strong>API Key</strong> y <strong>Secret Key</strong> en la sección de Conexión.</li>
-                            <li>Define la cantidad en USDT (mínimo $6) y la frecuencia con la que quieres invertir.</li>
-                            <li>Haz clic en el botón amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
-                            <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de Inversión</strong> para que quede en Verde (ACTIVO).</li>
-                        </ol>
+
+                        <div class="dash-card" style="background: rgba(239, 68, 68, 0.05); border: 1px dashed #EF4444; margin-bottom: 0; padding: 20px;">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                <h4 style="font-family:var(--font-heading); font-size:1rem; color:#EF4444; margin:0;">Importante: Fondos en Spot</h4>
+                            </div>
+                            <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+                                Recuerda mantener tus USDT en la <strong>Billetera Spot</strong> de Binance. Si tus fondos están en <em>Futuros, Earn o Fondos</em>, el bot no podrá tomarlos y la compra automática fallará.
+                            </p>
+                        </div>
                     </div>
 
                 </div>
