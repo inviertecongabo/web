@@ -1239,10 +1239,22 @@
                                     </div>
                                     <div>
                                         <div style="font-weight: 700; color: var(--text-primary);">Google Authenticator</div>
-                                        <div style="font-size: 0.8rem; color: #EF4444; font-weight: 600; margin-top: 2px;">No configurado</div>
+                                        <div id="mfaStatusText" style="font-size: 0.8rem; color: #EF4444; font-weight: 600; margin-top: 2px;">No configurado</div>
                                     </div>
                                 </div>
-                                <button class="btn-save" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); width: auto; padding: 8px 16px; font-size: 0.9rem;">Configurar</button>
+                                <button id="btnConfigMfa" class="btn-save" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); width: auto; padding: 8px 16px; font-size: 0.9rem;">Configurar</button>
+                            </div>
+                            
+                            <!-- Hidden MFA Setup Block -->
+                            <div id="mfaSetupBlock" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-sm); border: 1px dashed var(--border);">
+                                <div style="font-size: 0.9rem; margin-bottom: 12px;">1. Escanea este código QR con la app Google Authenticator:</div>
+                                <div id="mfaQrContainer" style="background: white; padding: 10px; display: inline-block; border-radius: 8px; margin-bottom: 16px;"></div>
+                                <div style="font-size: 0.9rem; margin-bottom: 8px;">2. Ingresa el código de 6 dígitos que aparece en la app:</div>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 120px; text-align: center; letter-spacing: 2px; font-weight: bold;">
+                                    <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 20px;">Verificar</button>
+                                </div>
+                                <div id="mfaMsg" style="margin-top: 10px; font-size: 0.85rem; display: none;"></div>
                             </div>
                         </div>
                     </div>
@@ -2036,6 +2048,86 @@
     });
 
 
+
+    // MFA 2FA GOOGLE AUTHENTICATOR
+    let currentFactorId = null;
+
+    // To check MFA status on load, we call it in initDash or here globally
+    async function checkMfaStatus() {
+        try {
+            const { data, error } = await sb.auth.mfa.listFactors();
+            if (error) return;
+            const totpFactors = data.totp || [];
+            const isVerified = totpFactors.some(f => f.status === 'verified');
+            if (isVerified) {
+                document.getElementById("mfaStatusText").textContent = "Configurado (Protegido)";
+                document.getElementById("mfaStatusText").style.color = "#10B981";
+                document.getElementById("btnConfigMfa").style.display = "none";
+                document.getElementById("mfaSetupBlock").style.display = "none";
+            }
+        } catch (e) {}
+    }
+    // Call it now
+    checkMfaStatus();
+
+    document.getElementById("btnConfigMfa").addEventListener("click", async () => {
+        const btn = document.getElementById("btnConfigMfa");
+        btn.textContent = "Generando QR...";
+        btn.disabled = true;
+
+        const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp' });
+        
+        if (error) {
+            alert("Error o MFA no habilitado en Supabase: " + error.message);
+            btn.textContent = "Configurar";
+            btn.disabled = false;
+            return;
+        }
+
+        currentFactorId = data.id;
+        document.getElementById("mfaQrContainer").innerHTML = data.totp.qr_code;
+        document.getElementById("mfaSetupBlock").style.display = "block";
+        btn.style.display = "none";
+    });
+
+    document.getElementById("btnVerifyMfa").addEventListener("click", async () => {
+        const code = document.getElementById("mfaVerifyCode").value.trim();
+        const msg = document.getElementById("mfaMsg");
+        const btn = document.getElementById("btnVerifyMfa");
+        
+        if (code.length !== 6 || !currentFactorId) return;
+
+        btn.textContent = "Verificando...";
+        btn.disabled = true;
+
+        const challenge = await sb.auth.mfa.challenge({ factorId: currentFactorId });
+        
+        if (challenge.error) {
+            msg.textContent = "Error al crear reto.";
+            msg.className = "msg-err";
+            msg.style.display = "block";
+            btn.textContent = "Verificar";
+            btn.disabled = false;
+            return;
+        }
+
+        const verify = await sb.auth.mfa.verify({
+            factorId: currentFactorId,
+            challengeId: challenge.data.id,
+            code: code
+        });
+
+        if (verify.error) {
+            msg.textContent = "Código incorrecto.";
+            msg.className = "msg-err";
+            msg.style.display = "block";
+            btn.textContent = "Verificar";
+            btn.disabled = false;
+        } else {
+            document.getElementById("mfaSetupBlock").style.display = "none";
+            checkMfaStatus();
+        }
+    });
 
     // LOGOUT
 
