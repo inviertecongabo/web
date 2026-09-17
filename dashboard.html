@@ -269,7 +269,7 @@
         .feedback-form .form-group { margin-bottom: 20px; }
         .feedback-form label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
         .feedback-form select, .feedback-form textarea, .feedback-form input[type="file"] { width: 100%; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; }
-        .feedback-form select option { background: #0D0D0F; color: #FFFFFF; }
+        .feedback-form select option { background: var(--card-bg); color: var(--text-primary); }
         .feedback-form select:focus, .feedback-form textarea:focus { border-color: var(--accent); outline: none; }
         .feedback-form textarea { resize: vertical; min-height: 100px; }
         .feedback-form .file-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; display: block; }
@@ -654,14 +654,17 @@
 
                 <div class="form-group">
                     <label>¿A qué área corresponde tu sugerencia?</label>
-                    <select name="Categoría" required>
-                        <option value="" disabled selected>Selecciona un filtro...</option>
-                        <option value="Oratoria">Oratoria / Estilo de videos</option>
-                        <option value="Videos">Videos educativos nuevos que quieres ver</option>
-                        <option value="Herramientas">Herramientas o GaboBot</option>
-                        <option value="Pagina Web">Página Web (Errores o Diseño)</option>
-                        <option value="Otro">Otro</option>
-                    </select>
+                    <div style="position: relative;">
+                        <select name="Categoría" required style="appearance: none; cursor: pointer;">
+                            <option value="" disabled selected>Selecciona un filtro...</option>
+                            <option value="Oratoria">Oratoria / Estilo de videos</option>
+                            <option value="Videos">Videos educativos nuevos que quieres ver</option>
+                            <option value="Herramientas">Herramientas o GaboBot</option>
+                            <option value="Pagina Web">Página Web (Errores o Diseño)</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
                 </div>
                 
                 <div class="form-group">
