@@ -1873,12 +1873,15 @@
         input.focus();
 
         return new Promise((resolve) => {
-            globalMfaResolve = async (isVerified) => {
-                if (isVerified) {
+            globalMfaResolve = async (status) => {
+                if (status === 'success') {
                     modal.style.display = "none";
                     await actionCallback();
                     resolve(true);
-                } else {
+                } else if (status === 'cancel') {
+                    modal.style.display = "none";
+                    resolve(false);
+                } else if (status === 'error') {
                     msgErr.style.display = "block";
                 }
             };
@@ -1888,8 +1891,7 @@
     }
 
     document.getElementById("btnCancelGlobalMfa")?.addEventListener("click", () => {
-        document.getElementById("globalMfaModal").style.display = "none";
-        if (globalMfaResolve) globalMfaResolve(false);
+        if (globalMfaResolve) globalMfaResolve('cancel');
     });
 
     document.getElementById("btnConfirmGlobalMfa")?.addEventListener("click", async () => {
@@ -1915,9 +1917,9 @@
             
             if (verify.error) throw verify.error;
             
-            if (globalMfaResolve) globalMfaResolve(true);
+            if (globalMfaResolve) globalMfaResolve('success');
         } catch (err) {
-            if (globalMfaResolve) globalMfaResolve(false);
+            if (globalMfaResolve) globalMfaResolve('error');
         } finally {
             btn.textContent = "Verificar";
             btn.disabled = false;
