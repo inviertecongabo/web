@@ -1202,7 +1202,7 @@
                         </div>
                     </div>
 
-                    <div class="dash-card">
+                    <div class="dash-card" id="passwordCard">
                         <div class="profile-section-title">Cambiar Contraseña</div>
                         <div class="profile-form">
                             <div class="form-group">
@@ -1597,8 +1597,14 @@
 
 
 
-        // Mostrar menú admin si aplica
+        // Ocultar sección de contraseña si inició sesión con Google
+        const providers = user.app_metadata?.providers || [];
+        if (providers.includes('google')) {
+            const pwCard = document.getElementById("passwordCard");
+            if (pwCard) pwCard.style.display = "none";
+        }
 
+        // Mostrar menú admin si aplica
         if (user.email === "aibersonmontilla22@gmail.com") {
 
             const adminBtn = document.getElementById("navAdmin");
