@@ -1246,15 +1246,15 @@
                             </div>
                             
                             <!-- Hidden MFA Setup Block -->
-                            <div id="mfaSetupBlock" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-sm); border: 1px dashed var(--border);">
-                                <div style="font-size: 0.9rem; margin-bottom: 12px;">1. Escanea este código QR con la app Google Authenticator:</div>
-                                <div id="mfaQrContainer" style="background: white; padding: 10px; display: inline-block; border-radius: 8px; margin-bottom: 16px;"></div>
-                                <div style="font-size: 0.9rem; margin-bottom: 8px;">2. Ingresa el código de 6 dígitos que aparece en la app:</div>
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 120px; text-align: center; letter-spacing: 2px; font-weight: bold;">
-                                    <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 20px;">Verificar</button>
+                            <div id="mfaSetupBlock" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.2); padding: 24px; border-radius: var(--radius-sm); border: 1px dashed var(--border); text-align: center;">
+                                <div style="font-size: 0.95rem; margin-bottom: 16px; font-weight: 600;">1. Escanea este código QR con Google Authenticator</div>
+                                <div id="mfaQrContainer" style="background: white; padding: 12px; display: inline-flex; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);"></div>
+                                <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">2. Ingresa el código de 6 dígitos</div>
+                                <div style="display: flex; gap: 8px; justify-content: center;">
+                                    <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 140px; text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05);">
+                                    <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 24px; font-size: 1rem;">Activar 2FA</button>
                                 </div>
-                                <div id="mfaMsg" style="margin-top: 10px; font-size: 0.85rem; display: none;"></div>
+                                <div id="mfaMsg" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
                             </div>
                         </div>
                     </div>
@@ -2074,6 +2074,15 @@
         const btn = document.getElementById("btnConfigMfa");
         btn.textContent = "Generando QR...";
         btn.disabled = true;
+
+        // Limpiar factores pendientes que el usuario no completó (evita error "already exists")
+        const { data: factorList } = await sb.auth.mfa.listFactors();
+        if (factorList && factorList.totp) {
+            const unverified = factorList.totp.filter(f => f.status === 'unverified');
+            for (const f of unverified) {
+                await sb.auth.mfa.unenroll({ factorId: f.id });
+            }
+        }
 
         const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp' });
         
