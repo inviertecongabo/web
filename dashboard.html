@@ -1291,6 +1291,22 @@
 
     </div>
 
+    <!-- Global MFA Modal -->
+    <div id="globalMfaModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+        <div style="background:var(--card-bg); border:1px solid var(--border); padding:32px; border-radius:var(--radius-md); max-width:400px; width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+            <div style="width:50px; height:50px; background:rgba(240,185,11,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <h3 style="margin-bottom:8px; font-family:var(--font-heading); font-size:1.4rem;">Autenticación 2FA</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Esta acción requiere confirmación. Abre Google Authenticator e ingresa el código de 6 dígitos.</p>
+            <input type="text" id="globalMfaCodeInput" class="form-input" placeholder="000000" maxlength="6" style="width:100%; text-align:center; letter-spacing:4px; font-size:1.4rem; font-weight:bold; margin-bottom:16px;">
+            <div id="globalMfaError" class="msg-err" style="display:none; margin-bottom:16px;">Código incorrecto. Intenta de nuevo.</div>
+            <div style="display:flex; gap:12px;">
+                <button id="btnCancelGlobalMfa" class="btn-save" style="background:transparent; border:1px solid var(--border); color:var(--text-primary); flex:1;">Cancelar</button>
+                <button id="btnConfirmGlobalMfa" class="btn-save" style="flex:1;">Verificar</button>
+            </div>
+        </div>
+    </div>
 </main>
 
 
@@ -1834,6 +1850,79 @@
 
 
 
+    // MFA GLOBAL PROMPT
+    let globalMfaResolve = null;
+
+    async function require2FA(actionCallback) {
+        const { data, error } = await sb.auth.mfa.listFactors();
+        const totpFactors = data?.totp || [];
+        const verifiedFactor = totpFactors.find(f => f.status === 'verified');
+
+        if (!verifiedFactor) {
+            return actionCallback(); // 2FA no activo, dejar pasar
+        }
+
+        // Mostrar Modal
+        const modal = document.getElementById("globalMfaModal");
+        const input = document.getElementById("globalMfaCodeInput");
+        const msgErr = document.getElementById("globalMfaError");
+        
+        input.value = "";
+        msgErr.style.display = "none";
+        modal.style.display = "flex";
+        input.focus();
+
+        return new Promise((resolve) => {
+            globalMfaResolve = async (isVerified) => {
+                if (isVerified) {
+                    modal.style.display = "none";
+                    await actionCallback();
+                    resolve(true);
+                } else {
+                    msgErr.style.display = "block";
+                }
+            };
+            
+            modal.dataset.factorId = verifiedFactor.id;
+        });
+    }
+
+    document.getElementById("btnCancelGlobalMfa")?.addEventListener("click", () => {
+        document.getElementById("globalMfaModal").style.display = "none";
+    });
+
+    document.getElementById("btnConfirmGlobalMfa")?.addEventListener("click", async () => {
+        const modal = document.getElementById("globalMfaModal");
+        const btn = document.getElementById("btnConfirmGlobalMfa");
+        const code = document.getElementById("globalMfaCodeInput").value.trim();
+        const factorId = modal.dataset.factorId;
+        
+        if (code.length !== 6) return;
+        
+        btn.textContent = "Verificando...";
+        btn.disabled = true;
+
+        try {
+            const challenge = await sb.auth.mfa.challenge({ factorId });
+            if (challenge.error) throw challenge.error;
+            
+            const verify = await sb.auth.mfa.verify({
+                factorId,
+                challengeId: challenge.data.id,
+                code
+            });
+            
+            if (verify.error) throw verify.error;
+            
+            if (globalMfaResolve) globalMfaResolve(true);
+        } catch (err) {
+            if (globalMfaResolve) globalMfaResolve(false);
+        } finally {
+            btn.textContent = "Verificar";
+            btn.disabled = false;
+        }
+    });
+
     // BOT CONFIG
 
     function checkBotTerms() {
@@ -1892,19 +1981,21 @@
 
 
     document.getElementById("botToggle")?.addEventListener("change", async (e) => {
-
         const isActive = e.target.checked;
+        const checkbox = e.target;
 
-        updateBotStatusBadge(isActive);
-
-        const { data: { user } } = await sb.auth.getUser();
-
-        const botConfig = user?.user_metadata?.bot_config || {};
-
-        botConfig.active = isActive;
-
-        await sb.auth.updateUser({ data: { bot_config: botConfig } });
-
+        require2FA(async () => {
+            updateBotStatusBadge(isActive);
+            const { data: { user } } = await sb.auth.getUser();
+            const botConfig = user?.user_metadata?.bot_config || {};
+            botConfig.active = isActive;
+            await sb.auth.updateUser({ data: { bot_config: botConfig } });
+        }).then(verified => {
+            if (!verified) {
+                // If user cancelled or failed 2FA, revert checkbox
+                checkbox.checked = !isActive;
+            }
+        });
     });
 
 
@@ -2016,25 +2107,31 @@
 
 
     // SAVE PASSWORD
-
-    document.getElementById("btnSavePassword").addEventListener("click", async () => {
-
-        const pw = document.getElementById("newPassword").value;
-
-        const pw2 = document.getElementById("confirmPassword").value;
-
-        const ok = document.getElementById("pwMsg");
-
-        const err = document.getElementById("pwErrMsg");
-
-        ok.style.display = "none"; err.style.display = "none";
-
-        if (pw !== pw2 || pw.length < 6) { err.textContent = pw.length < 6 ? "Minimo 6 caracteres." : "Las contrasenas no coinciden."; err.style.display = "block"; return; }
-
-        const { error } = await sb.auth.updateUser({ password: pw });
-
-        if (!error) { ok.style.display = "block"; document.getElementById("newPassword").value = ""; document.getElementById("confirmPassword").value = ""; setTimeout(() => ok.style.display = "none", 3000); }
-
+    document.getElementById("btnSavePassword")?.addEventListener("click", () => {
+        require2FA(async () => {
+            const pw = document.getElementById("newPassword").value;
+            const pw2 = document.getElementById("confirmPassword").value;
+            const ok = document.getElementById("pwMsg");
+            const err = document.getElementById("pwErrMsg");
+            ok.style.display = "none"; err.style.display = "none";
+            
+            if (pw !== pw2 || pw.length < 6) { 
+                err.textContent = pw.length < 6 ? "Mínimo 6 caracteres." : "Las contraseñas no coinciden."; 
+                err.style.display = "block"; 
+                return; 
+            }
+            
+            const { error } = await sb.auth.updateUser({ password: pw });
+            if (!error) { 
+                ok.style.display = "block"; 
+                document.getElementById("newPassword").value = ""; 
+                document.getElementById("confirmPassword").value = ""; 
+                setTimeout(() => ok.style.display = "none", 3000); 
+            } else {
+                err.textContent = error.message;
+                err.style.display = "block";
+            }
+        });
     });
 
 
