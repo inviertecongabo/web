@@ -1246,15 +1246,37 @@
                             </div>
                             
                             <!-- Hidden MFA Setup Block -->
-                            <div id="mfaSetupBlock" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.2); padding: 24px; border-radius: var(--radius-sm); border: 1px dashed var(--border); text-align: center;">
-                                <div style="font-size: 0.95rem; margin-bottom: 16px; font-weight: 600;">1. Escanea este código QR con Google Authenticator</div>
-                                <div id="mfaQrContainer" style="background: white; padding: 12px; display: inline-flex; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);"></div>
-                                <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">2. Ingresa el código de 6 dígitos</div>
-                                <div style="display: flex; gap: 8px; justify-content: center;">
-                                    <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 140px; text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05);">
-                                    <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 24px; font-size: 1rem;">Activar 2FA</button>
+                            <div id="mfaSetupBlock" style="display: none; margin-top: 16px; background: rgba(0,0,0,0.2); padding: 24px; border-radius: var(--radius-sm); border: 1px dashed var(--border); text-align: left;">
+                                
+                                <div style="display: flex; gap: 24px; align-items: center; margin-bottom: 24px; flex-wrap: wrap;">
+                                    
+                                    <!-- Instrucciones (Izquierda) -->
+                                    <div style="flex: 1; min-width: 250px;">
+                                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; font-family: var(--font-heading);">Instrucciones para activar:</h4>
+                                        <ol style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0;">
+                                            <li>Descarga la app <strong>Google Authenticator</strong> en tu celular (iOS o Android).</li>
+                                            <li>Abre la app y presiona el ícono <strong>"+"</strong>.</li>
+                                            <li>Selecciona la opción <strong>"Escanear código QR"</strong>.</li>
+                                            <li>Apunta con la cámara al código que está aquí a la derecha.</li>
+                                        </ol>
+                                    </div>
+
+                                    <!-- Código QR (Derecha) -->
+                                    <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
+                                        <img id="mfaQrImg" src="" alt="Código QR 2FA" style="width: 160px; height: 160px; display: block;">
+                                    </div>
+
                                 </div>
-                                <div id="mfaMsg" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
+
+                                <div style="border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
+                                    <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">5. Ingresa el código de 6 dígitos que generó la app:</div>
+                                    <div style="display: flex; gap: 8px; justify-content: center;">
+                                        <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 140px; text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05);">
+                                        <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 24px; font-size: 1rem;">Verificar y Activar</button>
+                                    </div>
+                                    <div id="mfaMsg" style="margin-top: 12px; font-size: 0.9rem; display: none;"></div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -2096,7 +2118,7 @@
         }
 
         currentFactorId = data.id;
-        document.getElementById("mfaQrContainer").innerHTML = data.totp.qr_code;
+        document.getElementById("mfaQrImg").src = data.totp.qr_code;
         document.getElementById("mfaSetupBlock").style.display = "block";
         btn.style.display = "none";
     });
