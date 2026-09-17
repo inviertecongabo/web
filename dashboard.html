@@ -2042,12 +2042,15 @@
             } else {
                 msg.textContent = "Configuración guardada correctamente.";
                 msg.className = "msg-ok";
+                setTimeout(() => {
+                    alert("¡Configuración guardada exitosamente!\n\nRecuerda mantener tus USDT en la Billetera Spot de Binance para que el bot pueda ejecutar las compras.");
+                }, 100);
             }
 
             btn.textContent = "Guardar Configuración";
             btn.disabled = false;
             msg.style.display = "block";
-            setTimeout(() => msg.style.display = "none", 3000);
+            setTimeout(() => msg.style.display = "none", 5000);
         });
     });
 
