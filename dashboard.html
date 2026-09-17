@@ -2084,7 +2084,9 @@
             }
         }
 
-        const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp' });
+        // Add a random friendlyName to force bypass the "already exists" error in case unenroll failed
+        const fName = "App_" + Date.now();
+        const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: fName });
         
         if (error) {
             alert("Error o MFA no habilitado en Supabase: " + error.message);
