@@ -238,6 +238,32 @@
 
 
 
+        /* NUEVOS ESTILOS PARA TARJETAS DE INICIO */
+        .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); animation: pulse 1.5s infinite; }
+        .pulse-dot.green { background: #10B981; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        
+        .stat-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .stat-card-badge { font-size: 0.7rem; font-family: var(--font-heading); font-weight: 700; padding: 4px 8px; border-radius: 50px; background: rgba(255,255,255,0.05); color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; }
+        .stat-card-action { display: inline-block; margin-top: 12px; font-size: 0.8rem; font-family: var(--font-heading); font-weight: 700; color: var(--text-dark); background: var(--accent); padding: 6px 14px; border-radius: 50px; text-decoration: none; cursor: pointer; transition: var(--transition); border: none; }
+        .stat-card-action:hover { opacity: 0.9; transform: scale(1.02); }
+        .stat-card-action.outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+        .stat-card-action.outline:hover { border-color: var(--text-primary); background: rgba(255,255,255,0.05); }
+
+        .qa-card-visual { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; text-decoration: none; color: var(--text-primary); height: 100%; position: relative;}
+        .qa-card-visual:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .qa-card-visual.highlight { border: 1px solid rgba(240,185,11,0.3); }
+        .qa-card-visual.highlight:hover { box-shadow: 0 10px 30px rgba(240,185,11,0.15); }
+        .qa-image-container { height: 140px; background: #0D0D0F; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid var(--border); }
+        .qa-image-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+        .qa-card-visual:hover .qa-image-container img { opacity: 1; }
+        .qa-play-btn { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--text-dark); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(240,185,11,0.4); }
+        .qa-content { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;}
+        .qa-title { font-family: var(--font-heading); font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+        .qa-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+        .qa-action-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); font-family: var(--font-heading); display: flex; align-items: center; gap: 6px; }
+        .qa-action-link svg { width: 16px; height: 16px; }
+
         /* PERFIL */
 
         .perfil-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
@@ -530,61 +556,70 @@
             </div>
 
             <div class="stats-grid">
-
                 <div class="stat-card">
-
-                    <div class="stat-icon">&#8383;</div>
-
-                    <div class="stat-value" style="color:var(--accent)">-- BTC</div>
-
-                    <div class="stat-label">Total acumulado</div>
-
+                    <div class="stat-card-header">
+                        <div class="stat-icon" style="margin-bottom:0;">&#8383;</div>
+                        <div class="stat-card-badge">En Vivo <span class="pulse-dot green"></span></div>
+                    </div>
+                    <div class="stat-value" id="btcLivePrice" style="color:var(--accent)">Cargando...</div>
+                    <div class="stat-label">Precio Bitcoin (BTC/USDT)</div>
+                    <div id="btcLiveChange" style="font-size:0.85rem; margin-top:4px; font-family:var(--font-heading); font-weight:700;">--</div>
                 </div>
 
                 <div class="stat-card">
-
-                    <div class="stat-icon">&#128197;</div>
-
-                    <div class="stat-value">--</div>
-
-                    <div class="stat-label">Ultima compra</div>
-
+                    <div class="stat-card-header">
+                        <div class="stat-icon" style="margin-bottom:0;">&#129302;</div>
+                        <div class="stat-card-badge">Estado API <span class="pulse-dot"></span></div>
+                    </div>
+                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">No Conectada</div>
+                    <div class="stat-label">GaboBot requiere tus llaves</div>
+                    <button class="stat-card-action" onclick="switchSection(event,'herramientas')">Conectar API</button>
                 </div>
 
                 <div class="stat-card">
-
-                    <div class="stat-icon">&#129302;</div>
-
-                    <div class="stat-value" style="color:#94A3B8">INACTIVO</div>
-
-                    <div class="stat-label">Estado GaboBot</div>
-
+                    <div class="stat-card-header">
+                        <div class="stat-icon" style="margin-bottom:0;">&#128174;</div>
+                        <div class="stat-card-badge" style="background:var(--accent-glow); color:var(--accent);">Nivel: Miembro</div>
+                    </div>
+                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Comunidad</div>
+                    <div class="stat-label">Únete al grupo exclusivo</div>
+                    <a href="https://t.me/" target="_blank" class="stat-card-action outline">Acceso a Telegram</a>
                 </div>
-
             </div>
 
             <div class="quick-actions">
-
-                <a class="quick-action-card" href="#" onclick="switchSection(event,'contenido')">
-
-                    <div class="qa-icon">&#127916;</div>
-
-                    <div class="qa-title">Contenido Educativo</div>
-
-                    <div class="qa-desc">Videos y guias sobre Binance, Trading y Acciones Venezolanas organizados por categoria.</div>
-
+                <a class="qa-card-visual" href="#" onclick="switchSection(event,'contenido')">
+                    <div class="qa-image-container">
+                        <img src="https://images.unsplash.com/photo-1621504450181-5d156f06249e?auto=format&fit=crop&q=80&w=800" alt="Video">
+                        <div class="qa-play-btn">&#9658;</div>
+                    </div>
+                    <div class="qa-content">
+                        <div>
+                            <div class="qa-title">Guía de Inicio Rápido</div>
+                            <div class="qa-desc">Aprende a configurar tu cuenta, conectar GaboBot y dar tus primeros pasos en la plataforma.</div>
+                        </div>
+                        <div class="qa-action-link">
+                            Ver video ahora 
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
+                    </div>
                 </a>
 
-                <a class="quick-action-card" href="#" onclick="switchSection(event,'herramientas')">
-
-                    <div class="qa-icon">&#128296;</div>
-
-                    <div class="qa-title">Mis Herramientas</div>
-
-                    <div class="qa-desc">GaboBot y las proximas herramientas de automatizacion y analisis de portafolio.</div>
-
+                <a class="qa-card-visual highlight" href="#" onclick="switchSection(event,'tool-bot')">
+                    <div class="qa-image-container" style="background: linear-gradient(135deg, rgba(240,185,11,0.2) 0%, rgba(0,0,0,0) 100%);">
+                        <div style="font-size:3.5rem; filter: drop-shadow(0 0 20px rgba(240,185,11,0.5));">&#129302;</div>
+                    </div>
+                    <div class="qa-content">
+                        <div>
+                            <div class="qa-title">Automatiza con GaboBot</div>
+                            <div class="qa-desc">Configura tu estrategia de compras recurrentes en Bitcoin. Define el monto, la frecuencia y deja que el bot opere por ti 24/7.</div>
+                        </div>
+                        <div class="qa-action-link" style="color:var(--accent);">
+                            Ir al panel del bot 
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
+                    </div>
                 </a>
-
             </div>
 
         </section>
@@ -1970,6 +2005,34 @@
         window.location.href = "index.html";
 
     });
+
+    // FETCH LIVE BTC PRICE
+    async function fetchBtcPrice() {
+        try {
+            const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT');
+            if (res.ok) {
+                const data = await res.json();
+                const price = parseFloat(data.lastPrice).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                const change = parseFloat(data.priceChangePercent);
+                const isPositive = change >= 0;
+                
+                // Update Topbar
+                if(document.getElementById('btcPrice')) document.getElementById('btcPrice').textContent = price;
+                
+                // Update Card
+                if(document.getElementById('btcLivePrice')) document.getElementById('btcLivePrice').textContent = price;
+                if(document.getElementById('btcLiveChange')) {
+                    const el = document.getElementById('btcLiveChange');
+                    el.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)}% (24h)`;
+                    el.style.color = isPositive ? '#10B981' : '#EF4444';
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching BTC price:', e);
+        }
+    }
+    fetchBtcPrice();
+    setInterval(fetchBtcPrice, 15000); // Update every 15s
 
 </script>
 
