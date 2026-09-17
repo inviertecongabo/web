@@ -381,13 +381,24 @@
         }
 
         @media (max-width: 600px) {
-
             .stats-grid { grid-template-columns: 1fr; }
-
             .video-grid { grid-template-columns: 1fr; }
-
             .tools-grid { grid-template-columns: 1fr; }
-
+            
+            /* Utilidades para arreglar desbordamientos en móviles */
+            .dash-card { padding: 20px 16px !important; }
+            .topbar { padding: 0 16px !important; }
+            .topbar-title h1 { font-size: 1.2rem !important; }
+            .topbar-title p { font-size: 0.75rem !important; }
+            .btc-live-card { display: none !important; } /* Ocultar ticker en topbar si estorba */
+            
+            /* Forzar que los bloques flex con min-width ancho se conviertan en columnas de 100% */
+            div[style*="min-width: 320px"], 
+            div[style*="min-width: 280px"], 
+            div[style*="min-width: 260px"] {
+                min-width: 100% !important;
+                flex: 1 1 100% !important;
+            }
         }
 
     </style>
