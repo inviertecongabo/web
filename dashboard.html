@@ -1800,7 +1800,7 @@
 
 
 
-            <div id="botOnboarding" class="dash-card" style="max-width: 900px; margin-bottom: 24px; display: none;">
+            <div id="botOnboarding" class="dash-card bot-onboarding-card" style="max-width: 900px; margin-bottom: 24px; display: none;">
 
 
 
@@ -1820,11 +1820,11 @@
 
 
 
-                    <h3 style="font-family:var(--font-heading); font-size: 1.5rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
+                    <h3 class="bot-setup-title" style="font-family:var(--font-heading); font-size: 1.5rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
 
 
 
-                    <p style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos o mira el tutorial para habilitar a GaboBot sin comprometer tus fondos.</p>
+                    <p class="bot-setup-subtitle" style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos o mira el tutorial para habilitar a GaboBot sin comprometer tus fondos.</p>
 
 
 
@@ -1836,15 +1836,13 @@
 
 
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
+                <div class="bot-setup-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
 
 
 
                     <!-- Columna Izquierda: Instrucciones -->
 
-
-
-                    <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="bot-setup-text" style="display: flex; flex-direction: column; justify-content: center;">
 
 
 
@@ -1882,9 +1880,7 @@
 
                     <!-- Columna Derecha: Video -->
 
-
-
-                    <div style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(240,185,11,0.4); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 16/9; position: relative; overflow: hidden; padding: 20px; text-align: center;">
+                    <div class="bot-setup-video" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(240,185,11,0.4); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 16/9; position: relative; overflow: hidden; padding: 20px; text-align: center;">
 
 
 
@@ -1932,7 +1928,7 @@
 
 
 
-                    <a href="/herramientas-info" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cómo funciona el bot &rarr;</a>
+                    <a href="/herramientas-info" target="_blank" class="bot-setup-link" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cómo funciona el bot &rarr;</a>
 
 
 
@@ -4756,6 +4752,13 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
     .sidebar { transform: translateX(-100%); }
 
     .sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+
+    .bot-onboarding-card { padding: 16px 12px !important; }
+    .bot-setup-title { font-size: 1.3rem !important; }
+    .bot-setup-subtitle { font-size: 0.85rem !important; }
+    .bot-setup-grid { display: flex !important; flex-direction: column-reverse; gap: 20px !important; margin-bottom: 24px !important; }
+    .bot-setup-link { display: block; margin-top: 8px; }
+
 
 }
 
