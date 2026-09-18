@@ -106,7 +106,7 @@
 
 
 
-        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 100; }
+        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 1000; }
 
 
 
@@ -4823,19 +4823,13 @@ function toggleMobileSidebar() {
 // Close sidebar when clicking a menu item on mobile
 
 document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item').forEach(btn => {
-
-    btn.addEventListener('click', () => {
-
+    btn.addEventListener('click', (e) => {
+        if(btn.hasAttribute('onclick') && btn.getAttribute('onclick').includes('toggleTools')) return;
         if(window.innerWidth <= 900) {
-
             document.querySelector('.sidebar').classList.remove('mobile-open');
-
             document.getElementById('mobileSidebarOverlay').classList.remove('active');
-
         }
-
     });
-
 });
 
 </script>
