@@ -1375,13 +1375,12 @@
 
             
 
-            <form id="feedbackForm" class="feedback-form" action="https://formsubmit.co/b25dbf064dd5d41b0ebafd7fd45db9e7" method="POST" enctype="multipart/form-data">
-
-                <input type="hidden" name="_subject" value="Nueva sugerencia desde el Dashboard">
-
-                <input type="hidden" name="_next" value="https://www.inviertecongabo.com/dashboard?feedback=success">
-
-                <input type="hidden" name="_captcha" value="false">
+            <form id="feedbackForm" class="feedback-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="access_key" value="d2d58852-428d-4245-8f86-365d9b47c0b0">
+                <input type="hidden" name="subject" value="Nueva sugerencia desde el Dashboard">
+                <input type="hidden" name="redirect" value="https://www.inviertecongabo.com/dashboard?feedback=success">
+                <input type="hidden" name="email" id="sugerenciaUserEmail" value="">
+                <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
 
 
@@ -3180,6 +3179,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById("editEmail").value = user.email;
+        
+        // Populate hidden email field for suggestions box
+        const userEmailFeedback = document.getElementById("sugerenciaUserEmail");
+        if (userEmailFeedback) userEmailFeedback.value = user.email;
 
 
 
