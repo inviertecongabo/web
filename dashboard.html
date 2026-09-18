@@ -824,7 +824,25 @@
 
 
 
-    </style>
+    
+        /* CUSTOM DROPDOWN */
+        .custom-dropdown { position: relative; width: 100%; user-select: none; }
+        .dropdown-header { padding: 13px 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s; }
+        .dropdown-header:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+        .dropdown-header.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .dropdown-arrow { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dropdown-header.active .dropdown-arrow { transform: rotate(180deg); stroke: var(--accent); }
+        .dropdown-options { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); overflow: hidden; max-height: 0; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .dropdown-options.open { max-height: 350px; opacity: 1; visibility: visible; overflow-y: auto; }
+        .dropdown-option { padding: 14px 16px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .dropdown-option:last-child { border-bottom: none; }
+        .dropdown-option:hover { background: rgba(240,185,11,0.08); color: var(--accent); padding-left: 20px; }
+        .dropdown-option.selected { background: rgba(240,185,11,0.15); color: var(--accent); font-weight: 600; border-left: 3px solid var(--accent); padding-left: 17px; }
+        .dropdown-options::-webkit-scrollbar { width: 6px; }
+        .dropdown-options::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        .dropdown-options::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+</style>
 
 
 
@@ -1372,20 +1390,20 @@
 
                     <label>¿A qué área corresponde tu sugerencia?</label>
 
-                    <div style="position: relative;">
-
-                        <select name="Categoria" required style="appearance: none; cursor: pointer;">
-                            <option value="" disabled selected>Selecciona un filtro...</option>
-                            <option value="Nueva Herramienta">Idea para una Nueva Herramienta</option>
-                            <option value="Contenido">Contenido Educativo / Nuevos Temas</option>
-                            <option value="GaboBot">Mejoras en GaboBot o Herramientas Actuales</option>
-                            <option value="Web">Problemas o Diseño de la Página Web</option>
-                            <option value="Comunidad">Comunidad / Grupo de Telegram</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-
+                    <div class="custom-dropdown" id="sugerenciaDropdown">
+                        <div class="dropdown-header">
+                            <span class="dropdown-selected">Selecciona un filtro...</span>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="dropdown-option" data-value="Nueva Herramienta">Idea para una Nueva Herramienta</div>
+                            <div class="dropdown-option" data-value="Contenido">Contenido Educativo / Nuevos Temas</div>
+                            <div class="dropdown-option" data-value="GaboBot">Mejoras en GaboBot o Herramientas Actuales</div>
+                            <div class="dropdown-option" data-value="Web">Problemas o Diseño de la Página Web</div>
+                            <div class="dropdown-option" data-value="Comunidad">Comunidad / Grupo de Telegram</div>
+                            <div class="dropdown-option" data-value="Otro">Otro</div>
+                        </div>
+                        <input type="hidden" name="Categoria" id="hiddenCategoria" required>
                     </div>
 
                 </div>
@@ -2703,6 +2721,46 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// Custom Dropdown Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById('sugerenciaDropdown');
+    if (!dropdown) return;
+    
+    const header = dropdown.querySelector('.dropdown-header');
+    const optionsContainer = dropdown.querySelector('.dropdown-options');
+    const options = dropdown.querySelectorAll('.dropdown-option');
+    const hiddenInput = document.getElementById('hiddenCategoria');
+    const selectedText = dropdown.querySelector('.dropdown-selected');
+    
+    header.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        header.classList.toggle('active');
+        optionsContainer.classList.toggle('open');
+    });
+    
+    options.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedText.textContent = option.textContent;
+            hiddenInput.value = option.getAttribute('data-value');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            
+            header.classList.remove('active');
+            optionsContainer.classList.remove('open');
+        });
+    });
+    
+    document.addEventListener('click', () => {
+        header.classList.remove('active');
+        optionsContainer.classList.remove('open');
+    });
+});
+</script>
+
 
 
 
@@ -4820,3 +4878,13 @@ document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item').forEach(
 
 
 
+
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    if (!document.getElementById('hiddenCategoria').value) {
+        e.preventDefault();
+        alert('Por favor, selecciona a qué área corresponde tu sugerencia.');
+        document.querySelector('.dropdown-header').style.borderColor = '#FF6B6B';
+    }
+});
+</script>
