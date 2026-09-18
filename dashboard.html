@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="es" style="background-color: #0D0D0F; color-scheme: dark;">
 
@@ -1328,7 +1328,7 @@
 
         </button>
 
-        <button class="mobile-nav-item" data-section="herramientas">
+        <button class="mobile-nav-item" id="mobileNavHerramientas" onclick="openToolsSheet()">
 
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
 
@@ -1342,6 +1342,11 @@
 
             Perfil
 
+        </button>
+
+        <button class="mobile-nav-item" data-section="sugerencias">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Buzón
         </button>
 
     </div>
@@ -1743,6 +1748,7 @@
         document.getElementById("sec-" + id).classList.add("active");
 
         document.querySelectorAll("[data-section='" + id + "']").forEach(n => n.classList.add("active"));
+        if(id.startsWith('tool-')) document.querySelectorAll('#mobileNavHerramientas').forEach(n => n.classList.add('active'));
 
 
         // Update breadcrumbs inside sections
@@ -2323,3 +2329,61 @@
 </body>
 
 </html>
+<!-- BOTTOM SHEET -->
+<div class="bottom-sheet-overlay" id="toolsBottomSheetOverlay"></div>
+<div class="bottom-sheet" id="toolsBottomSheet">
+    <div class="bottom-sheet-handle"></div>
+    <div class="bottom-sheet-title">Herramientas</div>
+    <div class="bottom-sheet-content">
+        <button class="sheet-item" onclick="closeSheet(); document.getElementById('mobileNavHerramientas').classList.add('active'); switchSection(event, 'herramientas')">
+            <span class="sheet-icon">??</span>
+            <div class="sheet-text">
+                <div class="sheet-title">Todas las herramientas</div>
+                <div class="sheet-desc">Explora el cat�logo completo</div>
+            </div>
+        </button>
+        <button class="sheet-item" onclick="closeSheet(); document.getElementById('mobileNavHerramientas').classList.add('active'); switchSection(event, 'tool-bot')">
+            <span class="sheet-icon">??</span>
+            <div class="sheet-text">
+                <div class="sheet-title">GaboBot</div>
+                <div class="sheet-desc">Automatiza compras DCA</div>
+            </div>
+        </button>
+        <button class="sheet-item" onclick="closeSheet(); document.getElementById('mobileNavHerramientas').classList.add('active'); switchSection(event, 'tool-alertas')">
+            <span class="sheet-icon">??</span>
+            <div class="sheet-text">
+                <div class="sheet-title">Alertas de Precio</div>
+                <div class="sheet-desc">Recibe notificaciones (Pr�ximamente)</div>
+            </div>
+        </button>
+    </div>
+</div>
+<script>
+function openToolsSheet() {
+    document.getElementById('toolsBottomSheetOverlay').classList.add('active');
+    document.getElementById('toolsBottomSheet').classList.add('active');
+}
+function closeSheet() {
+    document.getElementById('toolsBottomSheetOverlay').classList.remove('active');
+    document.getElementById('toolsBottomSheet').classList.remove('active');
+}
+document.getElementById('toolsBottomSheetOverlay').addEventListener('click', closeSheet);
+</script>
+
+<style>
+/* --- BOTTOM SHEET --- */
+.bottom-sheet-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.bottom-sheet-overlay.active { opacity: 1; pointer-events: auto; }
+.bottom-sheet { position: fixed; bottom: -100%; left: 0; right: 0; background: var(--sidebar-bg, #111113); border-radius: 20px 20px 0 0; z-index: 2001; padding: 16px 24px 32px; border-top: 1px solid var(--border, rgba(255,255,255,0.08)); transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.bottom-sheet.active { bottom: 0; }
+.bottom-sheet-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border, rgba(255,255,255,0.08)); margin: 0 auto 16px; }
+.bottom-sheet-title { font-size: 1.2rem; font-family: var(--font-heading); font-weight: 700; margin-bottom: 20px; text-align: center; }
+.sheet-item { display: flex; align-items: center; gap: 16px; width: 100%; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 12px; cursor: pointer; text-align: left; color: white; transition: var(--transition); outline: none; }
+.sheet-item:hover { background: rgba(255,255,255,0.05); }
+.sheet-icon { font-size: 1.5rem; }
+.sheet-title { font-weight: 600; font-size: 1rem; }
+.sheet-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+</style>
+
+
+
