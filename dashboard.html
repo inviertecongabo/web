@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿<!DOCTYPE html>
+=======
+<!DOCTYPE html>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
 <html lang="es" style="background-color: #0D0D0F; color-scheme: dark;">
 
@@ -15,9 +19,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- Fondos con Brillo Decorativo (Glow Effects) --- */
+<<<<<<< HEAD
         .bg-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(150px); z-index: -1; pointer-events: none; opacity: 0.3; }
         .bg-glow-1 { top: -200px; right: -100px; background: linear-gradient(135deg, #F0B90B 0%, #F8D347 100%); }
         .bg-glow-2 { top: 50%; left: -200px; background: radial-gradient(circle, #F0B90B 0%, rgba(0,0,0,0) 70%); }
+=======
+        .bg-glow { position: absolute; width: 300px; height: 300px; border-radius: 50%; filter: blur(150px); z-index: -1; pointer-events: none; opacity: 0.2; max-width: 80vw; max-height: 80vw; }
+
+        .bg-glow-1 { top: -100px; right: -100px; background: linear-gradient(135deg, #F0B90B 0%, #F8D347 100%); }
+
+        .bg-glow-2 { top: 50%; left: -100px; background: radial-gradient(circle, #F0B90B 0%, rgba(0,0,0,0) 70%); }
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
         
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
@@ -44,6 +56,7 @@
 
         html { max-width: 100%; overflow-x: hidden; }
 
+<<<<<<< HEAD
         body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; max-width: 100%; overflow-x: hidden; display: flex; opacity: 0; transition: opacity 0.4s ease; }
 
 
@@ -55,6 +68,15 @@
         /* SIDEBAR */
 
         .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 1000; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+=======
+        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; max-width: 100%; overflow-x: hidden; position: relative; display: flex; flex-direction: column; opacity: 0; transition: opacity 0.4s ease; }
+
+
+
+        /* SIDEBAR */
+
+        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 100; }
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
         .sidebar-logo { padding: 24px 24px 20px; border-bottom: 1px solid var(--border); }
 
@@ -370,7 +392,11 @@
 
         @media (max-width: 900px) {
 
+<<<<<<< HEAD
             .sidebar { display: none; }
+=======
+            .sidebar { display: flex; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             .desktop-only { display: none !important; }
             .mobile-only { display: block !important; }
 
@@ -395,7 +421,11 @@
             .video-grid { grid-template-columns: 1fr; }
             .tools-grid { grid-template-columns: 1fr; }
             
+<<<<<<< HEAD
             /* Utilidades para arreglar desbordamientos en mÃ³viles */
+=======
+            /* Utilidades para arreglar desbordamientos en móviles */
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             .dash-card { padding: 20px 16px !important; }
             .topbar { padding: 0 16px !important; }
             .dash-content h2 { font-size: 1.8rem !important; } /* Reducir titulo principal */
@@ -413,6 +443,7 @@
             }
         }
 
+<<<<<<< HEAD
     
         /* MOBILE SIDEBAR SLIDE-IN */
         @media (max-width: 900px) {
@@ -422,11 +453,18 @@
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 999; }
         .sidebar-overlay.active { display: block; }
 </style>
+=======
+    </style>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
 </head>
 
 <body>
+<<<<<<< HEAD
     <!-- Fondo decorativo con gradiente dinÃ¡mico -->
+=======
+    <!-- Fondo decorativo con gradiente dinámico -->
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
 
@@ -559,6 +597,7 @@
     <header class="topbar">
 
         <div style="display: flex; align-items: center; gap: 12px;">
+<<<<<<< HEAD
             <!-- MenÃº Hamburguesa en mÃ³vil (oculto en escritorio) -->
             <button class="mobile-only" id="mobileSidebarToggle" onclick="toggleMobileSidebar()" style="background: none; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -566,6 +605,15 @@
             <!-- TÃ­tulo en escritorio (oculto en mÃ³vil) -->
             <h1 class="topbar-title desktop-only" id="topbarTitle">Inicio</h1>
             <!-- Logo en mÃ³vil (oculto en escritorio) -->
+=======
+            <!-- MenÃº Hamburguesa en móvil (oculto en escritorio) -->
+            <button class="mobile-only" id="mobileSidebarToggle" onclick="toggleMobileSidebar()" style="background: none; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <!-- Título en escritorio (oculto en móvil) -->
+            <h1 class="topbar-title desktop-only" id="topbarTitle">Inicio</h1>
+            <!-- Logo en móvil (oculto en escritorio) -->
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             <a href="/" class="mobile-only" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: var(--text-primary); text-decoration: none; line-height: 1;">
                 invierte<span style="color: var(--accent);">con</span>gabo
             </a>
@@ -637,7 +685,11 @@
                         </div>
                     </div>
                     <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Comunidad</div>
+<<<<<<< HEAD
                     <div class="stat-label">Ãšnete a nuestra comunidad y obtÃ©n contenido exclusivo gratuito</div>
+=======
+                    <div class="stat-label">Únete a nuestra comunidad y obtén contenido exclusivo gratuito</div>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                     <a href="https://t.me/inviertecongabo" target="_blank" class="stat-card-action">Abrir Telegram</a>
                 </div>
             </div>
@@ -694,14 +746,24 @@
                 <input type="hidden" name="_captcha" value="false">
 
                 <div class="form-group">
+<<<<<<< HEAD
                     <label>Â¿A quÃ© Ã¡rea corresponde tu sugerencia?</label>
                     <div style="position: relative;">
                         <select name="CategorÃ­a" required style="appearance: none; cursor: pointer;">
+=======
+                    <label>Â¿A qué área corresponde tu sugerencia?</label>
+                    <div style="position: relative;">
+                        <select name="Categoría" required style="appearance: none; cursor: pointer;">
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             <option value="" disabled selected>Selecciona un filtro...</option>
                             <option value="Oratoria">Oratoria / Estilo de videos</option>
                             <option value="Videos">Videos educativos nuevos que quieres ver</option>
                             <option value="Herramientas">Herramientas o GaboBot</option>
+<<<<<<< HEAD
                             <option value="Pagina Web">PÃ¡gina Web (Errores o DiseÃ±o)</option>
+=======
+                            <option value="Pagina Web">Página Web (Errores o Diseño)</option>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             <option value="Otro">Otro</option>
                         </select>
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -709,8 +771,13 @@
                 </div>
                 
                 <div class="form-group">
+<<<<<<< HEAD
                     <label>ExplÃ­canos tu idea</label>
                     <textarea name="Sugerencia" required placeholder="Escribe aquÃ­ tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
+=======
+                    <label>Explícanos tu idea</label>
+                    <textarea name="Sugerencia" required placeholder="Escribe aquí tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                 </div>
                 
                 <div class="form-group">
@@ -906,7 +973,11 @@
             </div>
             <h2 class="section-heading">Compras BTC (GaboBot)</h2>
 
+<<<<<<< HEAD
             <p class="section-sub">Configura tu estrategia de inversiÃ³n automatizada (DCA) en Binance.</p>
+=======
+            <p class="section-sub">Configura tu estrategia de inversión automatizada (DCA) en Binance.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
             
 
@@ -938,11 +1009,19 @@
 
                         <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
 
+<<<<<<< HEAD
                             <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>GestiÃ³n de API</strong>.</span></li>
 
                             <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guÃ¡rdala en un lugar seguro.</span></li>
 
                             <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y asegÃºrate de marcar <strong>Ãšnicamente</strong> "Habilitar lectura" y "Habilitar trading de Margen, Acciones y Spot".</span></li>
+=======
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
+
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
+
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y asegÃºrate de marcar <strong>Únicamente</strong> "Habilitar lectura" y "Habilitar trading de Margen, Acciones y Spot".</span></li>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
                             <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
 
@@ -964,7 +1043,11 @@
 
                         <h4 style="color: #F8FAFC; margin-bottom: 8px; font-family: var(--font-heading);">Video Tutorial</h4>
 
+<<<<<<< HEAD
                         <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">AquÃ­ irÃ¡ tu video de 2 minutos explicando el proceso paso a paso.</p>
+=======
+                        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">Aquí irá tu video de 2 minutos explicando el proceso paso a paso.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
                     </div>
 
@@ -978,7 +1061,11 @@
 
                     <span style="color: var(--text-muted);">Â¿Tienes dudas sobre la seguridad?</span>
 
+<<<<<<< HEAD
                     <a href="/herramientas-info" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cÃ³mo funciona el bot â†—</a>
+=======
+                    <a href="/herramientas-info" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cómo funciona el bot â†—</a>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
                 </div>
 
@@ -1004,7 +1091,11 @@
 
                         <label for="botTermsCheck2" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
 
+<<<<<<< HEAD
                             He leÃ­do y acepto los <a href="/legal?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">Términos y Condiciones de uso de GaboBot</a>.
+=======
+                            He leído y acepto los <a href="/legal?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">Términos y Condiciones de uso de GaboBot</a>.
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
                         </label>
 
@@ -1031,7 +1122,11 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
                             <div>
                                 <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+<<<<<<< HEAD
                                     Estado de InversiÃ³n
+=======
+                                    Estado de Inversión
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                     <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
                                 </h3>
                                 <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
@@ -1048,7 +1143,11 @@
                             <div class="config-box">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+<<<<<<< HEAD
                                     <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">ConexiÃ³n Binance</h4>
+=======
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                 </div>
                                 
                                 <div class="form-group" style="margin-bottom: 16px;">
@@ -1080,7 +1179,11 @@
                                         <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px;">
                                         <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
                                     </div>
+<<<<<<< HEAD
                                     <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*MÃ­nimo requerido: $6 USDT</small>
+=======
+                                    <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                 </div>
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label class="form-label">Frecuencia</label>
@@ -1096,7 +1199,11 @@
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                     </div>
                                     <div id="customDaysContainer" style="display: none; margin-top: 16px; position: relative;">
+<<<<<<< HEAD
                                         <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">NÃºmero de dÃ­as</label>
+=======
+                                        <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">NÃºmero de días</label>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                         <input type="number" class="form-input" id="botCustomDays" placeholder="Ej: 5" min="1" max="365">
                                     </div>
                                 </div>
@@ -1104,7 +1211,11 @@
                         </div>
 
                         <div style="margin-top: 24px;">
+<<<<<<< HEAD
                             <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">âš ï¸ Nota: Guardar la configuraciÃ³n <b>no enciende</b> el bot automÃ¡ticamente. DeberÃ¡s encender el interruptor de arriba.</p>
+=======
+                            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">âš ï¸ Nota: Guardar la configuración <b>no enciende</b> el bot automáticamente. Deberás encender el interruptor de arriba.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
                             <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">Configuración guardada correctamente.</div>
                         </div>
@@ -1115,6 +1226,7 @@
                         <div class="dash-card" style="background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent); margin-bottom: 0;">
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
                                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+<<<<<<< HEAD
                                 <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">Â¿CÃ³mo funciona?</h4>
                             </div>
                             <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
@@ -1122,16 +1234,32 @@
                                 <li>Define la cantidad en USDT (mÃ­nimo $6) y la frecuencia con la que quieres invertir.</li>
                                 <li>Haz clic en el botÃ³n amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
                                 <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de InversiÃ³n</strong> para que quede en Verde (ACTIVO).</li>
+=======
+                                <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">Â¿Cómo funciona?</h4>
+                            </div>
+                            <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
+                                <li>Pega tu <strong>API Key</strong> y <strong>Secret Key</strong> en la sección de Conexión.</li>
+                                <li>Define la cantidad en USDT (mínimo $6) y la frecuencia con la que quieres invertir.</li>
+                                <li>Haz clic en el botón amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
+                                <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de Inversión</strong> para que quede en Verde (ACTIVO).</li>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             </ol>
                         </div>
 
                         <div class="dash-card" style="background: rgba(42, 171, 238, 0.05); border: 1px dashed #2AABEE; margin-bottom: 0; padding: 20px;">
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2AABEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+<<<<<<< HEAD
                                 <h4 style="font-family:var(--font-heading); font-size:1rem; color:#2AABEE; margin:0;">InformaciÃ³n Importante</h4>
                             </div>
                             <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
                                 Una vez guardada la configuraciÃ³n, <strong>recuerda mantener tus USDT en la billetera de Spot</strong> de Binance. Si tus fondos estÃ¡n en <em>Futuros, Earn o Fondos</em>, el bot no podrÃ¡ tomarlos y la compra automÃ¡tica fallarÃ¡.
+=======
+                                <h4 style="font-family:var(--font-heading); font-size:1rem; color:#2AABEE; margin:0;">Información Importante</h4>
+                            </div>
+                            <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
+                                Una vez guardada la configuración, <strong>recuerda mantener tus USDT en la billetera de Spot</strong> de Binance. Si tus fondos están en <em>Futuros, Earn o Fondos</em>, el bot no podrá tomarlos y la compra automática fallará.
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             </p>
                         </div>
                     </div>
@@ -1154,7 +1282,11 @@
             </div>
             <h2 class="section-heading">Alertas de Precio</h2>
 
+<<<<<<< HEAD
             <p class="section-sub">Notificaciones automÃ¡ticas por Telegram.</p>
+=======
+            <p class="section-sub">Notificaciones automáticas por Telegram.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
             <div class="dash-card" style="text-align:center; padding: 60px 20px;">
 
@@ -1162,7 +1294,11 @@
 
                 <h3 style="font-family:var(--font-heading); margin-bottom:8px;">Herramienta en desarrollo</h3>
 
+<<<<<<< HEAD
                 <p style="color:var(--text-muted); max-width:400px; margin:0 auto;">PodrÃ¡s crear alertas personalizadas para que te avisemos cuando BTC toque el precio que esperas.</p>
+=======
+                <p style="color:var(--text-muted); max-width:400px; margin:0 auto;">Podrás crear alertas personalizadas para que te avisemos cuando BTC toque el precio que esperas.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
             </div>
 
@@ -1203,14 +1339,22 @@
 
                 <div class="profile-forms">
                     <div class="dash-card">
+<<<<<<< HEAD
                         <div class="profile-section-title">InformaciÃ³n Personal</div>
+=======
+                        <div class="profile-section-title">Información Personal</div>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                         <div class="profile-form">
                             <div class="form-group">
                                 <label class="form-label">Nombre completo</label>
                                 <input type="text" class="form-input" id="editName" placeholder="Tu nombre">
                             </div>
                             <div class="form-group">
+<<<<<<< HEAD
                                 <label class="form-label">Correo electrÃ³nico</label>
+=======
+                                <label class="form-label">Correo electrónico</label>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                 <input type="email" class="form-input" id="editEmail" disabled>
                             </div>
                             <button class="btn-save" id="btnSaveName">Guardar cambios</button>
@@ -1219,6 +1363,7 @@
                     </div>
 
                     <div class="dash-card" id="passwordCard">
+<<<<<<< HEAD
                         <div class="profile-section-title">Cambiar ContraseÃ±a</div>
                         <div class="profile-form">
                             <div class="form-group">
@@ -1236,6 +1381,25 @@
                             <button class="btn-save" id="btnSavePassword">Actualizar contraseÃ±a</button>
                             <div id="pwMsg" class="msg-ok">ContraseÃ±a actualizada.</div>
                             <div id="pwErrMsg" class="msg-err">Las contraseÃ±as no coinciden.</div>
+=======
+                        <div class="profile-section-title">Cambiar Contraseña</div>
+                        <div class="profile-form">
+                            <div class="form-group">
+                                <label class="form-label">Contraseña actual</label>
+                                <input type="password" class="form-input" id="currentPassword" placeholder="Ingresa tu contraseña actual">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nueva contraseña</label>
+                                <input type="password" class="form-input" id="newPassword" placeholder="Mínimo 6 caracteres">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmar contraseña</label>
+                                <input type="password" class="form-input" id="confirmPassword" placeholder="Repite la contraseña">
+                            </div>
+                            <button class="btn-save" id="btnSavePassword">Actualizar contraseña</button>
+                            <div id="pwMsg" class="msg-ok">Contraseña actualizada.</div>
+                            <div id="pwErrMsg" class="msg-err">Las contraseñas no coinciden.</div>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                         </div>
 
                     </div>
@@ -1246,7 +1410,11 @@
                             Seguridad Avanzada (2FA)
                         </div>
                         <div class="profile-form">
+<<<<<<< HEAD
                             <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 16px; line-height: 1.5;">Protege tu cuenta y tus claves API con autenticaciÃ³n de dos factores usando Google Authenticator.</p>
+=======
+                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 16px; line-height: 1.5;">Protege tu cuenta y tus claves API con autenticación de dos factores usando Google Authenticator.</p>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                             
                             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-sm);">
                                 <div style="display: flex; align-items: center; gap: 12px;">
@@ -1271,6 +1439,7 @@
                                         <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; font-family: var(--font-heading);">Instrucciones para activar:</h4>
                                         <ol style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0;">
                                             <li>Descarga la app <strong>Google Authenticator</strong> en tu celular (iOS o Android).</li>
+<<<<<<< HEAD
                                             <li>Abre la app y presiona el Ã­cono <strong>"+"</strong>.</li>
                                             <li>Selecciona la opciÃ³n <strong>"Escanear cÃ³digo QR"</strong>.</li>
                                             <li>Apunta con la cÃ¡mara al cÃ³digo que estÃ¡ aquÃ­ a la derecha.</li>
@@ -1280,12 +1449,27 @@
                                     <!-- CÃ³digo QR (Derecha) -->
                                     <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
                                         <img id="mfaQrImg" src="" alt="CÃ³digo QR 2FA" style="width: 160px; height: 160px; display: block;">
+=======
+                                            <li>Abre la app y presiona el ícono <strong>"+"</strong>.</li>
+                                            <li>Selecciona la opción <strong>"Escanear código QR"</strong>.</li>
+                                            <li>Apunta con la cámara al código que está aquí a la derecha.</li>
+                                        </ol>
+                                    </div>
+
+                                    <!-- Código QR (Derecha) -->
+                                    <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
+                                        <img id="mfaQrImg" src="" alt="Código QR 2FA" style="width: 160px; height: 160px; display: block;">
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                     </div>
 
                                 </div>
 
                                 <div style="border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
+<<<<<<< HEAD
                                     <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">5. Ingresa el cÃ³digo de 6 dÃ­gitos que generÃ³ la app:</div>
+=======
+                                    <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">5. Ingresa el código de 6 dígitos que generó la app:</div>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                                     <div style="display: flex; gap: 8px; justify-content: center;">
                                         <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 140px; text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05);">
                                         <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 24px; font-size: 1rem;">Verificar y Activar</button>
@@ -1313,10 +1497,17 @@
             <div style="width:50px; height:50px; background:rgba(240,185,11,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
                 <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </div>
+<<<<<<< HEAD
             <h3 style="margin-bottom:8px; font-family:var(--font-heading); font-size:1.4rem;">AutenticaciÃ³n 2FA</h3>
             <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Esta acciÃ³n requiere confirmaciÃ³n. Abre Google Authenticator e ingresa el cÃ³digo de 6 dÃ­gitos.</p>
             <input type="text" id="globalMfaCodeInput" class="form-input" placeholder="000000" maxlength="6" style="width:100%; text-align:center; letter-spacing:4px; font-size:1.4rem; font-weight:bold; margin-bottom:16px;">
             <div id="globalMfaError" class="msg-err" style="display:none; margin-bottom:16px;">CÃ³digo incorrecto. Intenta de nuevo.</div>
+=======
+            <h3 style="margin-bottom:8px; font-family:var(--font-heading); font-size:1.4rem;">Autenticación 2FA</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Esta acción requiere confirmación. Abre Google Authenticator e ingresa el código de 6 dígitos.</p>
+            <input type="text" id="globalMfaCodeInput" class="form-input" placeholder="000000" maxlength="6" style="width:100%; text-align:center; letter-spacing:4px; font-size:1.4rem; font-weight:bold; margin-bottom:16px;">
+            <div id="globalMfaError" class="msg-err" style="display:none; margin-bottom:16px;">Código incorrecto. Intenta de nuevo.</div>
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             <div style="display:flex; gap:12px;">
                 <button id="btnCancelGlobalMfa" class="btn-save" style="background:transparent; border:1px solid var(--border); color:var(--text-primary); flex:1;">Cancelar</button>
                 <button id="btnConfirmGlobalMfa" class="btn-save" style="flex:1;">Verificar</button>
@@ -1415,7 +1606,11 @@
 
         }
 
+<<<<<<< HEAD
         // Verificar si el usuario estÃ¡ baneado antes de cargar el dashboard
+=======
+        // Verificar si el usuario está baneado antes de cargar el dashboard
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
         const { data: profile } = await sb.from('profiles').select('is_banned').eq('id', session.user.id).single();
 
@@ -1625,7 +1820,11 @@
 
 
 
+<<<<<<< HEAD
         // Ocultar sección de contraseÃ±a si iniciÃ³ sesiÃ³n con Google
+=======
+        // Ocultar sección de contraseña si inició sesión con Google
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
         const providers = user.app_metadata?.providers || [];
         if (providers.includes('google')) {
             const pwCard = document.getElementById("passwordCard");
@@ -1649,7 +1848,11 @@
 
         
 
+<<<<<<< HEAD
         // Llenar datos bÃ¡sicos del DOM
+=======
+        // Llenar datos básicos del DOM
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
         // Reset bot onboarding checkboxes on load
         if(document.getElementById("botTermsCheck1")) document.getElementById("botTermsCheck1").checked = false;
@@ -1670,7 +1873,11 @@
 
             
 
+<<<<<<< HEAD
             // Cuando estÃ© listo para producciÃ³n, descomentar esto y borrar las 2 lÃ­neas de arriba:
+=======
+            // Cuando esté listo para producción, descomentar esto y borrar las 2 líneas de arriba:
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
 
             /*
 
@@ -1717,7 +1924,11 @@
             }
         }
 
+<<<<<<< HEAD
         // Mostrar el contenido con una transiciÃ³n suave
+=======
+        // Mostrar el contenido con una transición suave
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
         document.body.style.opacity = "1";
     }
 
@@ -2010,10 +2221,17 @@
         const { data: { user } } = await sb.auth.getUser();
         const botConfig = user?.user_metadata?.bot_config || {};
 
+<<<<<<< HEAD
         // ValidaciÃ³n: Si intenta prenderlo y no hay API keys guardadas
         if (isActive && (!botConfig.ak || !botConfig.sk)) {
             checkbox.checked = false;
             alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuraciÃ³n de abajo.");
+=======
+        // Validación: Si intenta prenderlo y no hay API keys guardadas
+        if (isActive && (!botConfig.ak || !botConfig.sk)) {
+            checkbox.checked = false;
+            alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuración de abajo.");
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             return;
         }
 
@@ -2050,17 +2268,29 @@
         const customDays = document.getElementById("botCustomDays").value;
 
         if (!apiKey || !secretKey) {
+<<<<<<< HEAD
             alert("API Key y Secret Key son obligatorios para guardar la configuraciÃ³n.");
+=======
+            alert("API Key y Secret Key son obligatorios para guardar la configuración.");
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             return;
         }
 
         if (!amount || parseFloat(amount) < 6) {
+<<<<<<< HEAD
             alert("El monto mÃ­nimo requerido para activar el bot es de 6 USDT.");
+=======
+            alert("El monto mínimo requerido para activar el bot es de 6 USDT.");
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             return;
         }
 
         if (frequency === "custom" && (!customDays || parseInt(customDays) < 1)) {
+<<<<<<< HEAD
             alert("Debes ingresar un nÃºmero vÃ¡lido de dÃ­as para la frecuencia personalizada.");
+=======
+            alert("Debes ingresar un nÃºmero válido de días para la frecuencia personalizada.");
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             return;
         }
 
@@ -2147,7 +2377,11 @@
             ok.style.display = "none"; err.style.display = "none";
             
             if (pw !== pw2 || pw.length < 6) { 
+<<<<<<< HEAD
                 err.textContent = pw.length < 6 ? "MÃ­nimo 6 caracteres." : "Las contraseÃ±as no coinciden."; 
+=======
+                err.textContent = pw.length < 6 ? "Mínimo 6 caracteres." : "Las contraseñas no coinciden."; 
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
                 err.style.display = "block"; 
                 return; 
             }
@@ -2231,7 +2465,11 @@
         btn.textContent = "Generando QR...";
         btn.disabled = true;
 
+<<<<<<< HEAD
         // Limpiar factores pendientes que el usuario no completÃ³ (evita error "already exists")
+=======
+        // Limpiar factores pendientes que el usuario no completó (evita error "already exists")
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
         const { data: factorList } = await sb.auth.mfa.listFactors();
         if (factorList && factorList.totp) {
             const unverified = factorList.totp.filter(f => f.status === 'unverified');
@@ -2285,7 +2523,11 @@
         });
 
         if (verify.error) {
+<<<<<<< HEAD
             msg.textContent = "CÃ³digo incorrecto.";
+=======
+            msg.textContent = "Código incorrecto.";
+>>>>>>> 44993fb (Fix: Dashboard layout overflow and mobile sidebar menu)
             msg.className = "msg-err";
             msg.style.display = "block";
             btn.textContent = "Verificar";
