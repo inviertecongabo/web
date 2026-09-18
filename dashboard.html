@@ -544,7 +544,13 @@
 
     <header class="topbar">
 
-        <h1 class="topbar-title" id="topbarTitle">Inicio</h1>
+        <!-- Título en escritorio (oculto en móvil) -->
+        <h1 class="topbar-title desktop-only" id="topbarTitle">Inicio</h1>
+
+        <!-- Logo en móvil (oculto en escritorio) -->
+        <a href="/" class="mobile-only" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: var(--text-primary); text-decoration: none; line-height: 1;">
+            invierte<span style="color: var(--accent);">con</span>gabo
+        </a>
 
         <div class="topbar-right">
 
