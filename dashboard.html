@@ -42,7 +42,9 @@
 
         }
 
-        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; display: flex; opacity: 0; transition: opacity 0.4s ease; }
+        html { max-width: 100%; overflow-x: hidden; }
+
+        body { background-color: var(--bg); color: var(--text-primary); font-family: var(--font-body); min-height: 100vh; max-width: 100%; overflow-x: hidden; display: flex; opacity: 0; transition: opacity 0.4s ease; }
 
 
 
@@ -389,7 +391,7 @@
             .video-grid { grid-template-columns: 1fr; }
             .tools-grid { grid-template-columns: 1fr; }
             
-            /* Utilidades para arreglar desbordamientos en móviles */
+            /* Utilidades para arreglar desbordamientos en mÃ³viles */
             .dash-card { padding: 20px 16px !important; }
             .topbar { padding: 0 16px !important; }
             .dash-content h2 { font-size: 1.8rem !important; } /* Reducir titulo principal */
@@ -412,7 +414,7 @@
 </head>
 
 <body>
-    <!-- Fondo decorativo con gradiente dinámico -->
+    <!-- Fondo decorativo con gradiente dinÃ¡mico -->
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
 
@@ -486,7 +488,7 @@
         <button class="nav-item" data-section="sugerencias">
             <div class="nav-item-content">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Buzón de sugerencias
+                BuzÃ³n de sugerencias
             </div>
         </button>
 
@@ -544,13 +546,18 @@
 
     <header class="topbar">
 
-        <!-- Título en escritorio (oculto en móvil) -->
-        <h1 class="topbar-title desktop-only" id="topbarTitle">Inicio</h1>
-
-        <!-- Logo en móvil (oculto en escritorio) -->
-        <a href="/" class="mobile-only" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: var(--text-primary); text-decoration: none; line-height: 1;">
-            invierte<span style="color: var(--accent);">con</span>gabo
-        </a>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- MenÃº Hamburguesa en mÃ³vil (oculto en escritorio) -->
+            <button class="mobile-only" id="mobileSidebarToggle" onclick="toggleMobileSidebar()" style="background: none; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <!-- TÃ­tulo en escritorio (oculto en mÃ³vil) -->
+            <h1 class="topbar-title desktop-only" id="topbarTitle">Inicio</h1>
+            <!-- Logo en mÃ³vil (oculto en escritorio) -->
+            <a href="/" class="mobile-only" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: var(--text-primary); text-decoration: none; line-height: 1;">
+                invierte<span style="color: var(--accent);">con</span>gabo
+            </a>
+        </div>
 
         <div class="topbar-right">
 
@@ -606,8 +613,8 @@
                     <div class="stat-card-header">
                         <div class="stat-icon" style="margin-bottom:0; filter: drop-shadow(0 0 10px rgba(240,185,11,0.5));">&#128161;</div>
                     </div>
-                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Buzón de sugerencias</div>
-                    <div class="stat-label" style="font-size:0.8rem; line-height:1.4;">En Invierte con Gabo valoramos tu opinión. Déjanos una reseña para mejorar.</div>
+                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">BuzÃ³n de sugerencias</div>
+                    <div class="stat-label" style="font-size:0.8rem; line-height:1.4;">En Invierte con Gabo valoramos tu opiniÃ³n. DÃ©janos una reseÃ±a para mejorar.</div>
                     <button class="stat-card-action" onclick="switchSection(event,'sugerencias')">Dejar sugerencia</button>
                 </div>
 
@@ -618,7 +625,7 @@
                         </div>
                     </div>
                     <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Comunidad</div>
-                    <div class="stat-label">Únete a nuestra comunidad y obtén contenido exclusivo gratuito</div>
+                    <div class="stat-label">Ãšnete a nuestra comunidad y obtÃ©n contenido exclusivo gratuito</div>
                     <a href="https://t.me/inviertecongabo" target="_blank" class="stat-card-action">Abrir Telegram</a>
                 </div>
             </div>
@@ -652,7 +659,7 @@
                     <div class="qa-content">
                         <div>
                             <div class="qa-title">Automatiza con GaboBot</div>
-                            <div class="qa-desc">Tu tiempo es tu recurso más valioso. Automatiza tus compras de Bitcoin de manera fácil, segura y sin emociones.</div>
+                            <div class="qa-desc">Tu tiempo es tu recurso mÃ¡s valioso. Automatiza tus compras de Bitcoin de manera fÃ¡cil, segura y sin emociones.</div>
                         </div>
                         <div class="qa-action-link" style="color:var(--accent);">
                             Ir al panel del bot 
@@ -666,8 +673,8 @@
 
         <!-- SUGERENCIAS -->
         <section class="dash-section" id="sec-sugerencias">
-            <h2 class="section-heading">Buzón de sugerencias</h2>
-            <p class="section-sub">En Invierte con Gabo valoramos tu opinión. Selecciona una categoría y déjanos tu sugerencia o idea de mejora para la plataforma o el contenido.</p>
+            <h2 class="section-heading">BuzÃ³n de sugerencias</h2>
+            <p class="section-sub">En Invierte con Gabo valoramos tu opiniÃ³n. Selecciona una categorÃ­a y dÃ©janos tu sugerencia o idea de mejora para la plataforma o el contenido.</p>
             
             <form id="feedbackForm" class="feedback-form" action="https://formsubmit.co/b25dbf064dd5d41b0ebafd7fd45db9e7" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="_subject" value="Nueva sugerencia desde el Dashboard">
@@ -675,14 +682,14 @@
                 <input type="hidden" name="_captcha" value="false">
 
                 <div class="form-group">
-                    <label>¿A qué área corresponde tu sugerencia?</label>
+                    <label>Â¿A quÃ© Ã¡rea corresponde tu sugerencia?</label>
                     <div style="position: relative;">
-                        <select name="Categoría" required style="appearance: none; cursor: pointer;">
+                        <select name="CategorÃ­a" required style="appearance: none; cursor: pointer;">
                             <option value="" disabled selected>Selecciona un filtro...</option>
                             <option value="Oratoria">Oratoria / Estilo de videos</option>
                             <option value="Videos">Videos educativos nuevos que quieres ver</option>
                             <option value="Herramientas">Herramientas o GaboBot</option>
-                            <option value="Pagina Web">Página Web (Errores o Diseño)</option>
+                            <option value="Pagina Web">PÃ¡gina Web (Errores o DiseÃ±o)</option>
                             <option value="Otro">Otro</option>
                         </select>
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -690,8 +697,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Explícanos tu idea</label>
-                    <textarea name="Sugerencia" required placeholder="Escribe aquí tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
+                    <label>ExplÃ­canos tu idea</label>
+                    <textarea name="Sugerencia" required placeholder="Escribe aquÃ­ tu mejora, sugerencia o feedback. Mientras mÃ¡s detalles, mejor..."></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -887,7 +894,7 @@
             </div>
             <h2 class="section-heading">Compras BTC (GaboBot)</h2>
 
-            <p class="section-sub">Configura tu estrategia de inversión automatizada (DCA) en Binance.</p>
+            <p class="section-sub">Configura tu estrategia de inversiÃ³n automatizada (DCA) en Binance.</p>
 
             
 
@@ -919,11 +926,11 @@
 
                         <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
 
-                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>GestiÃ³n de API</strong>.</span></li>
 
-                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guÃ¡rdala en un lugar seguro.</span></li>
 
-                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y asegúrate de marcar <strong>Únicamente</strong> "Habilitar lectura" y "Habilitar trading de Margen, Acciones y Spot".</span></li>
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y asegÃºrate de marcar <strong>Ãšnicamente</strong> "Habilitar lectura" y "Habilitar trading de Margen, Acciones y Spot".</span></li>
 
                             <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
 
@@ -945,7 +952,7 @@
 
                         <h4 style="color: #F8FAFC; margin-bottom: 8px; font-family: var(--font-heading);">Video Tutorial</h4>
 
-                        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">Aquí irá tu video de 2 minutos explicando el proceso paso a paso.</p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">AquÃ­ irÃ¡ tu video de 2 minutos explicando el proceso paso a paso.</p>
 
                     </div>
 
@@ -957,9 +964,9 @@
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
 
-                    <span style="color: var(--text-muted);">¿Tienes dudas sobre la seguridad?</span>
+                    <span style="color: var(--text-muted);">Â¿Tienes dudas sobre la seguridad?</span>
 
-                    <a href="/herramientas-info" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cómo funciona el bot ↗</a>
+                    <a href="/herramientas-info" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cÃ³mo funciona el bot â†—</a>
 
                 </div>
 
@@ -973,7 +980,7 @@
 
                         <label for="botTermsCheck1" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
 
-                            Confirmo que he creado mi API Key en Binance <strong>únicamente</strong> con permisos de "Lectura" y "Trading Spot", y me he asegurado de NO habilitar retiros.
+                            Confirmo que he creado mi API Key en Binance <strong>Ãºnicamente</strong> con permisos de "Lectura" y "Trading Spot", y me he asegurado de NO habilitar retiros.
 
                         </label>
 
@@ -985,7 +992,7 @@
 
                         <label for="botTermsCheck2" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
 
-                            He leído y acepto los <a href="/legal?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">Términos y Condiciones de uso de GaboBot</a>.
+                            He leÃ­do y acepto los <a href="/legal?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">TÃ©rminos y Condiciones de uso de GaboBot</a>.
 
                         </label>
 
@@ -1012,10 +1019,10 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
                             <div>
                                 <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
-                                    Estado de Inversión
+                                    Estado de InversiÃ³n
                                     <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
                                 </h3>
-                                <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
+                                <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automÃ¡tico de tus compras.</p>
                             </div>
                             <label class="toggle-switch" style="transform: scale(1.1);">
                                 <input type="checkbox" id="botToggle">
@@ -1029,7 +1036,7 @@
                             <div class="config-box">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">ConexiÃ³n Binance</h4>
                                 </div>
                                 
                                 <div class="form-group" style="margin-bottom: 16px;">
@@ -1061,7 +1068,7 @@
                                         <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px;">
                                         <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
                                     </div>
-                                    <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
+                                    <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*MÃ­nimo requerido: $6 USDT</small>
                                 </div>
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label class="form-label">Frecuencia</label>
@@ -1077,7 +1084,7 @@
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                     </div>
                                     <div id="customDaysContainer" style="display: none; margin-top: 16px; position: relative;">
-                                        <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">Número de días</label>
+                                        <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">NÃºmero de dÃ­as</label>
                                         <input type="number" class="form-input" id="botCustomDays" placeholder="Ej: 5" min="1" max="365">
                                     </div>
                                 </div>
@@ -1085,9 +1092,9 @@
                         </div>
 
                         <div style="margin-top: 24px;">
-                            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">⚠️ Nota: Guardar la configuración <b>no enciende</b> el bot automáticamente. Deberás encender el interruptor de arriba.</p>
-                            <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar Configuración</button>
-                            <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">Configuración guardada correctamente.</div>
+                            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:12px;">âš ï¸ Nota: Guardar la configuraciÃ³n <b>no enciende</b> el bot automÃ¡ticamente. DeberÃ¡s encender el interruptor de arriba.</p>
+                            <button class="btn-save" id="btnSaveBot" style="width: 100%; padding: 14px; font-size: 1rem;">Guardar ConfiguraciÃ³n</button>
+                            <div id="botMsg" class="msg-ok" style="margin-top: 12px; display:none;">ConfiguraciÃ³n guardada correctamente.</div>
                         </div>
                     </div>
 
@@ -1096,23 +1103,23 @@
                         <div class="dash-card" style="background: rgba(240, 185, 11, 0.05); border: 1px dashed var(--accent); margin-bottom: 0;">
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
                                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                                <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">¿Cómo funciona?</h4>
+                                <h4 style="font-family:var(--font-heading); font-size:1.2rem; color:var(--accent); margin:0;">Â¿CÃ³mo funciona?</h4>
                             </div>
                             <ol style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; padding-left:16px; margin:0; display:flex; flex-direction:column; gap:12px;">
-                                <li>Pega tu <strong>API Key</strong> y <strong>Secret Key</strong> en la sección de Conexión.</li>
-                                <li>Define la cantidad en USDT (mínimo $6) y la frecuencia con la que quieres invertir.</li>
-                                <li>Haz clic en el botón amarillo <strong>Guardar Configuración</strong> y verifica tu identidad con 2FA.</li>
-                                <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de Inversión</strong> para que quede en Verde (ACTIVO).</li>
+                                <li>Pega tu <strong>API Key</strong> y <strong>Secret Key</strong> en la secciÃ³n de ConexiÃ³n.</li>
+                                <li>Define la cantidad en USDT (mÃ­nimo $6) y la frecuencia con la que quieres invertir.</li>
+                                <li>Haz clic en el botÃ³n amarillo <strong>Guardar ConfiguraciÃ³n</strong> y verifica tu identidad con 2FA.</li>
+                                <li>Sube al inicio de este panel y mueve el <strong>interruptor de Estado de InversiÃ³n</strong> para que quede en Verde (ACTIVO).</li>
                             </ol>
                         </div>
 
                         <div class="dash-card" style="background: rgba(42, 171, 238, 0.05); border: 1px dashed #2AABEE; margin-bottom: 0; padding: 20px;">
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
                                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#2AABEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                                <h4 style="font-family:var(--font-heading); font-size:1rem; color:#2AABEE; margin:0;">Información Importante</h4>
+                                <h4 style="font-family:var(--font-heading); font-size:1rem; color:#2AABEE; margin:0;">InformaciÃ³n Importante</h4>
                             </div>
                             <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5; margin:0;">
-                                Una vez guardada la configuración, <strong>recuerda mantener tus USDT en la billetera de Spot</strong> de Binance. Si tus fondos están en <em>Futuros, Earn o Fondos</em>, el bot no podrá tomarlos y la compra automática fallará.
+                                Una vez guardada la configuraciÃ³n, <strong>recuerda mantener tus USDT en la billetera de Spot</strong> de Binance. Si tus fondos estÃ¡n en <em>Futuros, Earn o Fondos</em>, el bot no podrÃ¡ tomarlos y la compra automÃ¡tica fallarÃ¡.
                             </p>
                         </div>
                     </div>
@@ -1135,15 +1142,15 @@
             </div>
             <h2 class="section-heading">Alertas de Precio</h2>
 
-            <p class="section-sub">Notificaciones automáticas por Telegram.</p>
+            <p class="section-sub">Notificaciones automÃ¡ticas por Telegram.</p>
 
             <div class="dash-card" style="text-align:center; padding: 60px 20px;">
 
-                <div style="font-size:3rem; margin-bottom:16px;">🔔</div>
+                <div style="font-size:3rem; margin-bottom:16px;">ðŸ””</div>
 
                 <h3 style="font-family:var(--font-heading); margin-bottom:8px;">Herramienta en desarrollo</h3>
 
-                <p style="color:var(--text-muted); max-width:400px; margin:0 auto;">Podrás crear alertas personalizadas para que te avisemos cuando BTC toque el precio que esperas.</p>
+                <p style="color:var(--text-muted); max-width:400px; margin:0 auto;">PodrÃ¡s crear alertas personalizadas para que te avisemos cuando BTC toque el precio que esperas.</p>
 
             </div>
 
@@ -1184,14 +1191,14 @@
 
                 <div class="profile-forms">
                     <div class="dash-card">
-                        <div class="profile-section-title">Información Personal</div>
+                        <div class="profile-section-title">InformaciÃ³n Personal</div>
                         <div class="profile-form">
                             <div class="form-group">
                                 <label class="form-label">Nombre completo</label>
                                 <input type="text" class="form-input" id="editName" placeholder="Tu nombre">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Correo electrónico</label>
+                                <label class="form-label">Correo electrÃ³nico</label>
                                 <input type="email" class="form-input" id="editEmail" disabled>
                             </div>
                             <button class="btn-save" id="btnSaveName">Guardar cambios</button>
@@ -1200,23 +1207,23 @@
                     </div>
 
                     <div class="dash-card" id="passwordCard">
-                        <div class="profile-section-title">Cambiar Contraseña</div>
+                        <div class="profile-section-title">Cambiar ContraseÃ±a</div>
                         <div class="profile-form">
                             <div class="form-group">
-                                <label class="form-label">Contraseña actual</label>
-                                <input type="password" class="form-input" id="currentPassword" placeholder="Ingresa tu contraseña actual">
+                                <label class="form-label">ContraseÃ±a actual</label>
+                                <input type="password" class="form-input" id="currentPassword" placeholder="Ingresa tu contraseÃ±a actual">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Nueva contraseña</label>
-                                <input type="password" class="form-input" id="newPassword" placeholder="Mínimo 6 caracteres">
+                                <label class="form-label">Nueva contraseÃ±a</label>
+                                <input type="password" class="form-input" id="newPassword" placeholder="MÃ­nimo 6 caracteres">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Confirmar contraseña</label>
-                                <input type="password" class="form-input" id="confirmPassword" placeholder="Repite la contraseña">
+                                <label class="form-label">Confirmar contraseÃ±a</label>
+                                <input type="password" class="form-input" id="confirmPassword" placeholder="Repite la contraseÃ±a">
                             </div>
-                            <button class="btn-save" id="btnSavePassword">Actualizar contraseña</button>
-                            <div id="pwMsg" class="msg-ok">Contraseña actualizada.</div>
-                            <div id="pwErrMsg" class="msg-err">Las contraseñas no coinciden.</div>
+                            <button class="btn-save" id="btnSavePassword">Actualizar contraseÃ±a</button>
+                            <div id="pwMsg" class="msg-ok">ContraseÃ±a actualizada.</div>
+                            <div id="pwErrMsg" class="msg-err">Las contraseÃ±as no coinciden.</div>
                         </div>
 
                     </div>
@@ -1227,7 +1234,7 @@
                             Seguridad Avanzada (2FA)
                         </div>
                         <div class="profile-form">
-                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 16px; line-height: 1.5;">Protege tu cuenta y tus claves API con autenticación de dos factores usando Google Authenticator.</p>
+                            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 16px; line-height: 1.5;">Protege tu cuenta y tus claves API con autenticaciÃ³n de dos factores usando Google Authenticator.</p>
                             
                             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-sm);">
                                 <div style="display: flex; align-items: center; gap: 12px;">
@@ -1252,21 +1259,21 @@
                                         <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 1.1rem; font-family: var(--font-heading);">Instrucciones para activar:</h4>
                                         <ol style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0;">
                                             <li>Descarga la app <strong>Google Authenticator</strong> en tu celular (iOS o Android).</li>
-                                            <li>Abre la app y presiona el ícono <strong>"+"</strong>.</li>
-                                            <li>Selecciona la opción <strong>"Escanear código QR"</strong>.</li>
-                                            <li>Apunta con la cámara al código que está aquí a la derecha.</li>
+                                            <li>Abre la app y presiona el Ã­cono <strong>"+"</strong>.</li>
+                                            <li>Selecciona la opciÃ³n <strong>"Escanear cÃ³digo QR"</strong>.</li>
+                                            <li>Apunta con la cÃ¡mara al cÃ³digo que estÃ¡ aquÃ­ a la derecha.</li>
                                         </ol>
                                     </div>
 
-                                    <!-- Código QR (Derecha) -->
+                                    <!-- CÃ³digo QR (Derecha) -->
                                     <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;">
-                                        <img id="mfaQrImg" src="" alt="Código QR 2FA" style="width: 160px; height: 160px; display: block;">
+                                        <img id="mfaQrImg" src="" alt="CÃ³digo QR 2FA" style="width: 160px; height: 160px; display: block;">
                                     </div>
 
                                 </div>
 
                                 <div style="border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
-                                    <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">5. Ingresa el código de 6 dígitos que generó la app:</div>
+                                    <div style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">5. Ingresa el cÃ³digo de 6 dÃ­gitos que generÃ³ la app:</div>
                                     <div style="display: flex; gap: 8px; justify-content: center;">
                                         <input type="text" id="mfaVerifyCode" class="form-input" placeholder="000000" maxlength="6" style="width: 140px; text-align: center; letter-spacing: 4px; font-size: 1.2rem; font-weight: bold; background: rgba(255,255,255,0.05);">
                                         <button id="btnVerifyMfa" class="btn-save" style="width: auto; padding: 0 24px; font-size: 1rem;">Verificar y Activar</button>
@@ -1294,10 +1301,10 @@
             <div style="width:50px; height:50px; background:rgba(240,185,11,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
                 <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </div>
-            <h3 style="margin-bottom:8px; font-family:var(--font-heading); font-size:1.4rem;">Autenticación 2FA</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Esta acción requiere confirmación. Abre Google Authenticator e ingresa el código de 6 dígitos.</p>
+            <h3 style="margin-bottom:8px; font-family:var(--font-heading); font-size:1.4rem;">AutenticaciÃ³n 2FA</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:24px;">Esta acciÃ³n requiere confirmaciÃ³n. Abre Google Authenticator e ingresa el cÃ³digo de 6 dÃ­gitos.</p>
             <input type="text" id="globalMfaCodeInput" class="form-input" placeholder="000000" maxlength="6" style="width:100%; text-align:center; letter-spacing:4px; font-size:1.4rem; font-weight:bold; margin-bottom:16px;">
-            <div id="globalMfaError" class="msg-err" style="display:none; margin-bottom:16px;">Código incorrecto. Intenta de nuevo.</div>
+            <div id="globalMfaError" class="msg-err" style="display:none; margin-bottom:16px;">CÃ³digo incorrecto. Intenta de nuevo.</div>
             <div style="display:flex; gap:12px;">
                 <button id="btnCancelGlobalMfa" class="btn-save" style="background:transparent; border:1px solid var(--border); color:var(--text-primary); flex:1;">Cancelar</button>
                 <button id="btnConfirmGlobalMfa" class="btn-save" style="flex:1;">Verificar</button>
@@ -1336,18 +1343,9 @@
 
         </button>
 
-        <button class="mobile-nav-item" data-section="perfil">
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 
-            Perfil
-
-        </button>
-
-        <button class="mobile-nav-item" data-section="sugerencias">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Buzón
-        </button>
+        
 
     </div>
 
@@ -1405,7 +1403,7 @@
 
         }
 
-        // Verificar si el usuario está baneado antes de cargar el dashboard
+        // Verificar si el usuario estÃ¡ baneado antes de cargar el dashboard
 
         const { data: profile } = await sb.from('profiles').select('is_banned').eq('id', session.user.id).single();
 
@@ -1615,14 +1613,14 @@
 
 
 
-        // Ocultar sección de contraseña si inició sesión con Google
+        // Ocultar secciÃ³n de contraseÃ±a si iniciÃ³ sesiÃ³n con Google
         const providers = user.app_metadata?.providers || [];
         if (providers.includes('google')) {
             const pwCard = document.getElementById("passwordCard");
             if (pwCard) pwCard.style.display = "none";
         }
 
-        // Mostrar menú admin si aplica
+        // Mostrar menÃº admin si aplica
         if (user.email === "aibersonmontilla22@gmail.com") {
 
             const adminBtn = document.getElementById("navAdmin");
@@ -1639,7 +1637,7 @@
 
         
 
-        // Llenar datos básicos del DOM
+        // Llenar datos bÃ¡sicos del DOM
 
         // Reset bot onboarding checkboxes on load
         if(document.getElementById("botTermsCheck1")) document.getElementById("botTermsCheck1").checked = false;
@@ -1652,7 +1650,7 @@
 
         if (document.getElementById("botOnboarding")) {
 
-            // MODO DESARROLLO: Siempre mostrar los términos al recargar para poder revisarlos/mejorarlos
+            // MODO DESARROLLO: Siempre mostrar los tÃ©rminos al recargar para poder revisarlos/mejorarlos
 
             document.getElementById("botOnboarding").style.display = "block";
 
@@ -1660,7 +1658,7 @@
 
             
 
-            // Cuando esté listo para producción, descomentar esto y borrar las 2 líneas de arriba:
+            // Cuando estÃ© listo para producciÃ³n, descomentar esto y borrar las 2 lÃ­neas de arriba:
 
             /*
 
@@ -1707,7 +1705,7 @@
             }
         }
 
-        // Mostrar el contenido con una transición suave
+        // Mostrar el contenido con una transiciÃ³n suave
         document.body.style.opacity = "1";
     }
 
@@ -1767,7 +1765,7 @@
                         crumb.style.display = "flex";
                         if (crumbSub) crumbSub.style.display = "flex";
                         if (crumbSubLink) {
-                            crumbSubLink.textContent = "Términos";
+                            crumbSubLink.textContent = "TÃ©rminos";
                             crumbSubLink.onclick = (ev) => {
                                 ev.preventDefault();
                                 document.getElementById("botConfigPanel").style.display = "none";
@@ -1775,7 +1773,7 @@
                                 switchSection(null, 'tool-bot');
                             };
                         }
-                        document.getElementById("topbarTitle").textContent = "Configuración";
+                        document.getElementById("topbarTitle").textContent = "ConfiguraciÃ³n";
                     } else {
                         crumb.style.display = "flex";
                         if (crumbSub) crumbSub.style.display = "none";
@@ -2000,10 +1998,10 @@
         const { data: { user } } = await sb.auth.getUser();
         const botConfig = user?.user_metadata?.bot_config || {};
 
-        // Validación: Si intenta prenderlo y no hay API keys guardadas
+        // ValidaciÃ³n: Si intenta prenderlo y no hay API keys guardadas
         if (isActive && (!botConfig.ak || !botConfig.sk)) {
             checkbox.checked = false;
-            alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuración de abajo.");
+            alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuraciÃ³n de abajo.");
             return;
         }
 
@@ -2040,17 +2038,17 @@
         const customDays = document.getElementById("botCustomDays").value;
 
         if (!apiKey || !secretKey) {
-            alert("API Key y Secret Key son obligatorios para guardar la configuración.");
+            alert("API Key y Secret Key son obligatorios para guardar la configuraciÃ³n.");
             return;
         }
 
         if (!amount || parseFloat(amount) < 6) {
-            alert("El monto mínimo requerido para activar el bot es de 6 USDT.");
+            alert("El monto mÃ­nimo requerido para activar el bot es de 6 USDT.");
             return;
         }
 
         if (frequency === "custom" && (!customDays || parseInt(customDays) < 1)) {
-            alert("Debes ingresar un número válido de días para la frecuencia personalizada.");
+            alert("Debes ingresar un nÃºmero vÃ¡lido de dÃ­as para la frecuencia personalizada.");
             return;
         }
 
@@ -2077,14 +2075,14 @@
                 msg.className = "msg-err";
                 console.error("Supabase error:", error);
             } else {
-                msg.textContent = "Configuración guardada correctamente.";
+                msg.textContent = "ConfiguraciÃ³n guardada correctamente.";
                 msg.className = "msg-ok";
                 setTimeout(() => {
-                    alert("¡Configuración guardada exitosamente!\n\nRecuerda mantener tus USDT en la Billetera Spot de Binance para que el bot pueda ejecutar las compras.");
+                    alert("Â¡ConfiguraciÃ³n guardada exitosamente!\n\nRecuerda mantener tus USDT en la Billetera Spot de Binance para que el bot pueda ejecutar las compras.");
                 }, 100);
             }
 
-            btn.textContent = "Guardar Configuración";
+            btn.textContent = "Guardar ConfiguraciÃ³n";
             btn.disabled = false;
             msg.style.display = "block";
             setTimeout(() => msg.style.display = "none", 5000);
@@ -2137,7 +2135,7 @@
             ok.style.display = "none"; err.style.display = "none";
             
             if (pw !== pw2 || pw.length < 6) { 
-                err.textContent = pw.length < 6 ? "Mínimo 6 caracteres." : "Las contraseñas no coinciden."; 
+                err.textContent = pw.length < 6 ? "MÃ­nimo 6 caracteres." : "Las contraseÃ±as no coinciden."; 
                 err.style.display = "block"; 
                 return; 
             }
@@ -2221,7 +2219,7 @@
         btn.textContent = "Generando QR...";
         btn.disabled = true;
 
-        // Limpiar factores pendientes que el usuario no completó (evita error "already exists")
+        // Limpiar factores pendientes que el usuario no completÃ³ (evita error "already exists")
         const { data: factorList } = await sb.auth.mfa.listFactors();
         if (factorList && factorList.totp) {
             const unverified = factorList.totp.filter(f => f.status === 'unverified');
@@ -2275,7 +2273,7 @@
         });
 
         if (verify.error) {
-            msg.textContent = "Código incorrecto.";
+            msg.textContent = "CÃ³digo incorrecto.";
             msg.className = "msg-err";
             msg.style.display = "block";
             btn.textContent = "Verificar";
@@ -2339,7 +2337,7 @@
             <span class="sheet-icon">??</span>
             <div class="sheet-text">
                 <div class="sheet-title">Todas las herramientas</div>
-                <div class="sheet-desc">Explora el cat�logo completo</div>
+                <div class="sheet-desc">Explora el catï¿½logo completo</div>
             </div>
         </button>
         <button class="sheet-item" onclick="closeSheet(); document.getElementById('mobileNavHerramientas').classList.add('active'); switchSection(event, 'tool-bot')">
@@ -2353,7 +2351,7 @@
             <span class="sheet-icon">??</span>
             <div class="sheet-text">
                 <div class="sheet-title">Alertas de Precio</div>
-                <div class="sheet-desc">Recibe notificaciones (Pr�ximamente)</div>
+                <div class="sheet-desc">Recibe notificaciones (Prï¿½ximamente)</div>
             </div>
         </button>
     </div>
@@ -2384,6 +2382,43 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
 .sheet-title { font-weight: 600; font-size: 1rem; }
 .sheet-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
 </style>
+
+
+
+
+<style>
+@media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+}
+.sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+</style>
+<div class="sidebar-overlay" id="mobileSidebarOverlay" onclick="toggleMobileSidebar()"></div>
+<script>
+function toggleMobileSidebar() {
+    const sb = document.querySelector('.sidebar');
+    const ov = document.getElementById('mobileSidebarOverlay');
+    if(sb.classList.contains('mobile-open')) {
+        sb.classList.remove('mobile-open');
+        ov.classList.remove('active');
+    } else {
+        sb.classList.add('mobile-open');
+        ov.classList.add('active');
+    }
+}
+// Close sidebar when clicking a menu item on mobile
+document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if(window.innerWidth <= 900) {
+            document.querySelector('.sidebar').classList.remove('mobile-open');
+            document.getElementById('mobileSidebarOverlay').classList.remove('active');
+        }
+    });
+});
+</script>
+
+
 
 
 
