@@ -1301,10 +1301,29 @@ body {
 }
 
 @media (max-width: 899px) {
+    .tool-card {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 0 !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .tool-card::-webkit-scrollbar {
+        display: none;
+    }
+    .tool-content {
+        min-width: 100%;
+        scroll-snap-align: center;
+        padding: 40px 24px !important;
+    }
     .tool-visual {
-        border-left: none;
-        border-top: 1px solid rgba(240,185,11,0.08);
-        padding: 32px 24px;
+        min-width: 100%;
+        scroll-snap-align: center;
+        border-top: none !important;
+        border-left: 1px solid rgba(240,185,11,0.08) !important;
+        padding: 40px 24px !important;
     }
 }
 
@@ -1742,3 +1761,12 @@ body {
     border-color: #ef4444;
 }
 
+
+/* --- Utilidades Responsivas Adicionales --- */
+.mobile-only { display: none !important; }
+.desktop-only { display: block !important; }
+
+@media (max-width: 899px) {
+    .mobile-only { display: flex !important; }
+    .desktop-only { display: none !important; }
+}
