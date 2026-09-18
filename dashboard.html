@@ -842,6 +842,12 @@
         .dropdown-options::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
         .dropdown-options::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
+
+        /* Custom grid for 2 items */
+        @media (min-width: 901px) {
+            .stats-grid-top { grid-template-columns: repeat(2, 1fr) !important; }
+            #buzonGridMobile { grid-template-columns: 1fr !important; }
+        }
 </style>
 
 
@@ -1221,7 +1227,7 @@
 
 
 
-            <div class="stats-grid">
+            <div class="stats-grid stats-grid-top">
 
                 <div class="stat-card">
 
@@ -1236,24 +1242,6 @@
                     <div class="stat-label">Precio Bitcoin (BTC/USDT)</div>
 
                     <div id="btcLiveChange" style="font-size:0.85rem; margin-top:4px; font-family:var(--font-heading); font-weight:700;">--</div>
-
-                </div>
-
-
-
-                <div class="stat-card">
-
-                    <div class="stat-card-header">
-
-                        <div class="stat-icon" style="margin-bottom:0; filter: drop-shadow(0 0 10px rgba(240,185,11,0.5));">&#128161;</div>
-
-                    </div>
-
-                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Buzón de sugerencias</div>
-
-                    <div class="stat-label" style="font-size:0.8rem; line-height:1.4;">En Invierte con Gabo valoramos tu opinión. Déjanos una reseña para mejorar.</div>
-
-                    <button class="stat-card-action" onclick="switchSection(event,'sugerencias')">Dejar sugerencia</button>
 
                 </div>
 
@@ -1356,10 +1344,29 @@
                     </div>
 
                 </a>
-
             </div>
 
+            <div class="stats-grid" id="buzonGridMobile">
 
+
+
+
+                <div class="stat-card">
+
+                    <div class="stat-card-header">
+
+                        <div class="stat-icon" style="margin-bottom:0; filter: drop-shadow(0 0 10px rgba(240,185,11,0.5));">&#128161;</div>
+
+                    </div>
+
+                    <div class="stat-value" style="color:var(--text-primary); font-size:1.4rem;">Buzón de sugerencias</div>
+
+                    <div class="stat-label" style="font-size:0.8rem; line-height:1.4;">En Invierte con Gabo valoramos tu opinión. Déjanos una reseña para mejorar.</div>
+
+                    <button class="stat-card-action" onclick="switchSection(event,'sugerencias')">Dejar sugerencia</button>
+
+                </div>
+            </div>
 
         </section>
 
