@@ -3478,30 +3478,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('pw-success').style.display = 'block';
             }
         };
-        
-        // Función para verificar si tiene acceso al cargar
-        async function checkSubscriptionAccess() {
-            // Chequear si es admin (Gabo tiene acceso gratis)
-            if(user.email === "aibersonmontilla22@gmail.com") return;
-            
-            // Chequear metadatos del usuario (si ya fue aprobado por Gabo)
-            if(user.user_metadata?.is_premium === true) return;
-            
-            // Si no es premium, verificamos si tiene un pago en revisión
-            const { data: pendingPayments } = await sb.from('payments').select('id').eq('user_id', user.id).eq('status', 'pending');
-            
-            document.getElementById('botConfigWrapper').classList.add('content-blurred');
-            document.getElementById('paywallContainer').style.display = 'flex';
-            
-            if (pendingPayments && pendingPayments.length > 0) {
-                // Ya pagó pero está en revisión
-                document.getElementById('pw-checkout').style.display = 'none';
-                document.getElementById('pw-success').style.display = 'block';
-            }
-        }
-        
-        // Llamar a la verificacion 
-        checkSubscriptionAccess();
 
 
         // Ocultar sección de contraseña si inició sesión con Google
