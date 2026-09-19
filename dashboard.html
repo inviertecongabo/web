@@ -1817,20 +1817,16 @@
 
             <div id="botConfigWrapper">
 
-
-
-            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
-
-                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-
-                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
-
-                    <span>/</span>
-
-                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
-
-                </span>
-
+            <div class="section-breadcrumb" id="botBreadcrumbContainer" style="display:flex; align-items:center; gap:6px; margin-bottom:16px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;">Inicio</a>
+                <span style="color:var(--text-muted);">&gt;</span>
+                <a id="botCrumbTerms" onclick="window.goToBotStep('terms')" style="color:var(--text-primary); font-weight:700; cursor:pointer; text-decoration:none;">Términos</a>
+                
+                <span id="botCrumbSepPayment" style="display:none; color:var(--text-muted);">&gt;</span>
+                <a id="botCrumbPayment" onclick="window.goToBotStep('payment')" style="display:none; color:var(--text-muted); font-weight:700; cursor:pointer; text-decoration:none;">Pago</a>
+                
+                <span id="botCrumbSepApi" style="display:none; color:var(--text-muted);">&gt;</span>
+                <a id="botCrumbApi" onclick="window.goToBotStep('api')" style="display:none; color:var(--text-muted); font-weight:700; cursor:pointer; text-decoration:none;">Configuración API</a>
             </div>
 
             <h2 class="section-heading">Compras BTC (GaboBot)</h2>
@@ -3596,7 +3592,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                document.getElementById("botConfigPanel").style.display = "block";
+                document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
 
 
 
@@ -4237,11 +4233,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
 
         if (isPremium) {
-            document.getElementById("botConfigPanel").style.display = "block";
+            document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
         } else {
             // Check if already has a pending payment
             const { data: pendingPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'pending');
-            document.getElementById("botPaymentStep").style.display = "block";
+            document.getElementById("botPaymentStep").style.display = "block"; if(window.goToBotStep) window.goToBotStep('payment');
             if (pendingPays && pendingPays.length > 0) {
                 document.getElementById("pwsCheckout").style.display = "none";
                 document.getElementById("pwsPending").style.display = "block";
@@ -5271,9 +5267,55 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             }
         };
 
+        
+        window.goToBotStep = function(step) {
+            const terms = document.getElementById('botOnboarding');
+            const payment = document.getElementById('botPaymentStep');
+            const api = document.getElementById('botConfigPanel');
+            
+            const bcTerms = document.getElementById('botCrumbTerms');
+            const bcSepPay = document.getElementById('botCrumbSepPayment');
+            const bcPay = document.getElementById('botCrumbPayment');
+            const bcSepApi = document.getElementById('botCrumbSepApi');
+            const bcApi = document.getElementById('botCrumbApi');
+
+            if (step === 'terms') {
+                if(terms) terms.style.display = 'block';
+                if(payment) payment.style.display = 'none';
+                if(api) api.style.display = 'none';
+                if(bcTerms) bcTerms.style.color = 'var(--text-primary)';
+                if(bcPay) bcPay.style.color = 'var(--text-muted)';
+                if(bcApi) bcApi.style.color = 'var(--text-muted)';
+            }
+            else if (step === 'payment') {
+                if(terms) terms.style.display = 'none';
+                if(payment) payment.style.display = 'block';
+                if(api) api.style.display = 'none';
+                if(bcTerms) bcTerms.style.color = 'var(--accent)';
+                if(bcPay) bcPay.style.color = 'var(--text-primary)';
+                if(bcApi) bcApi.style.color = 'var(--text-muted)';
+                
+                if(bcSepPay) bcSepPay.style.display = 'inline';
+                if(bcPay) bcPay.style.display = 'inline';
+            }
+            else if (step === 'api') {
+                if(terms) terms.style.display = 'none';
+                if(payment) payment.style.display = 'none';
+                if(api) api.style.display = 'block';
+                if(bcTerms) bcTerms.style.color = 'var(--accent)';
+                if(bcPay) bcPay.style.color = 'var(--accent)';
+                if(bcApi) bcApi.style.color = 'var(--text-primary)';
+                
+                if(bcSepPay) bcSepPay.style.display = 'inline';
+                if(bcPay) bcPay.style.display = 'inline';
+                if(bcSepApi) bcSepApi.style.display = 'inline';
+                if(bcApi) bcApi.style.display = 'inline';
+            }
+        };
+
         window.pwsContinueToConfig = function() {
             document.getElementById('botPaymentStep').style.display = 'none';
-            document.getElementById('botConfigPanel').style.display = 'block';
+            document.getElementById('botConfigPanel').style.display = 'block'; if(window.goToBotStep) window.goToBotStep('api');
         };
         // ── End GaboBot Payment Step JS ──
 
