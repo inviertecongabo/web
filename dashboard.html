@@ -3560,59 +3560,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-            // MODO DESARROLLO: Siempre mostrar los términos al recargar para poder revisarlos/mejorarlos
-
-
-
-            document.getElementById("botOnboarding").style.display = "block";
-
-
-
-            document.getElementById("botConfigPanel").style.display = "none";
-
-
-
             
-
-
-
-            // Cuando esté listo para producción, descomentar esto y borrar las 2 líneas de arriba:
-
-
-
-            /*
-
-
-
             if (botConfig.termsAccepted) {
-
-
-
-                document.getElementById("botOnboarding").style.display = "none";
-
-
-
-                document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
-
-
-
+                await window.checkBotPaymentStatus(user);
             } else {
-
-
-
                 document.getElementById("botOnboarding").style.display = "block";
-
-
-
+                document.getElementById("botPaymentStep").style.display = "none";
                 document.getElementById("botConfigPanel").style.display = "none";
-
-
-
+                if(window.goToBotStep) window.goToBotStep('terms');
             }
 
-
-
-            */
 
 
 
@@ -4187,6 +4144,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    
+    window.checkBotPaymentStatus = async function(uCheck) {
+        let isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
+        if (!isPremium) {
+            const { data: approvedPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'approved');
+            if (approvedPays && approvedPays.length > 0) {
+                isPremium = true;
+            }
+        }
+        window.gaboUserIsPremium = isPremium;
+
+        if (isPremium) {
+            document.getElementById("botOnboarding").style.display = "none";
+            document.getElementById("botPaymentStep").style.display = "none";
+            document.getElementById("botConfigPanel").style.display = "block";
+            if(window.goToBotStep) window.goToBotStep("api");
+        } else {
+            const { data: pendingPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'pending');
+            document.getElementById("botOnboarding").style.display = "none";
+            document.getElementById("botConfigPanel").style.display = "none";
+            document.getElementById("botPaymentStep").style.display = "block";
+            if(window.goToBotStep) window.goToBotStep('payment');
+            
+            if (pendingPays && pendingPays.length > 0) {
+                document.getElementById("pwsCheckout").style.display = "none";
+                document.getElementById("pwsPending").style.display = "block";
+                document.getElementById("pwsContinueBtn").style.display = "block";
+            } else {
+                document.getElementById("pwsCheckout").style.display = "block";
+                document.getElementById("pwsPending").style.display = "none";
+                document.getElementById("pwsContinueBtn").style.display = "none";
+            }
+        }
+    };
+
     document.getElementById("btnAcceptBotTerms")?.addEventListener("click", async () => {
 
 
@@ -4227,32 +4219,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.textContent = "Aceptar y Continuar";
 
-        // Check if user is already premium → skip payment step
         const { data: { user: uCheck } } = await sb.auth.getUser();
-        let isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
-
-        if (!isPremium) {
-            // Also check if there's an approved payment in the database
-            const { data: approvedPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'approved');
-            if (approvedPays && approvedPays.length > 0) {
-                isPremium = true;
-            }
-        }
-        window.gaboUserIsPremium = isPremium;
-
-        if (isPremium) {
-            document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
-        } else {
-            // Check if already has a pending payment
-            const { data: pendingPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'pending');
-            document.getElementById("botPaymentStep").style.display = "block"; if(window.goToBotStep) window.goToBotStep('payment');
-            if (pendingPays && pendingPays.length > 0) {
-                document.getElementById("pwsCheckout").style.display = "none";
-                document.getElementById("pwsPending").style.display = "block";
-                document.getElementById("pwsContinueBtn").style.display = "block";
-            }
-        }
-
+        await window.checkBotPaymentStatus(uCheck);
         switchSection(null, 'tool-bot');
 
 
