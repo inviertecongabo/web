@@ -2061,7 +2061,95 @@
 
 
 
-            <!-- PANEL DE CONFIGURACION -->
+
+            <!-- ── STEP 2: PAGO ── -->
+            <div id="botPaymentStep">
+                <div class="pws-card">
+                    <div class="pws-top"></div>
+                    <div class="pws-body">
+
+                        <div id="pwsCheckout">
+                            <div class="pws-badge">Paso 2 — Activar Acceso</div>
+                            <h3 class="pws-title">Elige tu Plan</h3>
+                            <p class="pws-subtitle">Para acceder a GaboBot elige un plan. Tus fondos permanecen 100% seguros en tu propia cuenta de Binance.</p>
+
+                            <div class="pws-plans">
+                                <div class="pws-plan" id="pwsPlanMonthly" onclick="pwsSelectPlan('monthly')">
+                                    <div class="pws-plan-name">Mensual</div>
+                                    <div class="pws-plan-price">$0.99</div>
+                                    <div class="pws-plan-desc">Mes a mes</div>
+                                </div>
+                                <div class="pws-plan selected" id="pwsPlanYearly" onclick="pwsSelectPlan('yearly')">
+                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 20%</span></div>
+                                    <div class="pws-plan-price">$11.76</div>
+                                    <div class="pws-plan-desc">365 días completos</div>
+                                </div>
+                            </div>
+
+                            <div class="pws-tabs">
+                                <div class="pws-tab active" id="pwsTabBinance" onclick="pwsSelectTab('binance')">Binance Pay</div>
+                                <div class="pws-tab" id="pwsTabPagomovil" onclick="pwsSelectTab('pagomovil')">Pago Móvil (Bs)</div>
+                            </div>
+
+                            <div id="pwsDataBinance" class="pws-data">
+                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$11.76 USDT</strong> a:</p>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Usuario / Pay ID</span>
+                                        <span class="pws-val">Gabito020</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('Gabito020',this)">Copiar</button>
+                                </div>
+                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrBinance')">Ver código QR</button>
+                                <img id="pwsQrBinance" class="pws-qr-img" src="assets/images/qr-binance.png" alt="QR Binance Pay">
+                            </div>
+
+                            <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
+                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$11.76</strong> según la tasa BCV del día a:</p>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Banco</span>
+                                        <span class="pws-val" style="font-size:0.85rem;">0105 – Mercantil</span>
+                                    </div>
+                                </div>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Cédula</span>
+                                        <span class="pws-val">V30107924</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('V30107924',this)">Copiar</button>
+                                </div>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Teléfono</span>
+                                        <span class="pws-val">04120333976</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('04120333976',this)">Copiar</button>
+                                </div>
+                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrPagomovil')">Ver código QR</button>
+                                <img id="pwsQrPagomovil" class="pws-qr-img" src="assets/images/qr-pagomovil.png" alt="QR Pago Móvil">
+                            </div>
+
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="Número de referencia de tu transferencia">
+                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()">Reportar Pago</button>
+                        </div>
+
+                        <div id="pwsPending" class="pws-pending">
+                            <div class="pws-pending-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p style="color:#eee; font-weight:700; font-size:1.05rem; margin:0 0 6px;">¡Pago en Revisión!</p>
+                            <p style="color:#888; font-size:0.85rem; line-height:1.5; margin:0;">Gabo verificará la transferencia y activará tu acceso en las próximas horas. Puedes continuar y configurar tus claves mientras tanto.</p>
+                        </div>
+
+                        <button class="pws-continue" id="pwsContinueBtn" onclick="pwsContinueToConfig()">Continuar a la Configuración →</button>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ── END STEP 2: PAGO ── -->
+
+                        <!-- PANEL DE CONFIGURACION -->
 
             <div id="botConfigPanel" style="display: none; width: 100%;">
 
@@ -4156,9 +4244,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById("botOnboarding").style.display = "none";
 
-        document.getElementById("botConfigPanel").style.display = "block";
-
         btn.textContent = "Aceptar y Continuar";
+
+        // Check if user is already premium → skip payment step
+        const { data: { user: uCheck } } = await sb.auth.getUser();
+        const isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
+
+        if (isPremium) {
+            document.getElementById("botConfigPanel").style.display = "block";
+        } else {
+            // Check if already has a pending payment
+            const { data: pendingPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'pending');
+            document.getElementById("botPaymentStep").style.display = "block";
+            if (pendingPays && pendingPays.length > 0) {
+                document.getElementById("pwsCheckout").style.display = "none";
+                document.getElementById("pwsPending").style.display = "block";
+                document.getElementById("pwsContinueBtn").style.display = "block";
+            }
+        }
 
         switchSection(null, 'tool-bot');
 
@@ -4997,6 +5100,47 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         
         /* Blur class */
         .content-blurred { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; }
+
+    
+        /* ── GaboBot Payment Step ── */
+        #botPaymentStep { display: none; max-width: 520px; margin: 0 0 24px 0; }
+        .pws-card { background: #111113; border: 1px solid rgba(240,185,11,0.2); border-radius: 16px; overflow: hidden; }
+        .pws-top { height: 3px; background: linear-gradient(90deg,#F0B90B,#F8D347); }
+        .pws-body { padding: 24px; }
+        .pws-badge { display: inline-block; background: rgba(240,185,11,0.1); color: #F0B90B; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(240,185,11,0.25); margin-bottom: 12px; }
+        .pws-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin: 0 0 6px; }
+        .pws-subtitle { font-size: 0.85rem; color: #888; margin: 0 0 20px; line-height: 1.5; }
+        .pws-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+        .pws-plan { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .pws-plan:hover { border-color: rgba(240,185,11,0.4); }
+        .pws-plan.selected { border-color: #F0B90B; background: rgba(240,185,11,0.06); }
+        .pws-plan-name { font-size: 0.85rem; font-weight: 600; color: #bbb; margin-bottom: 4px; }
+        .pws-plan-price { font-size: 1.3rem; font-weight: 800; color: #F0B90B; }
+        .pws-plan-desc { font-size: 0.7rem; color: #666; margin-top: 3px; }
+        .pws-plan-badge { background: #F0B90B; color: #000; padding: 1px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700; margin-left: 4px; }
+        .pws-tabs { display: flex; gap: 6px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .pws-tab { flex: 1; padding: 9px; text-align: center; font-size: 0.85rem; font-weight: 600; color: #555; cursor: pointer; border-radius: 8px; border: 1px solid transparent; transition: 0.2s; }
+        .pws-tab.active { background: rgba(255,255,255,0.05); color: #eee; border-color: rgba(255,255,255,0.08); }
+        .pws-data { background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+        .pws-hint { font-size: 0.8rem; color: #777; text-align: center; margin-bottom: 10px; }
+        .pws-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 7px; margin-bottom: 7px; }
+        .pws-row:last-of-type { margin-bottom: 0; }
+        .pws-lbl { font-size: 0.72rem; color: #666; display: block; margin-bottom: 2px; }
+        .pws-val { font-family: monospace; font-size: 0.9rem; color: #eee; font-weight: 600; }
+        .pws-copy { background: none; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 3px 9px; border-radius: 4px; font-size: 0.72rem; cursor: pointer; transition: 0.2s; }
+        .pws-copy:hover { color: #F0B90B; border-color: #F0B90B; }
+        .pws-qr-btn { display: block; width: 100%; background: none; border: 1px dashed rgba(240,185,11,0.3); color: #F0B90B; padding: 7px; border-radius: 7px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
+        .pws-qr-btn:hover { background: rgba(240,185,11,0.05); }
+        .pws-qr-img { display: none; max-width: 160px; width: 100%; margin: 10px auto 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+        .pws-ref { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 0.9rem; outline: none; transition: 0.2s; margin-bottom: 12px; }
+        .pws-ref:focus { border-color: #F0B90B; }
+        .pws-submit { width: 100%; padding: 13px; background: linear-gradient(135deg,#F0B90B,#F8D347); color: #000; font-weight: 700; font-size: 0.95rem; border: none; border-radius: 9px; cursor: pointer; transition: 0.2s; }
+        .pws-submit:hover { opacity: 0.88; }
+        .pws-pending { display: none; text-align: center; padding: 12px 0; }
+        .pws-pending-icon { width: 54px; height: 54px; background: rgba(240,185,11,0.1); color: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; border: 1px solid rgba(240,185,11,0.2); }
+        .pws-continue { display: none; width: 100%; padding: 12px; background: rgba(240,185,11,0.08); border: 1px solid rgba(240,185,11,0.3); color: #F0B90B; font-weight: 700; font-size: 0.9rem; border-radius: 9px; cursor: pointer; margin-top: 16px; transition: 0.2s; }
+        .pws-continue:hover { background: rgba(240,185,11,0.15); }
+        /* ── End GaboBot Payment Step ── */
 
     </style>
 
