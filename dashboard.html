@@ -1747,8 +1747,8 @@
                                 <div class="pw-plan-desc">Facturado mes a mes</div>
                             </div>
                             <div class="pw-plan active" id="plan-yearly" onclick="selectPlan('yearly')">
-                                <div class="pw-plan-name">Anual <span style="background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;font-size:0.65rem;margin-left:4px;">Ahorra 20%</span></div>
-                                <div class="pw-plan-price">$11.76</div>
+                                <div class="pw-plan-name">Anual <span style="background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;font-size:0.65rem;margin-left:4px;">Ahorra 15%</span></div>
+                                <div class="pw-plan-price">$10</div>
                                 <div class="pw-plan-desc">Pago único por 365 días</div>
                             </div>
                         </div>
@@ -1761,7 +1761,7 @@
                         
                         <!-- DATOS BINANCE -->
                         <div id="data-binance" class="pw-data-box">
-                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere <strong id="price-binance" style="color:var(--text-primary);">$11.76 USDT</strong> a este usuario:</p>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere <strong id="price-binance" style="color:var(--text-primary);">$10 USDT</strong> a este usuario:</p>
                             <div class="pw-copy-row">
                                 <div>
                                     <span class="pw-copy-label">Usuario / Pay ID</span>
@@ -1773,7 +1773,7 @@
                         
                         <!-- DATOS PAGO MOVIL -->
                         <div id="data-pagomovil" class="pw-data-box" style="display: none;">
-                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$11.76</strong> a tasa BCV hoy.</p>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$10</strong> a tasa BCV hoy.</p>
                             
                             <div class="pw-copy-row">
                                 <div>
@@ -2080,8 +2080,8 @@
                                     <div class="pws-plan-desc">Mes a mes</div>
                                 </div>
                                 <div class="pws-plan selected" id="pwsPlanYearly" onclick="pwsSelectPlan('yearly')">
-                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 20%</span></div>
-                                    <div class="pws-plan-price">$11.76</div>
+                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 15%</span></div>
+                                    <div class="pws-plan-price">$10</div>
                                     <div class="pws-plan-desc">365 días completos</div>
                                 </div>
                             </div>
@@ -2092,7 +2092,7 @@
                             </div>
 
                             <div id="pwsDataBinance" class="pws-data">
-                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$11.76 USDT</strong> a:</p>
+                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$10 USDT</strong> a:</p>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Usuario / Pay ID</span>
@@ -2110,7 +2110,7 @@
                             </div>
 
                             <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
-                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$11.76</strong> según la tasa BCV del día a:</p>
+                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$10</strong> según la tasa BCV del día a:</p>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Banco</span>
@@ -3424,7 +3424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('plan-yearly').classList.remove('active');
             document.getElementById('plan-' + plan).classList.add('active');
             
-            const price = plan === 'monthly' ? '$0.99' : '$11.76';
+            const price = plan === 'monthly' ? '$0.99' : '$10';
             document.getElementById('price-binance').textContent = price + ' USDT';
             document.getElementById('price-pagomovil').textContent = price;
         };
@@ -3468,7 +3468,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = "Enviando...";
             btn.disabled = true;
             
-            const amount = currentPlan === 'monthly' ? 0.99 : 11.76;
+            const amount = currentPlan === 'monthly' ? 0.99 : 10;
             
             const { error } = await sb.from('payments').insert({
                 user_id: user.id,
@@ -5220,7 +5220,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             _pwsPlan = plan;
             document.getElementById('pwsPlanMonthly').classList.toggle('selected', plan === 'monthly');
             document.getElementById('pwsPlanYearly').classList.toggle('selected', plan === 'yearly');
-            const p = plan === 'monthly' ? '$0.99' : '$11.76';
+            const p = plan === 'monthly' ? '$0.99' : '$10';
             document.getElementById('pwsPriceBinance').textContent  = p + ' USDT';
             document.getElementById('pwsPricePagomovil').textContent = p;
         };
@@ -5255,7 +5255,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             if (!ref) { alert('Por favor ingresa el número de referencia de tu transferencia.'); return; }
             const btn = document.getElementById('pwsSubmitBtn');
             btn.textContent = 'Enviando...'; btn.disabled = true;
-            const amount = _pwsPlan === 'monthly' ? 0.99 : 11.76;
+            const amount = _pwsPlan === 'monthly' ? 0.99 : 10;
             const { data: { user: u } } = await sb.auth.getUser();
             const { error } = await sb.from('payments').insert({
                 user_id: u.id, plan_type: _pwsPlan, payment_method: _pwsTab,
