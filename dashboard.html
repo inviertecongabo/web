@@ -5179,4 +5179,66 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         document.querySelector('.dropdown-header').style.borderColor = '#FF6B6B';
     }
 });
+
+        // ── GaboBot Payment Step JS ──
+        let _pwsPlan = 'yearly';
+        let _pwsTab  = 'binance';
+
+        window.pwsSelectPlan = function(plan) {
+            _pwsPlan = plan;
+            document.getElementById('pwsPlanMonthly').classList.toggle('selected', plan === 'monthly');
+            document.getElementById('pwsPlanYearly').classList.toggle('selected', plan === 'yearly');
+            const p = plan === 'monthly' ? '$0.99' : '$11.76';
+            document.getElementById('pwsPriceBinance').textContent  = p + ' USDT';
+            document.getElementById('pwsPricePagomovil').textContent = p;
+        };
+
+        window.pwsSelectTab = function(tab) {
+            _pwsTab = tab;
+            document.getElementById('pwsTabBinance').classList.toggle('active', tab === 'binance');
+            document.getElementById('pwsTabPagomovil').classList.toggle('active', tab === 'pagomovil');
+            document.getElementById('pwsDataBinance').style.display   = tab === 'binance'    ? 'block' : 'none';
+            document.getElementById('pwsDataPagomovil').style.display = tab === 'pagomovil'  ? 'block' : 'none';
+        };
+
+        window.pwsCopy = function(val, btn) {
+            navigator.clipboard.writeText(val);
+            const orig = btn.textContent;
+            btn.textContent = 'Copiado';
+            btn.style.color = '#F0B90B'; btn.style.borderColor = '#F0B90B';
+            setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+        };
+
+        window.pwsToggleQR = function(id) {
+            const img = document.getElementById(id);
+            img.style.display = img.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.pwsSubmitPayment = async function() {
+            const ref = document.getElementById('pwsRefInput').value.trim();
+            if (!ref) { alert('Por favor ingresa el número de referencia de tu transferencia.'); return; }
+            const btn = document.getElementById('pwsSubmitBtn');
+            btn.textContent = 'Enviando...'; btn.disabled = true;
+            const amount = _pwsPlan === 'monthly' ? 0.99 : 11.76;
+            const { data: { user: u } } = await sb.auth.getUser();
+            const { error } = await sb.from('payments').insert({
+                user_id: u.id, plan_type: _pwsPlan, payment_method: _pwsTab,
+                amount: amount, reference_number: ref, status: 'pending'
+            });
+            if (error) {
+                alert('Error: ' + error.message);
+                btn.textContent = 'Reportar Pago'; btn.disabled = false;
+            } else {
+                document.getElementById('pwsCheckout').style.display = 'none';
+                document.getElementById('pwsPending').style.display  = 'block';
+                document.getElementById('pwsContinueBtn').style.display = 'block';
+            }
+        };
+
+        window.pwsContinueToConfig = function() {
+            document.getElementById('botPaymentStep').style.display = 'none';
+            document.getElementById('botConfigPanel').style.display = 'block';
+        };
+        // ── End GaboBot Payment Step JS ──
+
 </script>
