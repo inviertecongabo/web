@@ -4239,6 +4239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isPremium = true;
             }
         }
+        window.gaboUserIsPremium = isPremium;
 
         if (isPremium) {
             document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
@@ -4278,6 +4279,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const botConfig = user?.user_metadata?.bot_config || {};
 
 
+
+        // Validación: Si no es premium, no puede encenderlo
+        if (isActive && !window.gaboUserIsPremium) {
+            checkbox.checked = false;
+            alert("Tu pago aún está en revisión.\n\nPodrás encender el bot una vez que tu transferencia sea verificada y aprobada por administración.");
+            return;
+        }
 
         // Validación: Si intenta prenderlo y no hay API keys guardadas
 
