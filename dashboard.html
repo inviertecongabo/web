@@ -3993,9 +3993,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         if (!verifiedFactor) {
-
-            return actionCallback(); // 2FA no activo, dejar pasar
-
+            await actionCallback(); // 2FA no activo, dejar pasar
+            return true;
         }
 
 
