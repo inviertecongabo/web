@@ -2136,7 +2136,7 @@
 
                             </div>
 
-                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="Número de Orden / Referencia de Binance Pay">
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)">
                             <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()">Reportar Pago</button>
                         </div>
 
@@ -5239,7 +5239,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             const refInput = document.getElementById('pwsRefInput');
             // Don't override if it's currently showing an error
             if(!refInput.classList.contains('error')) {
-                refInput.placeholder = tab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'Número de Orden / Referencia de Binance Pay';
+                refInput.placeholder = tab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
             }
         };
 
@@ -5269,7 +5269,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 refInput.placeholder = '⚠️ Debes ingresar el número de referencia';
                 setTimeout(() => {
                     refInput.classList.remove('error');
-                    refInput.placeholder = _pwsTab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'Número de Orden / Referencia de Binance Pay';
+                    refInput.placeholder = _pwsTab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
                 }, 3000);
                 return; 
             }
