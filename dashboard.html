@@ -4230,7 +4230,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if user is already premium → skip payment step
         const { data: { user: uCheck } } = await sb.auth.getUser();
-        const isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
+        let isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
+
+        if (!isPremium) {
+            // Also check if there's an approved payment in the database
+            const { data: approvedPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'approved');
+            if (approvedPays && approvedPays.length > 0) {
+                isPremium = true;
+            }
+        }
 
         if (isPremium) {
             document.getElementById("botConfigPanel").style.display = "block"; if(window.goToBotStep) window.goToBotStep("api");
