@@ -2096,7 +2096,7 @@
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Usuario / Pay ID</span>
-                                        <span class="pws-val">Gabito020</span>
+                                        <span class="pws-val pws-val-mono">Gabito020</span>
                                     </div>
                                     <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('Gabito020',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
@@ -2120,14 +2120,14 @@
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Cédula</span>
-                                        <span class="pws-val">V30107924</span>
+                                        <span class="pws-val pws-val-mono">V30107924</span>
                                     </div>
                                     <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('V30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Teléfono</span>
-                                        <span class="pws-val">04120333976</span>
+                                        <span class="pws-val pws-val-mono">04120333976</span>
                                     </div>
                                     <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('04120333976',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
@@ -5109,28 +5109,31 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         .pws-plan-desc { font-size: 0.7rem; color: #64748b; margin-top: 4px; font-weight: 500; }
         .pws-plan-badge { position: absolute; top: -1px; right: 12px; background: #F0B90B; color: #000; padding: 2px 8px; border-radius: 0 0 6px 6px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; }
         
-        .pws-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 12px; }
-        .pws-tab { flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; font-weight: 700; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; }
-        .pws-tab:hover { color: #e2e8f0; }
-        .pws-tab.active { background: rgba(255,255,255,0.08); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .pws-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 14px; position: relative; }
+        .pws-tab { flex: 1; padding: 12px; text-align: center; font-size: 0.9rem; font-weight: 700; color: #64748b; cursor: pointer; border-radius: 10px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1; }
+        .pws-tab:hover { color: #cbd5e1; }
+        .pws-tab.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         
-        .pws-data { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-        .pws-hint { font-size: 0.85rem; color: #8892b0; text-align: center; margin-bottom: 16px; }
-        .pws-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 8px; transition: 0.2s; }
-        .pws-row:hover { background: rgba(0,0,0,0.3); }
-        .pws-lbl { font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .pws-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #f8fafc; font-weight: 700; letter-spacing: 0.5px; }
+        .pws-data { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+        .pws-hint { font-size: 0.85rem; color: #94a3b8; text-align: center; margin-bottom: 20px; }
+        .pws-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; background: transparent; border-radius: 0; margin-bottom: 0; border-bottom: 1px solid rgba(255,255,255,0.06); transition: none; }
+        .pws-row:first-of-type { border-top: 1px solid rgba(255,255,255,0.06); }
+        .pws-row:last-of-type { border-bottom: none; }
+        .pws-row:hover { background: transparent; }
+        .pws-lbl { font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 6px; }
+        .pws-val { font-family: inherit; font-size: 1.05rem; color: #ffffff; font-weight: 600; letter-spacing: 0.3px; }
+        .pws-val-mono { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; }
         
-        .pws-copy { background: none; border: none; color: #64748b; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .pws-copy:hover { color: #F0B90B; background: rgba(240,185,11,0.1); }
-        .pws-copy svg { width: 16px; height: 16px; }
+        .pws-copy { background: none; border: none; color: #64748b; padding: 8px; margin-left: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .pws-copy:hover { color: #F0B90B; transform: scale(1.1); background: rgba(240,185,11,0.05); }
+        .pws-copy svg { width: 18px; height: 18px; }
         
-        .pws-qr-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: rgba(240,185,11,0.05); border: 1px dashed rgba(240,185,11,0.3); color: #F0B90B; padding: 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 16px; transition: 0.2s; }
-        .pws-qr-btn:hover { background: rgba(240,185,11,0.1); border-style: solid; transform: translateY(-1px); }
+        .pws-qr-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: rgba(240,185,11,0.08); border: 1px solid transparent; color: #F0B90B; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.2s; }
+        .pws-qr-btn:hover { background: rgba(240,185,11,0.12); border-color: rgba(240,185,11,0.2); transform: translateY(-1px); }
         
-        .pws-ref { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.08); color: #fff; font-size: 0.95rem; transition: 0.2s; margin-bottom: 16px; font-family: inherit; }
-        .pws-ref:focus { border-color: #F0B90B; background: rgba(0,0,0,0.4); outline: none; box-shadow: 0 0 0 3px rgba(240,185,11,0.15); }
-        .pws-ref::placeholder { color: #475569; }
+        .pws-ref { width: 100%; box-sizing: border-box; padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #fff; font-size: 0.95rem; transition: all 0.2s; margin-bottom: 20px; font-family: inherit; }
+        .pws-ref:focus { border-color: rgba(240,185,11,0.5); background: rgba(255,255,255,0.06); outline: none; box-shadow: 0 0 0 3px rgba(240,185,11,0.1); }
+        .pws-ref::placeholder { color: #64748b; }
         
         .pws-submit { width: 100%; padding: 16px; background: #F0B90B; color: #000; font-weight: 800; font-size: 1rem; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(240,185,11,0.2); }
         .pws-submit:hover { background: #facc15; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(240,185,11,0.3); }
