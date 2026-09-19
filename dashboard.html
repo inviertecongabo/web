@@ -5389,7 +5389,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             }, 5000);
         };
 
-        window.goToBotStep = function(step) {
+                window.goToBotStep = function(step) {
             const terms = document.getElementById('botOnboarding');
             const payment = document.getElementById('botPaymentStep');
             const api = document.getElementById('botConfigPanel');
@@ -5399,6 +5399,29 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             const bcPay = document.getElementById('botCrumbPayment');
             const bcSepApi = document.getElementById('botCrumbSepApi');
             const bcApi = document.getElementById('botCrumbApi');
+
+            // --- PREMIUM USER OVERRIDE ---
+            if (window.gaboUserIsPremium) {
+                if(terms) terms.style.display = 'none';
+                if(payment) payment.style.display = 'none';
+                if(api) api.style.display = 'block';
+                if(bcTerms) bcTerms.style.display = 'none';
+                if(bcSepPay) bcSepPay.style.display = 'none';
+                if(bcPay) bcPay.style.display = 'none';
+                // Separator from Inicio straight to Config
+                const spanBeforeTerms = bcTerms ? bcTerms.previousElementSibling : null;
+                if(spanBeforeTerms && spanBeforeTerms.tagName === 'SPAN') {
+                    spanBeforeTerms.style.display = 'inline'; // keep Inicio > separator
+                }
+                if(bcSepApi) bcSepApi.style.display = 'none';
+                
+                if(bcApi) {
+                    bcApi.style.display = 'inline';
+                    bcApi.style.color = 'var(--text-primary)';
+                }
+                return; // Stop executing further
+            }
+
 
             if (step === 'terms') {
                 if(terms) terms.style.display = 'block';
