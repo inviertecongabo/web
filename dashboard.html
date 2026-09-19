@@ -1729,6 +1729,590 @@
 
         <section class="dash-section" id="sec-tool-bot">
 
+            <!-- PAYWALL OVERLAY -->
+            <div id="paywallContainer" class="paywall-overlay" style="display: none;">
+                <div class="paywall-card">
+                    
+                    <div id="pw-checkout">
+                        <div class="pw-header">
+                            <h2 class="pw-title">Desbloquea GaboBot <span style="font-size: 1.2rem;">🚀</span></h2>
+                            <p class="pw-subtitle">Elige un plan para automatizar tus compras de Bitcoin.</p>
+                        </div>
+                        
+                        <!-- PLANES -->
+                        <div class="pw-plans">
+                            <div class="pw-plan" id="plan-monthly" onclick="selectPlan('monthly')">
+                                <div class="pw-plan-name">Mensual</div>
+                                <div class="pw-plan-price">$0.99</div>
+                                <div class="pw-plan-desc">Facturado mes a mes</div>
+                            </div>
+                            <div class="pw-plan active" id="plan-yearly" onclick="selectPlan('yearly')">
+                                <div class="pw-plan-name">Anual <span style="background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;font-size:0.65rem;margin-left:4px;">Ahorra 20%</span></div>
+                                <div class="pw-plan-price">$11.76</div>
+                                <div class="pw-plan-desc">Pago único por 365 días</div>
+                            </div>
+                        </div>
+                        
+                        <!-- METODOS -->
+                        <div class="pw-methods">
+                            <div class="pw-method active" id="method-binance" onclick="selectMethod('binance')">Binance Pay</div>
+                            <div class="pw-method" id="method-pagomovil" onclick="selectMethod('pagomovil')">Pago Móvil (Bs)</div>
+                        </div>
+                        
+                        <!-- DATOS BINANCE -->
+                        <div id="data-binance" class="pw-data-box">
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere <strong id="price-binance" style="color:var(--text-primary);">$11.76 USDT</strong> a este usuario:</p>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Usuario / Pay ID</span>
+                                    <span class="pw-copy-value">Gabito020</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('Gabito020', this)">Copiar</button>
+                            </div>
+                        </div>
+                        
+                        <!-- DATOS PAGO MOVIL -->
+                        <div id="data-pagomovil" class="pw-data-box" style="display: none;">
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$11.76</strong> a tasa BCV hoy.</p>
+                            
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Banco</span>
+                                    <span class="pw-copy-value" style="font-size:0.9rem;">0105 - Mercantil</span>
+                                </div>
+                            </div>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Cédula</span>
+                                    <span class="pw-copy-value">V30107924</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('V30107924', this)">Copiar</button>
+                            </div>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Teléfono</span>
+                                    <span class="pw-copy-value">04120333976</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('04120333976', this)">Copiar</button>
+                            </div>
+                        </div>
+                        
+                        <!-- REPORTE -->
+                        <div class="pw-form-group">
+                            <input type="text" id="payReference" class="pw-input" placeholder="Número de Referencia de tu pago">
+                        </div>
+                        <button class="pw-submit" id="btnReportPay" onclick="submitPayment()">Reportar Pago</button>
+                    </div>
+                    
+                    <div id="pw-success" class="pw-success-state">
+                        <div class="pw-success-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h2 class="pw-title">¡Pago en Revisión!</h2>
+                        <p class="pw-subtitle" style="margin-top:12px; line-height:1.6;">Hemos recibido tu reporte. Gabo verificará la transacción y activará tu acceso a GaboBot en las próximas horas.</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div id="botConfigWrapper">
+
+
+
+            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
+
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
+
+                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
+
+                    <span>/</span>
+
+                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
+
+                </span>
+
+            </div>
+
+            <h2 class="section-heading">Compras BTC (GaboBot)</h2>
+
+
+
+            <p class="section-sub">Configura tu estrategia de inversión automatizada (DCA) en Binance.</p>
+
+
+
+            
+
+
+
+            <!-- ONBOARDING GABOBOT -->
+
+
+
+            <div id="botOnboarding" class="dash-card bot-onboarding-card" style="max-width: 900px; margin-bottom: 24px; display: none;">
+
+
+
+                <div style="text-align: center; margin-bottom: 30px;">
+
+
+
+                    <div style="font-size:3rem; margin-bottom:8px; display:flex; justify-content:center;">
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M8 11l3 3 5-5"></path></svg>
+
+
+
+                    </div>
+
+
+
+                    <h3 class="bot-setup-title" style="font-family:var(--font-heading); font-size: 1.5rem; color: var(--accent);">Conecta tu cuenta de forma segura</h3>
+
+
+
+                    <p class="bot-setup-subtitle" style="color:var(--text-muted); font-size:0.95rem; margin-top:6px;">Sigue estos pasos o mira el tutorial para habilitar a GaboBot sin comprometer tus fondos.</p>
+
+
+
+                </div>
+
+
+
+                
+
+
+
+                <div class="bot-setup-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
+
+
+
+                    <!-- Columna Izquierda: Instrucciones -->
+
+                    <div class="bot-setup-text" style="display: flex; flex-direction: column; justify-content: center;">
+
+
+
+                        <ul style="font-size: 0.95rem; color: #E2E8F0; list-style:none; padding:0; margin: 0; line-height: 1.6;">
+
+
+
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">1.</span> <span>Ve a tu app de Binance y entra a <strong>Gestión de API</strong>.</span></li>
+
+
+
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">2.</span> <span>Crea una nueva clave y guárdala en un lugar seguro.</span></li>
+
+
+
+                            <li style="margin-bottom: 16px; display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">3.</span> <span>Edita las restricciones de la API y asegúrate de marcar <strong>Únicamente</strong> "Habilitar lectura" y "Habilitar trading de Margen, Acciones y Spot".</span></li>
+
+
+
+                            <li style="display:flex; gap:10px;"><span style="color:var(--accent); font-weight:bold;">4.</span> <span><strong style="color:#FF6B6B;">NUNCA habilites "Permitir Retiros".</strong> GaboBot no necesita, ni quiere, permisos para retirar tus fondos.</span></li>
+
+
+
+                        </ul>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!-- Columna Derecha: Video -->
+
+                    <div class="bot-setup-video" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(240,185,11,0.4); border-radius: var(--radius-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; aspect-ratio: 16/9; position: relative; overflow: hidden; padding: 20px; text-align: center;">
+
+
+
+                        <div style="width: 60px; height: 60px; background: rgba(240,185,11,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 2px solid rgba(240,185,11,0.3);">
+
+
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+
+
+
+                        </div>
+
+
+
+                        <h4 style="color: #F8FAFC; margin-bottom: 8px; font-family: var(--font-heading);">Video Tutorial</h4>
+
+
+
+                        <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 250px;">Aquí irá tu video de 2 minutos explicando el proceso paso a paso.</p>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                
+
+
+
+                <div class="bot-help-link-box" style="text-align:center; margin-bottom:30px; display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.9rem;">
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+
+
+
+                    <span style="color: var(--text-muted);">¿Tienes dudas sobre la seguridad?</span>
+
+
+
+                    <a href="/herramientas-info" target="_blank" class="bot-setup-link" style="color: var(--accent); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Ver cómo funciona el bot &rarr;</a>
+
+
+
+                </div>
+
+
+
+
+
+
+
+                <div class="bot-checkbox-box" style="display:flex; flex-direction:column; gap: 12px; margin-bottom: 24px; background: rgba(240,185,11,0.03); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(240,185,11,0.15);">
+
+
+
+                    <div style="display:flex; align-items:flex-start; gap: 12px;">
+
+
+
+                        <input type="checkbox" id="botTermsCheck1" autocomplete="off" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+
+
+
+                        <label for="botTermsCheck1" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
+
+
+
+                            Confirmo que he creado mi API Key en Binance <strong>Únicamente</strong> con permisos de "Lectura" y "Trading Spot", y me he asegurado de NO habilitar retiros.
+
+
+
+                        </label>
+
+
+
+                    </div>
+
+
+
+                    <div style="display:flex; align-items:flex-start; gap: 12px; margin-top:8px;">
+
+
+
+                        <input type="checkbox" id="botTermsCheck2" autocomplete="off" style="margin-top: 3px; transform: scale(1.2); accent-color: var(--accent); cursor:pointer;">
+
+
+
+                        <label for="botTermsCheck2" style="font-size: 0.9rem; color: #F8FAFC; cursor:pointer; line-height: 1.4;">
+
+
+
+                            He leído y acepto los <a href="/legal?tab=terms" target="_blank" style="color:var(--accent); text-decoration:underline;">Términos y Condiciones de uso de GaboBot</a>.
+
+
+
+                        </label>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                
+
+
+
+                <button class="btn-save" id="btnAcceptBotTerms" disabled style="width:100%; opacity:0.5;">Aceptar y Continuar</button>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+            <!-- ── STEP 2: PAGO ── -->
+            <div id="botPaymentStep">
+                <div class="pws-card">
+                    <div class="pws-top"></div>
+                    <div class="pws-body">
+
+                        <div id="pwsCheckout">
+                            <div class="pws-badge">Paso 2 — Activar Acceso</div>
+                            <h3 class="pws-title">Elige tu Plan</h3>
+                            <p class="pws-subtitle">Para acceder a GaboBot elige un plan. Tus fondos permanecen 100% seguros en tu propia cuenta de Binance.</p>
+
+                            <div class="pws-plans">
+                                <div class="pws-plan" id="pwsPlanMonthly" onclick="pwsSelectPlan('monthly')">
+                                    <div class="pws-plan-name">Mensual</div>
+                                    <div class="pws-plan-price">$0.99</div>
+                                    <div class="pws-plan-desc">Mes a mes</div>
+                                </div>
+                                <div class="pws-plan selected" id="pwsPlanYearly" onclick="pwsSelectPlan('yearly')">
+                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 20%</span></div>
+                                    <div class="pws-plan-price">$11.76</div>
+                                    <div class="pws-plan-desc">365 días completos</div>
+                                </div>
+                            </div>
+
+                            <div class="pws-tabs">
+                                <div class="pws-tab active" id="pwsTabBinance" onclick="pwsSelectTab('binance')">Binance Pay</div>
+                                <div class="pws-tab" id="pwsTabPagomovil" onclick="pwsSelectTab('pagomovil')">Pago Móvil (Bs)</div>
+                            </div>
+
+                            <div id="pwsDataBinance" class="pws-data">
+                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$11.76 USDT</strong> a:</p>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Usuario / Pay ID</span>
+                                        <span class="pws-val">Gabito020</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('Gabito020',this)">Copiar</button>
+                                </div>
+                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrBinance')">Ver código QR</button>
+                                <img id="pwsQrBinance" class="pws-qr-img" src="assets/images/qr-binance.png" alt="QR Binance Pay">
+                            </div>
+
+                            <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
+                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$11.76</strong> según la tasa BCV del día a:</p>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Banco</span>
+                                        <span class="pws-val" style="font-size:0.85rem;">0105 – Mercantil</span>
+                                    </div>
+                                </div>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Cédula</span>
+                                        <span class="pws-val">V30107924</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('V30107924',this)">Copiar</button>
+                                </div>
+                                <div class="pws-row">
+                                    <div>
+                                        <span class="pws-lbl">Teléfono</span>
+                                        <span class="pws-val">04120333976</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('04120333976',this)">Copiar</button>
+                                </div>
+                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrPagomovil')">Ver código QR</button>
+                                <img id="pwsQrPagomovil" class="pws-qr-img" src="assets/images/qr-pagomovil.png" alt="QR Pago Móvil">
+                            </div>
+
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="Número de referencia de tu transferencia">
+                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()">Reportar Pago</button>
+                        </div>
+
+                        <div id="pwsPending" class="pws-pending">
+                            <div class="pws-pending-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <p style="color:#eee; font-weight:700; font-size:1.05rem; margin:0 0 6px;">¡Pago en Revisión!</p>
+                            <p style="color:#888; font-size:0.85rem; line-height:1.5; margin:0;">Gabo verificará la transferencia y activará tu acceso en las próximas horas. Puedes continuar y configurar tus claves mientras tanto.</p>
+                        </div>
+
+                        <button class="pws-continue" id="pwsContinueBtn" onclick="pwsContinueToConfig()">Continuar a la Configuración →</button>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ── END STEP 2: PAGO ── -->
+
+                        <!-- PANEL DE CONFIGURACION -->
+
+            <div id="botConfigPanel" style="display: none; width: 100%;">
+
+                <div style="display: flex; gap: 24px; align-items: flex-start; max-width: 1200px; flex-wrap: wrap;">
+
+                    
+
+                    <!-- LADO IZQUIERDO: CONFIGURACION PRINCIPAL -->
+
+                    <div class="dash-card" style="flex: 2; min-width: 300px; margin-bottom: 24px;">
+
+                        
+
+                        <!-- STATUS HEADER -->
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+
+                            <div>
+
+                                <h3 style="font-family:var(--font-heading); font-size: 1.3rem; margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+
+                                    Estado de Inversión
+
+                                    <span id="botStatusBadge" class="status-badge status-inactive" style="font-size:0.75rem;"><span class="status-dot"></span> INACTIVO</span>
+
+                                </h3>
+
+                                <p style="color:var(--text-muted); font-size:0.9rem;">Enciende o apaga el piloto automático de tus compras.</p>
+
+                            </div>
+
+                            <label class="toggle-switch" style="transform: scale(1.1);">
+
+                                <input type="checkbox" id="botToggle">
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+                        
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+
+                            
+
+                            <!-- COLUMNA 1: API -->
+
+                            <div class="config-box">
+
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Conexión Binance</h4>
+
+                                </div>
+
+                                
+
+                                <div class="form-group" style="margin-bottom: 16px;">
+
+                                    <label class="form-label">API Key</label>
+
+                                    <div style="position: relative;">
+
+                                        <input type="password" class="form-input" id="botApiKey" placeholder="Pega tu API Key" style="padding-left: 36px;">
+
+                                        <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+
+                                    <label class="form-label">Secret Key</label>
+
+                                    <div style="position: relative;">
+
+                                        <input type="password" class="form-input" id="botSecretKey" placeholder="Pega tu Secret Key" style="padding-left: 36px;">
+
+                                        <svg style="position: absolute; left: 10px; top: 10px; opacity: 0.5;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- COLUMNA 2: ESTRATEGIA -->
+
+                            <div class="config-box">
+
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+                                    <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:#F8FAFC; margin:0;">Estrategia DCA</h4>
+
+                                </div>
+
+                                
+
+                                <div class="form-group" style="margin-bottom: 16px;">
+
+                                    <label class="form-label">Monto (USDT)</label>
+
+                                    <div style="position: relative;">
+
+                                        <input type="number" class="form-input" id="botAmount" placeholder="Ej: 15" min="6" style="padding-left: 32px;">
+
+                                        <span style="position: absolute; left: 12px; top: 9px; color: var(--accent); font-weight: bold;">$</span>
+
+                                    </div>
+
+                                    <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:6px;">*Mínimo requerido: $6 USDT</small>
+
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+
+                                    <label class="form-label">Frecuencia</label>
+
+                                    <div style="position: relative;">
+
+                                        <svg style="position: absolute; left: 10px; top: 10px; color: var(--accent);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+
+                                        <select class="form-input" id="botFrequency" style="padding-left: 36px; padding-right: 32px; appearance: none; cursor: pointer; background-color: rgba(255,255,255,0.03);">
+
+                                            <option value="daily" style="background: #000000; color: #FFFFFF;">Diaria</option>
+
+                                            <option value="weekly" style="background: #000000; color: #FFFFFF;" selected>Semanal</option>
+
+                                            <option value="biweekly" style="background: #000000; color: #FFFFFF;">Quincenal</option>
+
+                                            <option value="monthly" style="background: #000000; color: #FFFFFF;">Mensual</option>
+
+                                            <option value="custom" style="background: #000000; color: #FFFFFF;">Personalizado...</option>
+
+                                        </select>
+
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+
+                                    </div>
+
+                                    <div id="customDaysContainer" style="display: none; margin-top: 16px; position: relative;">
+
+                                        <label class="form-label" style="font-size: 0.85rem; color: var(--text-muted);">NÃºmero de días</label>
+
+                                        <input type="number" class="form-input" id="botCustomDays" placeholder="Ej: 5" min="1" max="365">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
 
 
                         <div style="margin-top: 24px;">
@@ -2820,6 +3404,104 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         
+        // --- LOGICA DEL PAYWALL ---
+        let currentPlan = 'yearly';
+        let currentMethod = 'binance';
+        
+        window.selectPlan = function(plan) {
+            currentPlan = plan;
+            document.getElementById('plan-monthly').classList.remove('active');
+            document.getElementById('plan-yearly').classList.remove('active');
+            document.getElementById('plan-' + plan).classList.add('active');
+            
+            const price = plan === 'monthly' ? '$0.99' : '$11.76';
+            document.getElementById('price-binance').textContent = price + ' USDT';
+            document.getElementById('price-pagomovil').textContent = price;
+        };
+        
+        window.selectMethod = function(method) {
+            currentMethod = method;
+            document.getElementById('method-binance').classList.remove('active');
+            document.getElementById('method-pagomovil').classList.remove('active');
+            document.getElementById('method-' + method).classList.add('active');
+            
+            if(method === 'binance') {
+                document.getElementById('data-binance').style.display = 'block';
+                document.getElementById('data-pagomovil').style.display = 'none';
+            } else {
+                document.getElementById('data-binance').style.display = 'none';
+                document.getElementById('data-pagomovil').style.display = 'block';
+            }
+        };
+        
+        window.copyText = function(text, btnElement) {
+            navigator.clipboard.writeText(text);
+            const originalText = btnElement.textContent;
+            btnElement.textContent = "¡Copiado!";
+            btnElement.style.color = "var(--accent)";
+            btnElement.style.borderColor = "var(--accent)";
+            setTimeout(() => {
+                btnElement.textContent = originalText;
+                btnElement.style.color = "";
+                btnElement.style.borderColor = "";
+            }, 2000);
+        };
+        
+        window.submitPayment = async function() {
+            const ref = document.getElementById('payReference').value.trim();
+            if(!ref) {
+                alert("Por favor, ingresa el número de referencia de tu transferencia.");
+                return;
+            }
+            
+            const btn = document.getElementById('btnReportPay');
+            btn.textContent = "Enviando...";
+            btn.disabled = true;
+            
+            const amount = currentPlan === 'monthly' ? 0.99 : 11.76;
+            
+            const { error } = await sb.from('payments').insert({
+                user_id: user.id,
+                plan_type: currentPlan,
+                payment_method: currentMethod,
+                amount: amount,
+                reference_number: ref,
+                status: 'pending'
+            });
+            
+            if(error) {
+                alert("Hubo un error al enviar el reporte: " + error.message);
+                btn.textContent = "Reportar Pago";
+                btn.disabled = false;
+            } else {
+                document.getElementById('pw-checkout').style.display = 'none';
+                document.getElementById('pw-success').style.display = 'block';
+            }
+        };
+        
+        // Función para verificar si tiene acceso al cargar
+        async function checkSubscriptionAccess() {
+            // Chequear si es admin (Gabo tiene acceso gratis)
+            if(user.email === "aibersonmontilla22@gmail.com") return;
+            
+            // Chequear metadatos del usuario (si ya fue aprobado por Gabo)
+            if(user.user_metadata?.is_premium === true) return;
+            
+            // Si no es premium, verificamos si tiene un pago en revisión
+            const { data: pendingPayments } = await sb.from('payments').select('id').eq('user_id', user.id).eq('status', 'pending');
+            
+            document.getElementById('botConfigWrapper').classList.add('content-blurred');
+            document.getElementById('paywallContainer').style.display = 'flex';
+            
+            if (pendingPayments && pendingPayments.length > 0) {
+                // Ya pagó pero está en revisión
+                document.getElementById('pw-checkout').style.display = 'none';
+                document.getElementById('pw-success').style.display = 'block';
+            }
+        }
+        
+        // Llamar a la verificacion 
+        checkSubscriptionAccess();
 
 
         // Ocultar sección de contraseña si inició sesión con Google
@@ -4376,6 +5058,48 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
 .sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 
 .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+
+        /* PAYWALL CSS */
+        .paywall-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(13, 13, 15, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 20px; }
+        .paywall-card { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .paywall-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-gradient); }
+        .pw-header { text-align: center; margin-bottom: 24px; }
+        .pw-title { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .pw-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+        
+        .pw-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .pw-plan { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .pw-plan:hover { border-color: rgba(240,185,11,0.5); }
+        .pw-plan.active { border-color: var(--accent); background: rgba(240,185,11,0.05); }
+        .pw-plan-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: var(--text-primary); }
+        .pw-plan-price { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+        .pw-plan-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        
+        .pw-methods { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        .pw-method { flex: 1; padding: 10px; text-align: center; font-weight: 600; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .pw-method.active { background: var(--card-bg); color: var(--text-primary); }
+        
+        .pw-data-box { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+        .pw-copy-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.02); }
+        .pw-copy-row:last-child { margin-bottom: 0; }
+        .pw-copy-label { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        .pw-copy-value { font-family: monospace; font-size: 1rem; color: var(--text-primary); font-weight: 600; }
+        .pw-btn-copy { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+        .pw-btn-copy:hover { color: var(--accent); border-color: var(--accent); }
+        
+        .pw-form-group { margin-bottom: 16px; }
+        .pw-form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
+        .pw-input { width: 100%; padding: 14px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; font-family: var(--font-body); outline: none; transition: 0.2s; }
+        .pw-input:focus { border-color: var(--accent); }
+        .pw-submit { width: 100%; padding: 14px; background: var(--accent-gradient); color: #000; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .pw-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .pw-success-state { display: none; text-align: center; padding: 20px 0; }
+        .pw-success-icon { width: 60px; height: 60px; background: rgba(240,185,11,0.1); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        
+        /* Blur class */
+        .content-blurred { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; }
 
     
         /* ── GaboBot Payment Step ── */
