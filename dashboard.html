@@ -2098,9 +2098,9 @@
                                         <span class="pws-lbl">Usuario / Pay ID</span>
                                         <span class="pws-val">Gabito020</span>
                                     </div>
-                                    <button class="pws-copy" onclick="pwsCopy('Gabito020',this)">Copiar</button>
+                                    <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('Gabito020',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
-                                <button class="pws-qr-btn" onclick="openQrModal('binance')">Ver código QR</button>
+                                <button class="pws-qr-btn" onclick="openQrModal('binance')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
                             </div>
 
                             <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
@@ -2116,16 +2116,16 @@
                                         <span class="pws-lbl">Cédula</span>
                                         <span class="pws-val">V30107924</span>
                                     </div>
-                                    <button class="pws-copy" onclick="pwsCopy('V30107924',this)">Copiar</button>
+                                    <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('V30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Teléfono</span>
                                         <span class="pws-val">04120333976</span>
                                     </div>
-                                    <button class="pws-copy" onclick="pwsCopy('04120333976',this)">Copiar</button>
+                                    <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('04120333976',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
-                                <button class="pws-qr-btn" onclick="openQrModal('pagomovil')">Ver código QR</button>
+                                <button class="pws-qr-btn" onclick="openQrModal('pagomovil')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
                             </div>
 
                             <input type="text" id="pwsRefInput" class="pws-ref" placeholder="Número de referencia de tu transferencia">
@@ -5076,45 +5076,60 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         .content-blurred { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; }
 
     
-        /* ── GaboBot Payment Step ── */
-        #botPaymentStep { display: none; max-width: 520px; margin: 0 0 24px 0; }
-        .pws-card { background: #111113; border: 1px solid rgba(240,185,11,0.2); border-radius: 16px; overflow: hidden; }
-        .pws-top { height: 3px; background: linear-gradient(90deg,#F0B90B,#F8D347); }
-        .pws-body { padding: 24px; }
-        .pws-badge { display: inline-block; background: rgba(240,185,11,0.1); color: #F0B90B; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(240,185,11,0.25); margin-bottom: 12px; }
-        .pws-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin: 0 0 6px; }
-        .pws-subtitle { font-size: 0.85rem; color: #888; margin: 0 0 20px; line-height: 1.5; }
-        .pws-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-        .pws-plan { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .pws-plan:hover { border-color: rgba(240,185,11,0.4); }
-        .pws-plan.selected { border-color: #F0B90B; background: rgba(240,185,11,0.06); }
-        .pws-plan-name { font-size: 0.85rem; font-weight: 600; color: #bbb; margin-bottom: 4px; }
-        .pws-plan-price { font-size: 1.3rem; font-weight: 800; color: #F0B90B; }
-        .pws-plan-desc { font-size: 0.7rem; color: #666; margin-top: 3px; }
-        .pws-plan-badge { background: #F0B90B; color: #000; padding: 1px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700; margin-left: 4px; }
-        .pws-tabs { display: flex; gap: 6px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .pws-tab { flex: 1; padding: 9px; text-align: center; font-size: 0.85rem; font-weight: 600; color: #555; cursor: pointer; border-radius: 8px; border: 1px solid transparent; transition: 0.2s; }
-        .pws-tab.active { background: rgba(255,255,255,0.05); color: #eee; border-color: rgba(255,255,255,0.08); }
-        .pws-data { background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
-        .pws-hint { font-size: 0.8rem; color: #777; text-align: center; margin-bottom: 10px; }
-        .pws-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 7px; margin-bottom: 7px; }
-        .pws-row:last-of-type { margin-bottom: 0; }
-        .pws-lbl { font-size: 0.72rem; color: #666; display: block; margin-bottom: 2px; }
-        .pws-val { font-family: monospace; font-size: 0.9rem; color: #eee; font-weight: 600; }
-        .pws-copy { background: none; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 3px 9px; border-radius: 4px; font-size: 0.72rem; cursor: pointer; transition: 0.2s; }
-        .pws-copy:hover { color: #F0B90B; border-color: #F0B90B; }
-        .pws-qr-btn { display: block; width: 100%; background: none; border: 1px dashed rgba(240,185,11,0.3); color: #F0B90B; padding: 7px; border-radius: 7px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; text-align: center; transition: 0.2s; }
-        .pws-qr-btn:hover { background: rgba(240,185,11,0.05); }
-        .pws-qr-img { display: none; max-width: 160px; width: 100%; margin: 10px auto 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
-        .pws-ref { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 0.9rem; outline: none; transition: 0.2s; margin-bottom: 12px; }
-        .pws-ref:focus { border-color: #F0B90B; }
-        .pws-submit { width: 100%; padding: 13px; background: linear-gradient(135deg,#F0B90B,#F8D347); color: #000; font-weight: 700; font-size: 0.95rem; border: none; border-radius: 9px; cursor: pointer; transition: 0.2s; }
-        .pws-submit:hover { opacity: 0.88; }
-        .pws-pending { display: none; text-align: center; padding: 12px 0; }
-        .pws-pending-icon { width: 54px; height: 54px; background: rgba(240,185,11,0.1); color: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; border: 1px solid rgba(240,185,11,0.2); }
-        .pws-continue { display: none; width: 100%; padding: 12px; background: rgba(240,185,11,0.08); border: 1px solid rgba(240,185,11,0.3); color: #F0B90B; font-weight: 700; font-size: 0.9rem; border-radius: 9px; cursor: pointer; margin-top: 16px; transition: 0.2s; }
-        .pws-continue:hover { background: rgba(240,185,11,0.15); }
-        /* ── End GaboBot Payment Step ── */
+        
+        /* ── GaboBot Premium Payment Step ── */
+        #botPaymentStep { display: none; max-width: 520px; margin: 0 auto 32px; }
+        .pws-card { background: linear-gradient(145deg, #131418, #0d0d0f); border: 1px solid rgba(255,255,255,0.03); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); position: relative; }
+        .pws-top { height: 4px; background: linear-gradient(90deg, #F0B90B, #FFD54F, #F0B90B); background-size: 200% auto; animation: shine 3s linear infinite; }
+        @keyframes shine { to { background-position: 200% center; } }
+        .pws-body { padding: 32px 28px; }
+        .pws-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(240,185,11,0.08); color: #F0B90B; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; padding: 4px 12px; border-radius: 30px; margin-bottom: 16px; border: 1px solid rgba(240,185,11,0.2); }
+        .pws-title { font-size: 1.5rem; font-weight: 800; color: #ffffff; margin: 0 0 8px; letter-spacing: -0.5px; }
+        .pws-subtitle { font-size: 0.9rem; color: #8892b0; margin: 0 0 24px; line-height: 1.5; }
+        
+        .pws-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .pws-plan { background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .pws-plan:hover { border-color: rgba(240,185,11,0.3); background: rgba(255,255,255,0.04); transform: translateY(-2px); }
+        .pws-plan.selected { border-color: #F0B90B; background: linear-gradient(180deg, rgba(240,185,11,0.08) 0%, rgba(240,185,11,0.02) 100%); box-shadow: 0 8px 20px rgba(240,185,11,0.1); }
+        .pws-plan.selected::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #F0B90B; }
+        .pws-plan-name { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 6px; }
+        .pws-plan-price { font-size: 1.4rem; font-weight: 900; color: #F0B90B; letter-spacing: -0.5px; }
+        .pws-plan-desc { font-size: 0.7rem; color: #64748b; margin-top: 4px; font-weight: 500; }
+        .pws-plan-badge { position: absolute; top: -1px; right: 12px; background: #F0B90B; color: #000; padding: 2px 8px; border-radius: 0 0 6px 6px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px; }
+        
+        .pws-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 12px; }
+        .pws-tab { flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; font-weight: 700; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .pws-tab:hover { color: #e2e8f0; }
+        .pws-tab.active { background: rgba(255,255,255,0.08); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        
+        .pws-data { background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .pws-hint { font-size: 0.85rem; color: #8892b0; text-align: center; margin-bottom: 16px; }
+        .pws-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-bottom: 8px; transition: 0.2s; }
+        .pws-row:hover { background: rgba(0,0,0,0.3); }
+        .pws-lbl { font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        .pws-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #f8fafc; font-weight: 700; letter-spacing: 0.5px; }
+        
+        .pws-copy { background: none; border: none; color: #64748b; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .pws-copy:hover { color: #F0B90B; background: rgba(240,185,11,0.1); }
+        .pws-copy svg { width: 16px; height: 16px; }
+        
+        .pws-qr-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: rgba(240,185,11,0.05); border: 1px dashed rgba(240,185,11,0.3); color: #F0B90B; padding: 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 16px; transition: 0.2s; }
+        .pws-qr-btn:hover { background: rgba(240,185,11,0.1); border-style: solid; transform: translateY(-1px); }
+        
+        .pws-ref { width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.08); color: #fff; font-size: 0.95rem; transition: 0.2s; margin-bottom: 16px; font-family: inherit; }
+        .pws-ref:focus { border-color: #F0B90B; background: rgba(0,0,0,0.4); outline: none; box-shadow: 0 0 0 3px rgba(240,185,11,0.15); }
+        .pws-ref::placeholder { color: #475569; }
+        
+        .pws-submit { width: 100%; padding: 16px; background: #F0B90B; color: #000; font-weight: 800; font-size: 1rem; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(240,185,11,0.2); }
+        .pws-submit:hover { background: #facc15; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(240,185,11,0.3); }
+        .pws-submit:active { transform: translateY(0); }
+        
+        .pws-pending { display: none; text-align: center; padding: 24px 0; }
+        .pws-pending-icon { width: 64px; height: 64px; background: linear-gradient(135deg, rgba(240,185,11,0.2), rgba(240,185,11,0.05)); color: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(240,185,11,0.3); }
+        .pws-continue { display: none; width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 700; font-size: 0.9rem; border-radius: 12px; cursor: pointer; margin-top: 20px; transition: 0.2s; }
+        .pws-continue:hover { background: rgba(255,255,255,0.1); }
+        /* ── End GaboBot Premium Payment Step ── */
+
 
     </style>
 
@@ -5199,12 +5214,12 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('pwsDataPagomovil').style.display = tab === 'pagomovil'  ? 'block' : 'none';
         };
 
-        window.pwsCopy = function(val, btn) {
+                window.pwsCopy = function(val, btn) {
             navigator.clipboard.writeText(val);
-            const orig = btn.textContent;
-            btn.textContent = 'Copiado';
-            btn.style.color = '#F0B90B'; btn.style.borderColor = '#F0B90B';
-            setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            btn.style.color = '#F0B90B';
+            setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
         };
 
         window.openQrModal = function(method) {
