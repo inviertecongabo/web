@@ -4377,7 +4377,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!amount || parseFloat(amount) < 6) {
 
-            alert("El monto mínimo requerido para activar el bot es de 6 USDT.");
+            const amtInput = document.getElementById('botAmount');
+            amtInput.classList.add('error');
+            setTimeout(() => amtInput.classList.remove('error'), 3000);
+            window.showToast("Monto Inválido", "El monto mínimo requerido para operar en Binance es de $6 USDT.", "error");
 
             return;
 
@@ -5177,6 +5180,8 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
             25% { transform: translateX(-4px); }
             75% { transform: translateX(4px); }
         }
+        
+        .form-input.error { border-color: #ef4444 !important; background: rgba(239,68,68,0.05) !important; animation: pwsShake 0.3s ease-in-out; }
         .pws-ref.error { border-color: #ef4444 !important; background: rgba(239,68,68,0.05) !important; animation: pwsShake 0.3s ease-in-out; }
         .pws-ref.error::placeholder { color: #fca5a5 !important; }
         
