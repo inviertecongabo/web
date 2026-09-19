@@ -4283,7 +4283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Validación: Si no es premium, no puede encenderlo
         if (isActive && !window.gaboUserIsPremium) {
             checkbox.checked = false;
-            alert("Tu pago aún está en revisión.\n\nPodrás encender el bot una vez que tu transferencia sea verificada y aprobada por administración.");
+            window.showToast("Pago en revisión", "Podrás encender el bot una vez que tu transferencia sea verificada y aprobada por administración.", "warning");
             return;
         }
 
@@ -4293,7 +4293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             checkbox.checked = false;
 
-            alert("Primero debes ingresar y guardar tu API Key y Secret Key de Binance en la configuración de abajo.");
+            window.showToast("Faltan API Keys", "Primero debes ingresar y guardar tus credenciales de Binance en la configuración de abajo.", "error");
 
             return;
 
@@ -5164,6 +5164,21 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         }
         .pws-ref.error { border-color: #ef4444 !important; background: rgba(239,68,68,0.05) !important; animation: pwsShake 0.3s ease-in-out; }
         .pws-ref.error::placeholder { color: #fca5a5 !important; }
+        
+        /* ── GaboBot Premium Toast System ── */
+        #toast-container { position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
+        .pws-toast { background: rgba(19, 20, 24, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px 20px; min-width: 300px; max-width: 400px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; align-items: flex-start; gap: 12px; animation: toastSlideIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); transform-origin: top right; }
+        .pws-toast.hiding { animation: toastFadeOut 0.3s ease forwards; }
+        .pws-toast-icon { flex-shrink: 0; margin-top: 2px; }
+        .pws-toast-content { flex: 1; }
+        .pws-toast-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0 0 4px; }
+        .pws-toast-msg { font-size: 0.85rem; color: #94a3b8; margin: 0; line-height: 1.4; }
+        .pws-toast.warning .pws-toast-icon { color: #f59e0b; }
+        .pws-toast.error .pws-toast-icon { color: #ef4444; }
+        .pws-toast.success .pws-toast-icon { color: #10b981; }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(50px) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
+        @keyframes toastFadeOut { to { opacity: 0; transform: translateX(50px) scale(0.9); } }
+
         /* ── End GaboBot Premium Payment Step ── */
 
 
@@ -5309,6 +5324,38 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         };
 
         
+        
+        window.showToast = function(title, message, type = 'warning') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+            
+            let iconSvg = '';
+            if (type === 'warning') { iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>'; }
+            else if (type === 'error') { iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'; }
+            else if (type === 'success') { iconSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'; }
+
+            const toast = document.createElement('div');
+            toast.className = `pws-toast ${type}`;
+            toast.innerHTML = `
+                <div class="pws-toast-icon">${iconSvg}</div>
+                <div class="pws-toast-content">
+                    <h4 class="pws-toast-title">${title}</h4>
+                    <p class="pws-toast-msg">${message}</p>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        };
+
         window.goToBotStep = function(step) {
             const terms = document.getElementById('botOnboarding');
             const payment = document.getElementById('botPaymentStep');
