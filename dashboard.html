@@ -1735,7 +1735,10 @@
                     
                     <div id="pw-checkout">
                         <div class="pw-header">
+                            
+                            <button onclick="document.getElementById('paywallContainer').style.display='none'" style="position:absolute; top:20px; right:20px; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.5rem;">&times;</button>
                             <h2 class="pw-title">Desbloquea GaboBot <span style="font-size: 1.2rem;">🚀</span></h2>
+
                             <p class="pw-subtitle">Elige un plan para automatizar tus compras de Bitcoin.</p>
                         </div>
                         
@@ -1769,6 +1772,10 @@
                                 </div>
                                 <button class="pw-btn-copy" onclick="copyText('Gabito020', this)">Copiar</button>
                             </div>
+                            <div style="text-align: center; margin-top: 12px;">
+                                <button onclick="toggleQR('qr-img-binance')" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Ver código QR</button>
+                                <img id="qr-img-binance" src="assets/images/qr-binance.png" style="display:none; width:100%; max-width:200px; margin: 16px auto 0; border-radius:12px; border: 2px solid rgba(255,255,255,0.1);">
+                            </div>
                         </div>
                         
                         <!-- DATOS PAGO MOVIL -->
@@ -1794,6 +1801,109 @@
                                     <span class="pw-copy-value">04120333976</span>
                                 </div>
                                 <button class="pw-btn-copy" onclick="copyText('04120333976', this)">Copiar</button>
+                            </div>
+                            <div style="text-align: center; margin-top: 12px;">
+                                <button onclick="toggleQR('qr-img-pagomovil')" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Ver código QR</button>
+                                <img id="qr-img-pagomovil" src="assets/images/qr-pagomovil.png" style="display:none; width:100%; max-width:200px; margin: 16px auto 0; border-radius:12px; border: 2px solid rgba(255,255,255,0.1);">
+                            </div>
+                        </div>
+                        
+                        <!-- REPORTE -->
+                        <div class="pw-form-group">
+                            <input type="text" id="payReference" class="pw-input" placeholder="Número de Referencia de tu pago">
+                        </div>
+                        <button class="pw-submit" id="btnReportPay" onclick="submitPayment()">Reportar Pago</button>
+                    </div>
+                    
+                    <div id="pw-success" class="pw-success-state">
+                        <div class="pw-success-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h2 class="pw-title">¡Pago en Revisión!</h2>
+                        <p class="pw-subtitle" style="margin-top:12px; line-height:1.6;">Hemos recibido tu reporte. Gabo verificará la transacción y activará tu acceso a GaboBot en las próximas horas.</p>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div id="botConfigWrapper">
+
+            <!-- PAYWALL OVERLAY -->
+            <div id="paywallContainer" class="paywall-overlay" style="display: none;">
+                <div class="paywall-card">
+                    
+                    <div id="pw-checkout">
+                        <div class="pw-header">
+                            
+                            <button onclick="document.getElementById('paywallContainer').style.display='none'" style="position:absolute; top:20px; right:20px; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.5rem;">&times;</button>
+                            <h2 class="pw-title">Desbloquea GaboBot <span style="font-size: 1.2rem;">🚀</span></h2>
+
+                            <p class="pw-subtitle">Elige un plan para automatizar tus compras de Bitcoin.</p>
+                        </div>
+                        
+                        <!-- PLANES -->
+                        <div class="pw-plans">
+                            <div class="pw-plan" id="plan-monthly" onclick="selectPlan('monthly')">
+                                <div class="pw-plan-name">Mensual</div>
+                                <div class="pw-plan-price">$0.99</div>
+                                <div class="pw-plan-desc">Facturado mes a mes</div>
+                            </div>
+                            <div class="pw-plan active" id="plan-yearly" onclick="selectPlan('yearly')">
+                                <div class="pw-plan-name">Anual <span style="background:var(--accent);color:#000;padding:2px 6px;border-radius:4px;font-size:0.65rem;margin-left:4px;">Ahorra 20%</span></div>
+                                <div class="pw-plan-price">$11.76</div>
+                                <div class="pw-plan-desc">Pago único por 365 días</div>
+                            </div>
+                        </div>
+                        
+                        <!-- METODOS -->
+                        <div class="pw-methods">
+                            <div class="pw-method active" id="method-binance" onclick="selectMethod('binance')">Binance Pay</div>
+                            <div class="pw-method" id="method-pagomovil" onclick="selectMethod('pagomovil')">Pago Móvil (Bs)</div>
+                        </div>
+                        
+                        <!-- DATOS BINANCE -->
+                        <div id="data-binance" class="pw-data-box">
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere <strong id="price-binance" style="color:var(--text-primary);">$11.76 USDT</strong> a este usuario:</p>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Usuario / Pay ID</span>
+                                    <span class="pw-copy-value">Gabito020</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('Gabito020', this)">Copiar</button>
+                            </div>
+                            <div style="text-align: center; margin-top: 12px;">
+                                <button onclick="toggleQR('qr-img-binance')" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Ver código QR</button>
+                                <img id="qr-img-binance" src="assets/images/qr-binance.png" style="display:none; width:100%; max-width:200px; margin: 16px auto 0; border-radius:12px; border: 2px solid rgba(255,255,255,0.1);">
+                            </div>
+                        </div>
+                        
+                        <!-- DATOS PAGO MOVIL -->
+                        <div id="data-pagomovil" class="pw-data-box" style="display: none;">
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:center;">Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$11.76</strong> a tasa BCV hoy.</p>
+                            
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Banco</span>
+                                    <span class="pw-copy-value" style="font-size:0.9rem;">0105 - Mercantil</span>
+                                </div>
+                            </div>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Cédula</span>
+                                    <span class="pw-copy-value">V30107924</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('V30107924', this)">Copiar</button>
+                            </div>
+                            <div class="pw-copy-row">
+                                <div>
+                                    <span class="pw-copy-label">Teléfono</span>
+                                    <span class="pw-copy-value">04120333976</span>
+                                </div>
+                                <button class="pw-btn-copy" onclick="copyText('04120333976', this)">Copiar</button>
+                            </div>
+                            <div style="text-align: center; margin-top: 12px;">
+                                <button onclick="toggleQR('qr-img-pagomovil')" style="background:none; border:1px solid var(--accent); color:var(--accent); padding:6px 12px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Ver código QR</button>
+                                <img id="qr-img-pagomovil" src="assets/images/qr-pagomovil.png" style="display:none; width:100%; max-width:200px; margin: 16px auto 0; border-radius:12px; border: 2px solid rgba(255,255,255,0.1);">
                             </div>
                         </div>
                         
@@ -3391,29 +3501,136 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        // Función para verificar si tiene acceso al cargar
-        async function checkSubscriptionAccess() {
-            // Chequear si es admin (Gabo tiene acceso gratis)
-            if(user.email === "aibersonmontilla22@gmail.com") return;
+
+        window.toggleQR = function(id) {
+            const img = document.getElementById(id);
+            img.style.display = img.style.display === 'none' ? 'block' : 'none';
+        };
+
+        // Función para verificar si tiene acceso cuando intenta encender el bot o guardar
+        window.requireSubscription = async function() {
+            // Gabo tiene acceso gratis
+            if(user.email === "aibersonmontilla22@gmail.com") return true;
             
-            // Chequear metadatos del usuario (si ya fue aprobado por Gabo)
-            if(user.user_metadata?.is_premium === true) return;
+            // Si ya fue aprobado
+            if(user.user_metadata?.is_premium === true) return true;
             
-            // Si no es premium, verificamos si tiene un pago en revisión
-            const { data: pendingPayments } = await sb.from('payments').select('id').eq('user_id', user.id).eq('status', 'pending');
-            
-            document.getElementById('botConfigWrapper').classList.add('content-blurred');
+            // Mostrar modal de Paywall
             document.getElementById('paywallContainer').style.display = 'flex';
             
+            // Chequear si ya pagó y está en revisión
+            const { data: pendingPayments } = await sb.from('payments').select('id').eq('user_id', user.id).eq('status', 'pending');
             if (pendingPayments && pendingPayments.length > 0) {
-                // Ya pagó pero está en revisión
                 document.getElementById('pw-checkout').style.display = 'none';
                 document.getElementById('pw-success').style.display = 'block';
             }
+            return false;
         }
+
+
+
         
-        // Llamar a la verificacion 
-        checkSubscriptionAccess();
+        // --- LOGICA DEL PAYWALL ---
+        let currentPlan = 'yearly';
+        let currentMethod = 'binance';
+        
+        window.selectPlan = function(plan) {
+            currentPlan = plan;
+            document.getElementById('plan-monthly').classList.remove('active');
+            document.getElementById('plan-yearly').classList.remove('active');
+            document.getElementById('plan-' + plan).classList.add('active');
+            
+            const price = plan === 'monthly' ? '$0.99' : '$11.76';
+            document.getElementById('price-binance').textContent = price + ' USDT';
+            document.getElementById('price-pagomovil').textContent = price;
+        };
+        
+        window.selectMethod = function(method) {
+            currentMethod = method;
+            document.getElementById('method-binance').classList.remove('active');
+            document.getElementById('method-pagomovil').classList.remove('active');
+            document.getElementById('method-' + method).classList.add('active');
+            
+            if(method === 'binance') {
+                document.getElementById('data-binance').style.display = 'block';
+                document.getElementById('data-pagomovil').style.display = 'none';
+            } else {
+                document.getElementById('data-binance').style.display = 'none';
+                document.getElementById('data-pagomovil').style.display = 'block';
+            }
+        };
+        
+        window.copyText = function(text, btnElement) {
+            navigator.clipboard.writeText(text);
+            const originalText = btnElement.textContent;
+            btnElement.textContent = "¡Copiado!";
+            btnElement.style.color = "var(--accent)";
+            btnElement.style.borderColor = "var(--accent)";
+            setTimeout(() => {
+                btnElement.textContent = originalText;
+                btnElement.style.color = "";
+                btnElement.style.borderColor = "";
+            }, 2000);
+        };
+        
+        window.submitPayment = async function() {
+            const ref = document.getElementById('payReference').value.trim();
+            if(!ref) {
+                alert("Por favor, ingresa el número de referencia de tu transferencia.");
+                return;
+            }
+            
+            const btn = document.getElementById('btnReportPay');
+            btn.textContent = "Enviando...";
+            btn.disabled = true;
+            
+            const amount = currentPlan === 'monthly' ? 0.99 : 11.76;
+            
+            const { error } = await sb.from('payments').insert({
+                user_id: user.id,
+                plan_type: currentPlan,
+                payment_method: currentMethod,
+                amount: amount,
+                reference_number: ref,
+                status: 'pending'
+            });
+            
+            if(error) {
+                alert("Hubo un error al enviar el reporte: " + error.message);
+                btn.textContent = "Reportar Pago";
+                btn.disabled = false;
+            } else {
+                document.getElementById('pw-checkout').style.display = 'none';
+                document.getElementById('pw-success').style.display = 'block';
+            }
+        };
+        
+
+        window.toggleQR = function(id) {
+            const img = document.getElementById(id);
+            img.style.display = img.style.display === 'none' ? 'block' : 'none';
+        };
+
+        // Función para verificar si tiene acceso cuando intenta encender el bot o guardar
+        window.requireSubscription = async function() {
+            // Gabo tiene acceso gratis
+            if(user.email === "aibersonmontilla22@gmail.com") return true;
+            
+            // Si ya fue aprobado
+            if(user.user_metadata?.is_premium === true) return true;
+            
+            // Mostrar modal de Paywall
+            document.getElementById('paywallContainer').style.display = 'flex';
+            
+            // Chequear si ya pagó y está en revisión
+            const { data: pendingPayments } = await sb.from('payments').select('id').eq('user_id', user.id).eq('status', 'pending');
+            if (pendingPayments && pendingPayments.length > 0) {
+                document.getElementById('pw-checkout').style.display = 'none';
+                document.getElementById('pw-success').style.display = 'block';
+            }
+            return false;
+        }
+
 
 
         // Ocultar sección de contraseña si inició sesión con Google
@@ -4188,7 +4405,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Validación: Si intenta prenderlo y no hay API keys guardadas
 
-        if (isActive && (!botConfig.ak || !botConfig.sk)) {
+        if (isActive) {
+                const hasAccess = await requireSubscription();
+                if(!hasAccess) {
+                    checkbox.checked = false;
+                    return;
+                }
+            }
+
+            if (isActive && (!botConfig.ak || !botConfig.sk)) {
 
             checkbox.checked = false;
 
@@ -4958,8 +5183,50 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
 
 
         /* PAYWALL CSS */
-        .paywall-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(13, 13, 15, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 20px; }
-        .paywall-card { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .paywall-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(13, 13, 15, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 20px; }
+        .paywall-card { background: var(--sidebar-bg); max-height: 90vh; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 16px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .paywall-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-gradient); }
+        .pw-header { text-align: center; margin-bottom: 24px; }
+        .pw-title { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+        .pw-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+        
+        .pw-plans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .pw-plan { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .pw-plan:hover { border-color: rgba(240,185,11,0.5); }
+        .pw-plan.active { border-color: var(--accent); background: rgba(240,185,11,0.05); }
+        .pw-plan-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: var(--text-primary); }
+        .pw-plan-price { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+        .pw-plan-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        
+        .pw-methods { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        .pw-method { flex: 1; padding: 10px; text-align: center; font-weight: 600; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .pw-method.active { background: var(--card-bg); color: var(--text-primary); }
+        
+        .pw-data-box { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+        .pw-copy-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.02); }
+        .pw-copy-row:last-child { margin-bottom: 0; }
+        .pw-copy-label { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        .pw-copy-value { font-family: monospace; font-size: 1rem; color: var(--text-primary); font-weight: 600; }
+        .pw-btn-copy { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+        .pw-btn-copy:hover { color: var(--accent); border-color: var(--accent); }
+        
+        .pw-form-group { margin-bottom: 16px; }
+        .pw-form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
+        .pw-input { width: 100%; padding: 14px 16px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; font-family: var(--font-body); outline: none; transition: 0.2s; }
+        .pw-input:focus { border-color: var(--accent); }
+        .pw-submit { width: 100%; padding: 14px; background: var(--accent-gradient); color: #000; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .pw-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .pw-success-state { display: none; text-align: center; padding: 20px 0; }
+        .pw-success-icon { width: 60px; height: 60px; background: rgba(240,185,11,0.1); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        
+        /* Blur class */
+        .content-blurred { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.4; }
+
+    
+        /* PAYWALL CSS */
+        .paywall-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(13, 13, 15, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 20px; }
+        .paywall-card { background: var(--sidebar-bg); max-height: 90vh; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 16px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         .paywall-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent-gradient); }
         .pw-header { text-align: center; margin-bottom: 24px; }
         .pw-title { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
