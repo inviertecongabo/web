@@ -2100,8 +2100,7 @@
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('Gabito020',this)">Copiar</button>
                                 </div>
-                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrBinance')">Ver código QR</button>
-                                <img id="pwsQrBinance" class="pws-qr-img" src="assets/images/qr-binance.png" alt="QR Binance Pay">
+                                <button class="pws-qr-btn" onclick="openQrModal('binance')">Ver código QR</button>
                             </div>
 
                             <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
@@ -2126,8 +2125,7 @@
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('04120333976',this)">Copiar</button>
                                 </div>
-                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrPagomovil')">Ver código QR</button>
-                                <img id="pwsQrPagomovil" class="pws-qr-img" src="assets/images/qr-pagomovil.png" alt="QR Pago Móvil">
+                                <button class="pws-qr-btn" onclick="openQrModal('pagomovil')">Ver código QR</button>
                             </div>
 
                             <input type="text" id="pwsRefInput" class="pws-ref" placeholder="Número de referencia de tu transferencia">
@@ -5209,9 +5207,24 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
         };
 
-        window.pwsToggleQR = function(id) {
-            const img = document.getElementById(id);
-            img.style.display = img.style.display === 'block' ? 'none' : 'block';
+        window.openQrModal = function(method) {
+            const modal = document.getElementById('qrModal');
+            const img = document.getElementById('qrModalImage');
+            const sub = document.getElementById('qrModalSubtitle');
+            
+            if (method === 'binance') {
+                img.src = 'assets/images/qr-binance.png';
+                sub.textContent = 'Abre tu app de Binance y escanea este código.';
+            } else {
+                img.src = 'assets/images/qr-pagomovil.png';
+                sub.textContent = 'Abre la app de tu banco y escanea este código C2P.';
+            }
+            
+            modal.style.display = 'flex';
+        };
+
+        window.closeQrModal = function() {
+            document.getElementById('qrModal').style.display = 'none';
         };
 
         window.pwsSubmitPayment = async function() {
