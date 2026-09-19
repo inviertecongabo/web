@@ -5140,6 +5140,14 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         .pws-continue { display: none; width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 700; font-size: 0.9rem; border-radius: 12px; cursor: pointer; margin-top: 20px; transition: 0.2s; }
         .pws-continue:hover { background: rgba(255,255,255,0.1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes pwsShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+        .pws-ref.error { border-color: #ef4444 !important; background: rgba(239,68,68,0.05) !important; animation: pwsShake 0.3s ease-in-out; }
+        .pws-ref.error::placeholder { color: #fca5a5 !important; }
         /* ── End GaboBot Premium Payment Step ── */
 
 
@@ -5248,7 +5256,18 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
 
         window.pwsSubmitPayment = async function() {
             const ref = document.getElementById('pwsRefInput').value.trim();
-            if (!ref) { alert('Por favor ingresa el número de referencia de tu transferencia.'); return; }
+            
+            const refInput = document.getElementById('pwsRefInput');
+            if (!ref) { 
+                refInput.classList.add('error');
+                refInput.placeholder = '⚠️ Debes ingresar el número de referencia';
+                setTimeout(() => {
+                    refInput.classList.remove('error');
+                    refInput.placeholder = 'Número de referencia de tu transferencia';
+                }, 3000);
+                return; 
+            }
+
             const btn = document.getElementById('pwsSubmitBtn');
             btn.textContent = 'Enviando...'; btn.disabled = true;
             const amount = _pwsPlan === 'monthly' ? 0.99 : 10;
