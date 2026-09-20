@@ -5560,6 +5560,9 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('botPaymentStep').style.display = 'none';
             document.getElementById('botConfigPanel').style.display = 'block'; if(window.goToBotStep) window.goToBotStep('api');
         };
-        // ── End GaboBot Payment Step JS ──
 
+        document.addEventListener('DOMContentLoaded', () => {
+            pwsCheckRefInput();
+        });
+        // ── End GaboBot Payment Step JS ──
 </script>
