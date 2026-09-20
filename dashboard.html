@@ -5342,10 +5342,11 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         };
 
         window.pwsSubmitPayment = async function() {
-            const ref = document.getElementById('pwsRefInput').value.trim();
-            
+            const isAutoCrypto = (_pwsTab === 'binance' && _pwsPlan === 'yearly');
+            const ref = isAutoCrypto ? 'NOWPAYMENTS_PENDING' : document.getElementById('pwsRefInput').value.trim();
             const refInput = document.getElementById('pwsRefInput');
-            if (!ref) { 
+            
+            if (!ref && !isAutoCrypto) { 
                 refInput.classList.add('error');
                 refInput.placeholder = '⚠️ Debes ingresar el número de referencia';
                 setTimeout(() => {
@@ -5356,21 +5357,49 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             }
 
             const btn = document.getElementById('pwsSubmitBtn');
-            btn.textContent = 'Enviando...'; btn.disabled = true;
+            btn.textContent = 'Procesando...'; btn.disabled = true;
             const amount = _pwsPlan === 'monthly' ? 0.99 : 10;
             const { data: { user: u } } = await sb.auth.getUser();
-            const { error } = await sb.from('payments').insert({
+            
+            const { data: paymentData, error } = await sb.from('payments').insert({
                 user_id: u.id, plan_type: _pwsPlan, payment_method: _pwsTab,
                 amount: amount, reference_number: ref, status: 'pending', user_email: u.email
-            });
+            }).select().single();
+            
             if (error) {
                 alert('Error: ' + error.message);
                 btn.textContent = 'Reportar Pago'; btn.disabled = false;
-            } else {
-                document.getElementById('pwsCheckout').style.display = 'none';
-                document.getElementById('pwsPending').style.display  = 'block';
-                document.getElementById('pwsContinueBtn').style.display = 'block';
+                return;
+            } 
+            
+            if (isAutoCrypto) {
+                try {
+                    const response = await fetch('/api/create_payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            plan_type: _pwsPlan,
+                            amount: amount,
+                            user_id: u.id,
+                            user_email: u.email,
+                            payment_id: paymentData.id
+                        })
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Error desconocido');
+                    window.location.href = data.invoice_url;
+                    return;
+                } catch(e) {
+                    console.error(e);
+                    alert('Error en pasarela cripto: ' + e.message);
+                    btn.textContent = 'Reportar Pago'; btn.disabled = false;
+                    return;
+                }
             }
+
+            document.getElementById('pwsCheckout').style.display = 'none';
+            document.getElementById('pwsPending').style.display  = 'block';
+            document.getElementById('pwsContinueBtn').style.display = 'block';
         };
 
         
