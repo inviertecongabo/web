@@ -2177,11 +2177,12 @@
                             <div class="pws-pending-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             </div>
-                            <p style="color:#eee; font-weight:700; font-size:1.05rem; margin:0 0 6px;">¡Pago en Revisión!</p>
-                            <p style="color:#888; font-size:0.85rem; line-height:1.5; margin:0;">Gabo verificará la transferencia y activará tu acceso en las próximas horas. Puedes continuar y configurar tus claves mientras tanto.</p>
+                            <p id="pwsPendingTitle" style="color:#eee; font-weight:700; font-size:1.05rem; margin:0 0 6px;">¡Pago en Revisión!</p>
+                            <p id="pwsPendingDesc" style="color:#888; font-size:0.85rem; line-height:1.5; margin:0;">Gabo verificará la transferencia y activará tu acceso en las próximas horas.</p>
+                            <button id="pwsCancelBtn" onclick="pwsCancelPending()" style="display:none; margin-top: 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;">Cancelar intento de pago</button>
                         </div>
 
-                        <button class="pws-continue" id="pwsContinueBtn" onclick="pwsContinueToConfig()">Continuar a la Configuración →</button>
+                        <button class="pws-continue" id="pwsContinueBtn" onclick="pwsContinueToConfig()" style="margin-top: 16px;">Continuar a la Configuración →</button>
 
                     </div>
                 </div>
@@ -4243,7 +4244,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("botConfigPanel").style.display = "block";
             if(window.goToBotStep) window.goToBotStep("api");
         } else {
-            const { data: pendingPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'pending');
+            const { data: pendingPays } = await sb.from('payments').select('id, payment_method').eq('user_id', uCheck.id).eq('status', 'pending');
             document.getElementById("botOnboarding").style.display = "none";
             document.getElementById("botConfigPanel").style.display = "none";
             document.getElementById("botPaymentStep").style.display = "block";
@@ -4253,6 +4254,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("pwsCheckout").style.display = "none";
                 document.getElementById("pwsPending").style.display = "block";
                 document.getElementById("pwsContinueBtn").style.display = "block";
+                
+                const isCrypto = pendingPays.some(p => p.payment_method === 'crypto');
+                if (isCrypto) {
+                    document.getElementById("pwsPendingTitle").textContent = "¡Pago Cripto en Proceso!";
+                    document.getElementById("pwsPendingDesc").textContent = "Estamos esperando la confirmación de la red blockchain. Esto puede tomar algunos minutos. Si cerraste la factura y no enviaste los fondos, puedes cancelar este intento para usar otro método.";
+                    document.getElementById("pwsCancelBtn").style.display = "inline-block";
+                } else {
+                    document.getElementById("pwsPendingTitle").textContent = "¡Pago en Revisión!";
+                    document.getElementById("pwsPendingDesc").textContent = "Gabo verificará la transferencia manual y activará tu acceso en las próximas horas.";
+                    document.getElementById("pwsCancelBtn").style.display = "none";
+                }
             } else {
                 document.getElementById("pwsCheckout").style.display = "block";
                 document.getElementById("pwsPending").style.display = "none";
@@ -5421,6 +5433,16 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             }
         };
 
+        window.pwsCancelPending = async function() {
+            if(!confirm("¿Estás seguro que quieres cancelar este intento de pago cripto? Solo hazlo si NO enviaste los fondos a la dirección de NOWPayments.")) return;
+            const btn = document.getElementById('pwsCancelBtn');
+            btn.textContent = 'Cancelando...'; btn.disabled = true;
+            
+            const { data: { user: u } } = await sb.auth.getUser();
+            await sb.from('payments').update({ status: 'cancelled' }).eq('user_id', u.id).eq('status', 'pending').eq('payment_method', 'crypto');
+            location.reload();
+        };
+
         window.pwsSubmitPayment = async function() {
             // NOWPayments automatización solo para la pestaña "crypto"
             const isAutoCrypto = (_pwsTab === 'crypto');
@@ -5482,6 +5504,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 }
             }
 
+            // Mostrar pantalla de éxito manual (Binance o Pago Móvil)
             document.getElementById('pwsCheckout').style.display = 'none';
             document.getElementById('pwsPending').style.display  = 'block';
             document.getElementById('pwsContinueBtn').style.display = 'block';
@@ -5489,8 +5512,6 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById("pwsPendingDesc").textContent = "Gabo verificará la transferencia manual y activará tu acceso en las próximas horas.";
             document.getElementById("pwsCancelBtn").style.display = "none";
         };
-
-        
         
         window.showToast = function(title, message, type = 'warning') {
             let container = document.getElementById('toast-container');
