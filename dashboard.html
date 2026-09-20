@@ -3472,7 +3472,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 payment_method: currentMethod,
                 amount: amount,
                 reference_number: ref,
-                status: 'pending'
+                status: 'pending',
+                user_email: user.email
             });
             
             if(error) {
@@ -5312,7 +5313,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             const { data: { user: u } } = await sb.auth.getUser();
             const { error } = await sb.from('payments').insert({
                 user_id: u.id, plan_type: _pwsPlan, payment_method: _pwsTab,
-                amount: amount, reference_number: ref, status: 'pending'
+                amount: amount, reference_number: ref, status: 'pending', user_email: u.email
             });
             if (error) {
                 alert('Error: ' + error.message);
