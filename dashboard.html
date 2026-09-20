@@ -5342,8 +5342,8 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         };
 
         window.pwsSubmitPayment = async function() {
-            // Activar NOWPayments para Binance en AMBOS planes ($0.99 y $10)
-            const isAutoCrypto = (_pwsTab === 'binance');
+            // NOWPayments solo soporta automatización para el plan Anual ($10) por los mínimos de red
+            const isAutoCrypto = (_pwsTab === 'binance' && _pwsPlan === 'yearly');
             const ref = isAutoCrypto ? 'NOWPAYMENTS_PENDING' : document.getElementById('pwsRefInput').value.trim();
             const refInput = document.getElementById('pwsRefInput');
             
