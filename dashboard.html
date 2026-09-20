@@ -3495,35 +3495,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // 3. Si es Binance, llamar a NOWPayments y redirigir al checkout seguro
-            try {
-                const response = await fetch('/api/create_payment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        plan_type: currentPlan,
-                        amount: amount,
-                        user_id: user.id,
-                        user_email: user.email,
-                        payment_id: paymentData.id
-                    })
-                });
+            // 3. Si es Binance Y es el plan anual, llamar a NOWPayments
+            if (currentMethod === 'binance' && currentPlan === 'yearly') {
+                try {
+                    const response = await fetch('/api/create_payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            plan_type: currentPlan,
+                            amount: amount,
+                            user_id: user.id,
+                            user_email: user.email,
+                            payment_id: paymentData.id
+                        })
+                    });
 
-                const data = await response.json();
+                    const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al generar link de pago');
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Error al generar link de pago');
+                    }
+
+                    // Redirigir a la pasarela de NOWPayments
+                    window.location.href = data.invoice_url;
+                    return;
+
+                } catch (err) {
+                    console.error(err);
+                    alert("Ocurrió un error al conectar con la pasarela de criptomonedas. Intenta de nuevo.");
+                    btn.textContent = "Pagar con Binance";
+                    btn.disabled = false;
+                    return;
                 }
-
-                // Redirigir a la pasarela de NOWPayments
-                window.location.href = data.invoice_url;
-
-            } catch (err) {
-                console.error(err);
-                alert("Ocurrió un error al conectar con la pasarela de criptomonedas. Intenta de nuevo.");
-                btn.textContent = "Pagar con Binance";
-                btn.disabled = false;
             }
+
+            // 4. Si es pago móvil o Binance Mensual ($0.99), mostrar pantalla de éxito manual
+            document.getElementById('pw-checkout').style.display = 'none';
+            document.getElementById('pw-success').style.display = 'block';
         };
 
 
