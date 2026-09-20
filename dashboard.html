@@ -5485,6 +5485,9 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('pwsCheckout').style.display = 'none';
             document.getElementById('pwsPending').style.display  = 'block';
             document.getElementById('pwsContinueBtn').style.display = 'block';
+            document.getElementById("pwsPendingTitle").textContent = "¡Pago en Revisión!";
+            document.getElementById("pwsPendingDesc").textContent = "Gabo verificará la transferencia manual y activará tu acceso en las próximas horas.";
+            document.getElementById("pwsCancelBtn").style.display = "none";
         };
 
         
