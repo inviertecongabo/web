@@ -2078,26 +2078,33 @@
                                 <div class="pws-plan" id="pwsPlanSemi" onclick="pwsSelectPlan('semi')">
                                     <div class="pws-plan-name">Semestral <span class="pws-plan-badge" style="background:#3b82f6; color:#ffffff;">Popular</span></div>
                                     <div class="pws-plan-price">$5</div>
-                                    <div class="pws-plan-desc">6 meses</div>
+                                    <div class="pws-plan-desc">6 meses<br><span style="color:#94a3b8; font-size:0.6rem;">(~$0.83/mes)</span></div>
                                 </div>
                                 <div class="pws-plan selected" id="pwsPlanYearly" onclick="pwsSelectPlan('yearly')">
                                     <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 15%</span></div>
                                     <div class="pws-plan-price">$10</div>
-                                    <div class="pws-plan-desc">365 días completos</div>
+                                    <div class="pws-plan-desc">365 días<br><span style="color:#94a3b8; font-size:0.6rem;">(~$0.83/mes)</span></div>
                                 </div>
                             </div>
 
                             <div class="pws-tabs">
-                                <div class="pws-tab active" id="pwsTabBinance" onclick="pwsSelectTab('binance')">Binance Pay</div>
+                                <div class="pws-tab active" id="pwsTabBinance" onclick="pwsSelectTab('binance')">Binance Pay (Manual)</div>
                                 <div class="pws-tab" id="pwsTabCrypto" onclick="pwsSelectTab('crypto')">⚡ Cripto (Auto)</div>
-                                <div class="pws-tab" id="pwsTabPagomovil" onclick="pwsSelectTab('pagomovil')">Pago Móvil</div>
+                                <div class="pws-tab" id="pwsTabPagomovil" onclick="pwsSelectTab('pagomovil')">Pago Móvil (Manual)</div>
                             </div>
 
                             <div id="pwsDataBinance" class="pws-data">
                                 <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$10 USDT</strong> a:</p>
+                                <div class="pws-row" style="margin-bottom: 8px;">
+                                    <div>
+                                        <span class="pws-lbl">Binance Pay ID (Recomendado)</span>
+                                        <span class="pws-val pws-val-mono">30107924</span>
+                                    </div>
+                                    <button class="pws-copy" onclick="pwsCopy('30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                </div>
                                 <div class="pws-row">
                                     <div>
-                                        <span class="pws-lbl">Usuario / Pay ID</span>
+                                        <span class="pws-lbl">O usa el alias / correo</span>
                                         <span class="pws-val pws-val-mono">Gabito020</span>
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('Gabito020',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
@@ -2162,8 +2169,9 @@
 
                             </div>
 
-                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)">
-                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()">Reportar Pago</button>
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)" oninput="pwsCheckRefInput()">
+                            <p id="pwsRefHelp" style="font-size: 0.7rem; color: #64748b; margin: -10px 0 16px 4px; text-align: left;">ℹ️ Lo encuentras en los detalles de tu transacción</p>
+                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()" disabled style="opacity: 0.5; cursor: not-allowed;">Reportar Pago</button>
                         </div>
 
                         <div id="pwsPending" class="pws-pending">
@@ -5172,17 +5180,17 @@ document.getElementById('toolsBottomSheetOverlay').addEventListener('click', clo
         .pws-subtitle { font-size: 0.85rem; color: #8892b0; margin: 0 0 16px; line-height: 1.4; }
         
         .pws-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-        .pws-plan { display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .pws-plan { display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px 8px 12px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; }
         .pws-plan:hover { border-color: rgba(240,185,11,0.3); background: rgba(255,255,255,0.04); transform: translateY(-2px); }
         .pws-plan.selected { border-color: #F0B90B; background: linear-gradient(180deg, rgba(240,185,11,0.08) 0%, rgba(240,185,11,0.02) 100%); box-shadow: 0 8px 20px rgba(240,185,11,0.1); }
-        .pws-plan.selected::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #F0B90B; }
+        .pws-plan.selected::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #F0B90B; border-radius: 12px 12px 0 0; }
         .pws-plan-name { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 6px; }
         .pws-plan-price { font-size: 1.25rem; font-weight: 900; color: #F0B90B; letter-spacing: -0.5px; }
-        .pws-plan-desc { font-size: 0.7rem; color: #64748b; margin-top: 2px; font-weight: 500; }
-        .pws-plan-badge { position: absolute; top: -1px; right: 50%; transform: translateX(50%); background: #F0B90B; color: #000; padding: 2px 10px; border-radius: 0 0 6px 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
+        .pws-plan-desc { font-size: 0.7rem; color: #64748b; margin-top: 2px; font-weight: 500; line-height: 1.3; }
+        .pws-plan-badge { position: absolute; top: -10px; right: 50%; transform: translateX(50%); background: #F0B90B; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         
         .pws-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: rgba(0,0,0,0.4); padding: 4px; border-radius: 10px; position: relative; }
-        .pws-tab { flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; font-weight: 700; color: #64748b; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; z-index: 1; }
+        .pws-tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.65); cursor: pointer; border-radius: 8px; transition: all 0.2s ease; z-index: 1; }
         .pws-tab:hover { color: #cbd5e1; }
         .pws-tab.active { background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         
@@ -5355,29 +5363,56 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('pwsDataPagomovil').style.display = tab === 'pagomovil'  ? 'block' : 'none';
             
             const refInput = document.getElementById('pwsRefInput');
+            const refHelp = document.getElementById('pwsRefHelp');
             
             if (tab === 'crypto') {
                 // Ocultar referencia y plan mensual
                 refInput.style.display = 'none';
+                refHelp.style.display = 'none';
                 document.getElementById('pwsPlanMonthly').style.display = 'none';
                 document.getElementById('pwsPlanMonthly').style.opacity = '0.3';
                 if(_pwsPlan === 'monthly') pwsSelectPlan('semi');
             } else {
                 refInput.style.display = 'block';
+                refHelp.style.display = 'block';
                 document.getElementById('pwsPlanMonthly').style.display = 'flex';
                 document.getElementById('pwsPlanMonthly').style.opacity = '1';
                 if(!refInput.classList.contains('error')) {
                     refInput.placeholder = tab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
+                    refHelp.innerHTML = tab === 'pagomovil' ? 'ℹ️ Últimos dígitos de la transferencia' : 'ℹ️ Lo encuentras en los detalles de tu transacción en Binance Pay';
                 }
             }
+            pwsCheckRefInput();
         };
 
-                window.pwsCopy = function(val, btn) {
+        window.pwsCheckRefInput = function() {
+            const btn = document.getElementById('pwsSubmitBtn');
+            if (_pwsTab === 'crypto') {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+                btn.textContent = 'Pagar con Cripto';
+                return;
+            }
+            
+            const val = document.getElementById('pwsRefInput').value.trim();
+            if (val.length >= 4) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+            btn.textContent = 'Reportar Pago';
+        };
+
+        window.pwsCopy = function(val, btn) {
             navigator.clipboard.writeText(val);
             const orig = btn.innerHTML;
-            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
-            btn.style.color = '#F0B90B';
-            setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
+            btn.innerHTML = '<span style="font-size:0.75rem; color:#F0B90B; font-weight:700;">¡Copiado!</span>';
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
         };
 
                 window.pwsToggleQR = function(id) {
@@ -5561,8 +5596,12 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('botConfigPanel').style.display = 'block'; if(window.goToBotStep) window.goToBotStep('api');
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
+        window.pwsInit = function() {
             pwsCheckRefInput();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            pwsInit();
         });
         // ── End GaboBot Payment Step JS ──
 </script>
