@@ -2098,13 +2098,13 @@
                                 <div class="pws-row" style="margin-bottom: 8px;">
                                     <div>
                                         <span class="pws-lbl">Binance Pay ID (Recomendado)</span>
-                                        <span class="pws-val pws-val-mono">30107924</span>
+                                        <span class="pws-val pws-val-mono">108659172</span>
                                     </div>
-                                    <button class="pws-copy" onclick="pwsCopy('30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                    <button class="pws-copy" onclick="pwsCopy('108659172',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <div class="pws-row">
                                     <div>
-                                        <span class="pws-lbl">O usa el alias / correo</span>
+                                        <span class="pws-lbl">O usa el alias</span>
                                         <span class="pws-val pws-val-mono">Gabito020</span>
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('Gabito020',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
@@ -2169,8 +2169,7 @@
 
                             </div>
 
-                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)" oninput="pwsCheckRefInput()">
-                            <p id="pwsRefHelp" style="font-size: 0.7rem; color: #64748b; margin: -10px 0 16px 4px; text-align: left;">ℹ️ Lo encuentras en los detalles de tu transacción</p>
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)" oninput="pwsCheckRefInput()" style="margin-bottom: 16px;">
                             <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()" disabled style="opacity: 0.5; cursor: not-allowed;">Reportar Pago</button>
                         </div>
 
@@ -5363,23 +5362,19 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('pwsDataPagomovil').style.display = tab === 'pagomovil'  ? 'block' : 'none';
             
             const refInput = document.getElementById('pwsRefInput');
-            const refHelp = document.getElementById('pwsRefHelp');
             
             if (tab === 'crypto') {
                 // Ocultar referencia y plan mensual
                 refInput.style.display = 'none';
-                refHelp.style.display = 'none';
                 document.getElementById('pwsPlanMonthly').style.display = 'none';
                 document.getElementById('pwsPlanMonthly').style.opacity = '0.3';
                 if(_pwsPlan === 'monthly') pwsSelectPlan('semi');
             } else {
                 refInput.style.display = 'block';
-                refHelp.style.display = 'block';
                 document.getElementById('pwsPlanMonthly').style.display = 'flex';
                 document.getElementById('pwsPlanMonthly').style.opacity = '1';
                 if(!refInput.classList.contains('error')) {
                     refInput.placeholder = tab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
-                    refHelp.innerHTML = tab === 'pagomovil' ? 'ℹ️ Últimos dígitos de la transferencia' : 'ℹ️ Lo encuentras en los detalles de tu transacción en Binance Pay';
                 }
             }
             pwsCheckRefInput();
