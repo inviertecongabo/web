@@ -3454,19 +3454,24 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         window.submitPayment = async function() {
-            const ref = document.getElementById('payReference').value.trim();
-            if(!ref) {
-                alert("Por favor, ingresa el número de referencia de tu transferencia.");
-                return;
-            }
-            
             const btn = document.getElementById('btnReportPay');
-            btn.textContent = "Enviando...";
+            btn.textContent = "Procesando...";
             btn.disabled = true;
             
             const amount = currentPlan === 'monthly' ? 0.99 : 10;
             
-            const { error } = await sb.from('payments').insert({
+            // Si es Binance, no necesitamos referencia todavía
+            const ref = currentMethod === 'binance' ? 'NOWPAYMENTS_PENDING' : document.getElementById('payReference').value.trim();
+            
+            if(currentMethod !== 'binance' && !ref) {
+                alert("Por favor, ingresa el número de referencia de tu transferencia.");
+                btn.textContent = "Reportar Pago";
+                btn.disabled = false;
+                return;
+            }
+            
+            // 1. Insertar el pago en Supabase como pending
+            const { data: paymentData, error } = await sb.from('payments').insert({
                 user_id: user.id,
                 plan_type: currentPlan,
                 payment_method: currentMethod,
@@ -3474,15 +3479,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 reference_number: ref,
                 status: 'pending',
                 user_email: user.email
-            });
+            }).select().single();
             
             if(error) {
-                alert("Hubo un error al enviar el reporte: " + error.message);
-                btn.textContent = "Reportar Pago";
+                alert("Hubo un error al procesar la solicitud: " + error.message);
+                btn.textContent = "Pagar";
                 btn.disabled = false;
-            } else {
+                return;
+            }
+
+            // 2. Si es pago móvil, mostrar éxito manual
+            if (currentMethod !== 'binance') {
                 document.getElementById('pw-checkout').style.display = 'none';
                 document.getElementById('pw-success').style.display = 'block';
+                return;
+            }
+
+            // 3. Si es Binance, llamar a NOWPayments y redirigir al checkout seguro
+            try {
+                const response = await fetch('/api/create_payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plan_type: currentPlan,
+                        amount: amount,
+                        user_id: user.id,
+                        user_email: user.email,
+                        payment_id: paymentData.id
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al generar link de pago');
+                }
+
+                // Redirigir a la pasarela de NOWPayments
+                window.location.href = data.invoice_url;
+
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error al conectar con la pasarela de criptomonedas. Intenta de nuevo.");
+                btn.textContent = "Pagar con Binance";
+                btn.disabled = false;
             }
         };
 
