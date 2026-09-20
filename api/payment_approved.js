@@ -103,7 +103,7 @@ export default async function handler(req, res) {
 
   try {
     const payloadReq = {
-      from: 'GaboBot <onboarding@resend.dev>',
+      from: 'GaboBot <gabobot@inviertecongabo.com>',
       to: [email],
       subject: '¡Pago Aprobado! Ya puedes usar GaboBot ✅',
       html: htmlContent
