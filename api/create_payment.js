@@ -13,7 +13,6 @@ export default async function handler(req, res) {
     const payload = {
       price_amount: amount,
       price_currency: 'usd',
-      pay_currency: 'usdt', // Suggests USDT by default
       order_id: payment_id,
       order_description: `GaboBot Membership - ${plan_type}`,
       ipn_callback_url: 'https://www.inviertecongabo.com/api/nowpayments_webhook',
