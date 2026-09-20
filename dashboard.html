@@ -2081,9 +2081,9 @@
                                     <div class="pws-plan-desc">6 meses<br><span style="color:#94a3b8; font-size:0.6rem;">(~$0.83/mes)</span></div>
                                 </div>
                                 <div class="pws-plan selected" id="pwsPlanYearly" onclick="pwsSelectPlan('yearly')">
-                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 15%</span></div>
-                                    <div class="pws-plan-price">$10</div>
-                                    <div class="pws-plan-desc">365 días<br><span style="color:#94a3b8; font-size:0.6rem;">(~$0.83/mes)</span></div>
+                                    <div class="pws-plan-name">Anual <span class="pws-plan-badge">Ahorra 25%</span></div>
+                                    <div class="pws-plan-price">$9</div>
+                                    <div class="pws-plan-desc">365 días<br><span style="color:#94a3b8; font-size:0.6rem;">(~$0.75/mes)</span></div>
                                 </div>
                             </div>
 
@@ -2094,7 +2094,7 @@
                             </div>
 
                             <div id="pwsDataBinance" class="pws-data">
-                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$10 USDT</strong> a:</p>
+                                <p class="pws-hint">Transfiere <strong id="pwsPriceBinance" style="color:#ddd;">$9 USDT</strong> a:</p>
                                 <div class="pws-row" style="margin-bottom: 8px;">
                                     <div>
                                         <span class="pws-lbl">Binance Pay ID (Recomendado)</span>
@@ -2139,7 +2139,7 @@
                             </div>
 
                             <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
-                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$10</strong> según la tasa BCV del día a:</p>
+                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$9</strong> según la tasa BCV del día a:</p>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Banco</span>
@@ -5343,7 +5343,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             document.getElementById('pwsPlanSemi').classList.toggle('selected', plan === 'semi');
             document.getElementById('pwsPlanYearly').classList.toggle('selected', plan === 'yearly');
             
-            let p = '$10';
+            let p = '$9';
             if(plan === 'monthly') p = '$0.99';
             if(plan === 'semi') p = '$5';
             
@@ -5440,7 +5440,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             const btn = document.getElementById('pwsSubmitBtn');
             btn.textContent = 'Procesando...'; btn.disabled = true;
             
-            let amount = 10;
+            let amount = 9;
             if (_pwsPlan === 'monthly') amount = 0.99;
             if (_pwsPlan === 'semi') amount = 5;
             
