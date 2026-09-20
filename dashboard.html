@@ -5018,6 +5018,23 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
 
+    <div id="cancelModal" class="custom-modal-overlay">
+        <div class="custom-modal">
+            <div class="custom-modal-icon" style="background: rgba(239, 68, 68, 0.1);">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            </div>
+            <h3 class="custom-modal-title">¿Cancelar intento de pago?</h3>
+            <p class="custom-modal-desc">Estás a punto de descartar tu factura de criptomonedas y volver a la selección de planes.</p>
+            <div class="custom-modal-alert" style="background: rgba(239, 68, 68, 0.05); border-left-color: #ef4444; color: #cbd5e1;">
+                <strong>⚠️ Advertencia:</strong> Solo haz esto si <b>NO</b> enviaste los fondos a la dirección de NOWPayments. Si ya los enviaste, no canceles y espera a que se confirme.
+            </div>
+            <div style="display:flex; gap: 10px; margin-top:20px;">
+                <button class="custom-modal-btn" style="background: transparent; color: #888; border: 1px solid #333;" onclick="document.getElementById('cancelModal').classList.remove('show')">Regresar</button>
+                <button class="custom-modal-btn" id="pwsConfirmCancelBtn" style="background: #ef4444; color: #fff;" onclick="pwsConfirmCancel()">Sí, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 
@@ -5433,14 +5450,29 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             }
         };
 
-        window.pwsCancelPending = async function() {
-            if(!confirm("¿Estás seguro que quieres cancelar este intento de pago cripto? Solo hazlo si NO enviaste los fondos a la dirección de NOWPayments.")) return;
-            const btn = document.getElementById('pwsCancelBtn');
-            btn.textContent = 'Cancelando...'; btn.disabled = true;
-            
-            const { data: { user: u } } = await sb.auth.getUser();
-            await sb.from('payments').update({ status: 'cancelled' }).eq('user_id', u.id).eq('status', 'pending').eq('payment_method', 'crypto');
-            location.reload();
+        window.pwsCancelPending = function() {
+            document.getElementById('cancelModal').classList.add('show');
+        };
+
+        window.pwsConfirmCancel = async function() {
+            try {
+                const btn = document.getElementById('pwsConfirmCancelBtn');
+                btn.textContent = 'Cancelando...'; btn.disabled = true;
+                
+                const { data: { user: u } } = await sb.auth.getUser();
+                if (!u) throw new Error("No user found");
+                
+                const { error } = await sb.from('payments').update({ status: 'cancelled' }).eq('user_id', u.id).eq('status', 'pending').eq('payment_method', 'crypto');
+                if (error) throw error;
+                
+                location.reload();
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error al intentar cancelar.");
+                document.getElementById('cancelModal').classList.remove('show');
+                const btn = document.getElementById('pwsConfirmCancelBtn');
+                btn.textContent = 'Sí, Cancelar'; btn.disabled = false;
+            }
         };
 
         window.pwsSubmitPayment = async function() {
