@@ -2109,7 +2109,7 @@
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('Gabito020',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
-                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrBinanceContainer')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
+                                <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrBinanceContainer', this)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
                                 
                                 <div id="pwsQrBinanceContainer" style="display:none; margin-top:16px; animation: fadeIn 0.3s ease;">
                                     <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; text-align: left;">
@@ -5410,12 +5410,14 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             setTimeout(() => { btn.innerHTML = orig; }, 2000);
         };
 
-                window.pwsToggleQR = function(id) {
+        window.pwsToggleQR = function(id, btn) {
             const el = document.getElementById(id);
             if (el.style.display === 'none') {
                 el.style.display = 'block';
+                if(btn) btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg> Ocultar código QR';
             } else {
                 el.style.display = 'none';
+                if(btn) btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR';
             }
         };
 
