@@ -2170,7 +2170,7 @@
                             </div>
 
                             <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)" oninput="pwsCheckRefInput()" style="margin-bottom: 16px;">
-                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()" disabled style="opacity: 0.5; cursor: not-allowed;">Reportar Pago</button>
+                            <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()" style="opacity: 0.5; cursor: not-allowed;">Reportar Pago</button>
                         </div>
 
                         <div id="pwsPending" class="pws-pending">
@@ -5421,11 +5421,9 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             
             const val = document.getElementById('pwsRefInput').value.trim();
             if (val.length >= 4) {
-                btn.disabled = false;
                 btn.style.opacity = '1';
                 btn.style.cursor = 'pointer';
             } else {
-                btn.disabled = true;
                 btn.style.opacity = '0.5';
                 btn.style.cursor = 'not-allowed';
             }
@@ -5481,9 +5479,10 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             const ref = isAutoCrypto ? 'NOWPAYMENTS_PENDING' : document.getElementById('pwsRefInput').value.trim();
             const refInput = document.getElementById('pwsRefInput');
             
-            if (!ref && !isAutoCrypto) { 
+            if (!isAutoCrypto && ref.length < 4) { 
                 refInput.classList.add('error');
-                refInput.placeholder = '⚠️ Debes ingresar el número de referencia';
+                refInput.value = '';
+                refInput.placeholder = '⚠️ Ingresa una referencia válida (mín. 4 dígitos)';
                 setTimeout(() => {
                     refInput.classList.remove('error');
                     refInput.placeholder = _pwsTab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
