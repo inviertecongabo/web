@@ -2065,6 +2065,10 @@
                     <div class="pws-body">
 
                         <div id="pwsCheckout">
+                            <div id="pwsExpiredBanner" style="display:none; margin-bottom: 20px; padding: 12px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px; text-align: left;">
+                                <h4 style="margin: 0 0 4px; color: #ef4444; font-size: 0.95rem;">Tu membresía ha expirado</h4>
+                                <p style="margin: 0; color: #fca5a5; font-size: 0.85rem;">Renueva tu plan hoy mismo para que GaboBot continúe operando de forma automática en tu cuenta.</p>
+                            </div>
                             <div class="pws-badge">Paso 2 — Activar Acceso</div>
                             <h3 class="pws-title">Elige tu Plan</h3>
                             <p class="pws-subtitle">Para acceder a GaboBot elige un plan. Tus fondos permanecen 100% seguros en tu propia cuenta de Binance.</p>
@@ -4230,13 +4234,33 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.checkBotPaymentStatus = async function(uCheck) {
         let isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
+        let daysRemaining = 0;
+        let hasExpired = false;
+        
         if (!isPremium) {
-            const { data: approvedPays } = await sb.from('payments').select('id').eq('user_id', uCheck.id).eq('status', 'approved');
+            const { data: approvedPays } = await sb.from('payments').select('created_at, plan_type').eq('user_id', uCheck.id).eq('status', 'approved');
             if (approvedPays && approvedPays.length > 0) {
-                isPremium = true;
+                approvedPays.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const latestPay = approvedPays[0];
+                
+                const payDate = new Date(latestPay.created_at);
+                let durationDays = 30;
+                if (latestPay.plan_type === 'semi') durationDays = 180;
+                if (latestPay.plan_type === 'annual') durationDays = 365;
+                
+                const expirationDate = new Date(payDate.getTime() + (durationDays * 24 * 60 * 60 * 1000));
+                const now = new Date();
+                
+                if (now < expirationDate) {
+                    isPremium = true;
+                    daysRemaining = Math.ceil((expirationDate - now) / (1000 * 60 * 60 * 24));
+                } else {
+                    hasExpired = true;
+                }
             }
         }
         window.gaboUserIsPremium = isPremium;
+        window.gaboUserDaysRemaining = daysRemaining;
 
         if (isPremium) {
             document.getElementById("botOnboarding").style.display = "none";
@@ -4269,6 +4293,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById("pwsCheckout").style.display = "block";
                 document.getElementById("pwsPending").style.display = "none";
                 document.getElementById("pwsContinueBtn").style.display = "none";
+                if (hasExpired) {
+                    document.getElementById("pwsExpiredBanner").style.display = "block";
+                }
             }
         }
     };
