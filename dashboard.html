@@ -2169,7 +2169,7 @@
 
                             </div>
 
-                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden (Ej. 4510...)" oninput="pwsCheckRefInput()" style="margin-bottom: 16px;">
+                            <input type="text" id="pwsRefInput" class="pws-ref" placeholder="ID de la orden de Binance (Ej. 4519...)" oninput="pwsCheckRefInput()" style="margin-bottom: 16px;">
                             <button class="pws-submit" id="pwsSubmitBtn" onclick="pwsSubmitPayment()" style="opacity: 0.5; cursor: not-allowed;">Reportar Pago</button>
                         </div>
 
@@ -5403,7 +5403,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 document.getElementById('pwsPlanMonthly').style.display = 'flex';
                 document.getElementById('pwsPlanMonthly').style.opacity = '1';
                 if(!refInput.classList.contains('error')) {
-                    refInput.placeholder = tab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
+                    refInput.placeholder = tab === 'pagomovil' ? 'Últimos 4 o 6 dígitos, o referencia completa' : 'ID de la orden de Binance (Ej. 4519...)';
                 }
             }
             pwsCheckRefInput();
@@ -5485,7 +5485,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 refInput.placeholder = '⚠️ Ingresa una referencia válida (mín. 4 dígitos)';
                 setTimeout(() => {
                     refInput.classList.remove('error');
-                    refInput.placeholder = _pwsTab === 'pagomovil' ? 'Número de referencia de tu Pago Móvil' : 'ID de la orden (Ej. 4510...)';
+                    refInput.placeholder = _pwsTab === 'pagomovil' ? 'Últimos 4 o 6 dígitos, o referencia completa' : 'ID de la orden de Binance (Ej. 4519...)';
                 }, 3000);
                 return; 
             }
