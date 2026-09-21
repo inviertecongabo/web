@@ -568,13 +568,29 @@
                 window.location.href = "login.html";
                 return;
             }
-            
-            if (session.user.email !== ADMIN_EMAIL) {
-                alert("Acceso Denegado. Esta área es exclusiva para la cuenta administradora.");
-                window.location.href = "dashboard.html";
+
+            // Verificación REAL del lado del servidor
+            try {
+                const checkRes = await fetch('/api/check_admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    }
+                });
+                const checkData = await checkRes.json();
+
+                if (!checkRes.ok || !checkData.authorized) {
+                    alert("Acceso Denegado. Esta área es exclusiva para la cuenta administradora.");
+                    window.location.href = "/dashboard";
+                    return;
+                }
+            } catch (e) {
+                alert("Error de verificación. Intenta de nuevo.");
+                window.location.href = "/dashboard";
                 return;
             }
-            
+
             // Acceso Concedido
             document.getElementById("adminEmailDisplay").textContent = session.user.email;
             document.getElementById("authOverlay").style.display = "none";

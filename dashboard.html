@@ -4484,9 +4484,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = "Verificando llaves...";
         btn.disabled = true;
         try {
+            const { data: { session: verifySession } } = await sb.auth.getSession();
             const verifyRes = await fetch('/api/verify_binance', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${verifySession?.access_token || ''}`
+                },
                 body: JSON.stringify({ apiKey, secretKey })
             });
             const verifyData = await verifyRes.json();
