@@ -4477,14 +4477,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         if (frequency === "custom" && (!customDays || parseInt(customDays) < 1)) {
-
-            alert("Debes ingresar un nÃºmero válido de días para la frecuencia personalizada.");
-
+            alert("Debes ingresar un número válido de días para la frecuencia personalizada.");
             return;
-
         }
 
 
+
+        btn.textContent = "Verificando...";
+        btn.disabled = true;
+        try {
+            const verifyRes = await fetch('/api/verify_binance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ apiKey, secretKey })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (!verifyRes.ok || !verifyData.valid) {
+                btn.textContent = "Guardar Configuración";
+                btn.disabled = false;
+                const keyInput = document.getElementById('botApiKey');
+                keyInput.classList.add('error');
+                setTimeout(() => keyInput.classList.remove('error'), 3000);
+                window.showToast("Error de Llaves API", verifyData.error || "Las llaves son incorrectas.", "error");
+                return;
+            }
+        } catch (err) {
+            btn.textContent = "Guardar Configuración";
+            btn.disabled = false;
+            window.showToast("Error de conexión", "Error al verificar con el servidor.", "error");
+            return;
+        }
+        btn.textContent = "Guardar Configuración";
+        btn.disabled = false;
 
         require2FA(async () => {
 
