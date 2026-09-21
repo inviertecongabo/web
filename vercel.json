@@ -1,5 +1,29 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "inviertecongabo.online"
+        }
+      ],
+      "destination": "https://www.inviertecongabo.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.inviertecongabo.online"
+        }
+      ],
+      "destination": "https://www.inviertecongabo.com/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*).html",
