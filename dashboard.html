@@ -5653,6 +5653,13 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             pwsCheckRefInput();
         };
 
+        // Forzar recarga si el usuario usa el botón "Atrás" del navegador (evita quedar atrapado en bfcache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             pwsInit();
         });
