@@ -118,7 +118,7 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 24px;
             margin-bottom: 40px;
         }
@@ -141,6 +141,7 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            flex-shrink: 0;
         }
         .stat-info h4 { margin: 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
         .stat-info .stat-value { margin: 4px 0 0; font-size: 1.8rem; font-family: var(--font-heading); font-weight: 700; color: var(--text-primary); }
@@ -191,6 +192,7 @@
         }
         .badge.active { background: rgba(16,185,129,0.15); color: #10B981; }
         .badge.inactive { background: rgba(239,68,68,0.15); color: #EF4444; }
+        .badge.neutral { background: rgba(148,163,184,0.15); color: #94A3B8; }
 
         /* Forms */
         .form-group { margin-bottom: 20px; }
@@ -237,6 +239,71 @@
         .msg { padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 24px; display: none; font-size: 0.9rem; font-weight: 500; }
         .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         .msg.err { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+        /* Extend Modal */
+        #extendModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        #extendModal.show { display: flex; }
+        .extend-modal-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .extend-modal-box h3 {
+            font-family: var(--font-heading);
+            margin: 0 0 8px;
+            color: var(--text-primary);
+        }
+        .extend-modal-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0 0 24px;
+        }
+        .extend-modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-extend {
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: rgba(240,185,11,0.15);
+            color: var(--accent);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+        .btn-extend:hover { background: rgba(240,185,11,0.3); }
+        .btn-extend-cancel {
+            padding: 12px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
+        }
+        .btn-extend-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
     </style>
 </head>
 <body>
@@ -304,6 +371,26 @@
                         <div class="stat-value" id="statVideos">0</div>
                     </div>
                 </div>
+                <!-- IMPROVEMENT 1: Clientes Pagando (Activos) -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(16,185,129,0.15); color: #10B981;">
+                        <i class="ph-fill ph-currency-dollar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Clientes Pagando</h4>
+                        <div class="stat-value" id="statPaying">0</div>
+                    </div>
+                </div>
+                <!-- IMPROVEMENT 2: Vencen esta Semana -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(239,68,68,0.15); color: #EF4444;">
+                        <i class="ph-fill ph-warning"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Vencen esta Semana</h4>
+                        <div class="stat-value" id="statExpiringSoon">0</div>
+                    </div>
+                </div>
             </div>
             
             <h3 style="margin-top: 40px; margin-bottom: 20px;">Actividad Reciente (Últimos Registros)</h3>
@@ -332,12 +419,14 @@
                         <th>Cliente</th>
                         <th>Email</th>
                         <th>Estado GaboBot</th>
+                        <!-- IMPROVEMENT 3: New Membresía column -->
+                        <th>Membresía</th>
                         <th>Fecha de Registro</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="allUsersTable">
-                    <tr><td colspan="4" style="text-align:center;">Cargando perfiles...</td></tr>
+                    <tr><td colspan="6" style="text-align:center;">Cargando perfiles...</td></tr>
                 </tbody>
             </table>
         </section>
@@ -410,12 +499,68 @@
 
     </main>
 
+    <!-- IMPROVEMENT 4: Extend Membership Modal -->
+    <div id="extendModal">
+        <div class="extend-modal-box">
+            <h3><i class="ph ph-calendar-plus" style="color:var(--accent); margin-right:8px;"></i>Extender Membresía</h3>
+            <p id="extendModalSubtitle">Selecciona cuántos días agregar al usuario.</p>
+            <div class="extend-modal-actions">
+                <button class="btn-extend" onclick="insertExtension('monthly')">
+                    <i class="ph ph-plus-circle"></i> +30 días (Mensual)
+                </button>
+                <button class="btn-extend" onclick="insertExtension('semiannual')">
+                    <i class="ph ph-plus-circle"></i> +180 días (Semestral)
+                </button>
+                <button class="btn-extend" onclick="insertExtension('annual')">
+                    <i class="ph ph-plus-circle"></i> +365 días (Anual)
+                </button>
+                <button class="btn-extend-cancel" onclick="hideExtendModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
         const SUPABASE_KEY = "sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa";
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const ADMIN_EMAIL = "aibersonmontilla22@gmail.com";
+
+        // Plan duration map (days)
+        const PLAN_DAYS = {
+            'monthly': 30,
+            'semiannual': 180,
+            'annual': 365
+        };
+
+        // Helper: get plan duration in days
+        function getPlanDays(plan) {
+            return PLAN_DAYS[plan] || 30;
+        }
+
+        // Helper: get membership status object for a user given their payments
+        function getMembershipStatus(userId, userEmail, payments) {
+            // Find all approved payments for this user (by user_id or email)
+            const userPayments = payments.filter(p =>
+                p.user_id === userId || p.email === userEmail
+            );
+            if (userPayments.length === 0) return { type: 'none' };
+
+            // Get the most recent approved payment
+            const latest = userPayments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+            const planDays = getPlanDays(latest.plan);
+            const createdAt = new Date(latest.created_at);
+            const expiresAt = new Date(createdAt.getTime() + planDays * 24 * 60 * 60 * 1000);
+            const now = new Date();
+            const msRemaining = expiresAt - now;
+            const daysRemaining = Math.ceil(msRemaining / (24 * 60 * 60 * 1000));
+
+            if (daysRemaining > 0) {
+                return { type: 'active', daysRemaining, expiresAt };
+            } else {
+                return { type: 'expired', expiresAt };
+            }
+        }
 
         async function initAdmin() {
             const { data: { session } } = await sb.auth.getSession();
@@ -467,9 +612,15 @@
             // 2. Cargar Videos
             const { data: videos, error: errV } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
             if (errV) console.error("Error cargando videos:", errV);
-            
+
+            // 3. Cargar Pagos aprobados
+            const { data: payments, error: errP } = await sb.from('payments').select('*').eq('status', 'approved');
+            if (errP) console.error("Error cargando pagos:", errP);
+
+            const approvedPayments = payments || [];
+
             if(users) {
-                renderUsers(users);
+                renderUsers(users, approvedPayments);
                 document.getElementById("statUsers").textContent = users.length;
                 document.getElementById("statBots").textContent = users.filter(u => u.bot_active).length;
             }
@@ -478,16 +629,54 @@
                 renderVideos(videos);
                 document.getElementById("statVideos").textContent = videos.length;
             }
+
+            // Calculate financial stats from payments
+            const now = new Date();
+            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+
+            // Track unique user_ids for active/expiring calculations
+            const seenUserIds = new Set();
+            let activeCount = 0;
+            let expiringSoonCount = 0;
+
+            // Group payments by user_id (or email as fallback), keep most recent
+            const latestByUser = {};
+            approvedPayments.forEach(p => {
+                const key = p.user_id || p.email;
+                if (!key) return;
+                if (!latestByUser[key] || new Date(p.created_at) > new Date(latestByUser[key].created_at)) {
+                    latestByUser[key] = p;
+                }
+            });
+
+            Object.values(latestByUser).forEach(p => {
+                const planDays = getPlanDays(p.plan);
+                const createdAt = new Date(p.created_at);
+                const expiresAt = new Date(createdAt.getTime() + planDays * 24 * 60 * 60 * 1000);
+                const msRemaining = expiresAt - now;
+
+                if (msRemaining > 0) {
+                    activeCount++;
+                    if (msRemaining <= sevenDaysMs) {
+                        expiringSoonCount++;
+                    }
+                }
+            });
+
+            document.getElementById("statPaying").textContent = activeCount;
+            document.getElementById("statExpiringSoon").textContent = expiringSoonCount;
         }
 
-        function renderUsers(users) {
+        // IMPROVEMENT 3: renderUsers now accepts payments as second argument
+        function renderUsers(users, payments) {
+            payments = payments || [];
             const tbodyAll = document.getElementById("allUsersTable");
             const tbodyRecent = document.getElementById("recentUsersTable");
             tbodyAll.innerHTML = "";
             tbodyRecent.innerHTML = "";
             
             if(users.length === 0) {
-                tbodyAll.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
+                tbodyAll.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
                 tbodyRecent.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No hay usuarios registrados.</td></tr>";
                 return;
             }
@@ -500,6 +689,17 @@
                 if (u.role === 'admin') nameHtml += ` <span class="badge" style="background:var(--accent); color:#000; margin-left:8px; font-size:0.7rem;">ADMIN</span>`;
                 if (u.is_banned) nameHtml += ` <span class="badge inactive" style="margin-left:8px; font-size:0.7rem;">BLOQUEADO</span>`;
 
+                // IMPROVEMENT 3: Membership badge
+                const membership = getMembershipStatus(u.id, u.email, payments);
+                let membershipBadge;
+                if (membership.type === 'active') {
+                    membershipBadge = `<span class="badge active">Activa (${membership.daysRemaining}d)</span>`;
+                } else if (membership.type === 'expired') {
+                    membershipBadge = `<span class="badge inactive">Vencida</span>`;
+                } else {
+                    membershipBadge = `<span class="badge neutral">Sin pago</span>`;
+                }
+
                 // Botones de acción
                 const isMe = u.email === ADMIN_EMAIL;
                 const banBtn = isMe ? '' : `<button class="btn-icon-danger" style="${u.is_banned ? 'background:#10B981; color:#fff;' : ''}" onclick="toggleBan('${u.id}', ${u.is_banned})" title="${u.is_banned ? 'Desbloquear' : 'Bloquear'}">
@@ -510,14 +710,20 @@
                     <i class="ph ${u.role==='admin' ? 'ph-user-minus' : 'ph-crown'}"></i>
                 </button>`;
 
+                // IMPROVEMENT 4: Extend membership button
+                const extendBtn = `<button class="btn-icon-danger" style="background:rgba(240,185,11,0.15); color:var(--accent);" onclick="showExtendModal('${u.id}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.full_name || 'Usuario').replace(/'/g, "\\'")}')" title="Extender Membresía">
+                    <i class="ph ph-calendar-plus"></i>
+                </button>`;
+
                 // Tabla Principal
                 const trAll = document.createElement('tr');
                 trAll.innerHTML = `
                     <td>${nameHtml}</td>
                     <td style="color:var(--text-muted);">${u.email}</td>
                     <td>${botBadge}</td>
+                    <td>${membershipBadge}</td>
                     <td>${dateStr}</td>
-                    <td style="display:flex; gap:8px;">${banBtn} ${roleBtn}</td>
+                    <td style="display:flex; gap:8px;">${banBtn} ${roleBtn} ${extendBtn}</td>
                 `;
                 tbodyAll.appendChild(trAll);
                 
@@ -548,6 +754,54 @@
             if(error) alert("Error de base de datos: " + error.message);
             else loadDashboardData();
         }
+
+        // IMPROVEMENT 4: Extend Membership Modal Logic
+        let _extendUserId = null;
+        let _extendUserEmail = null;
+
+        function showExtendModal(userId, email, name) {
+            _extendUserId = userId;
+            _extendUserEmail = email;
+            document.getElementById('extendModalSubtitle').textContent = `Usuario: ${name} (${email})`;
+            document.getElementById('extendModal').classList.add('show');
+        }
+
+        function hideExtendModal() {
+            _extendUserId = null;
+            _extendUserEmail = null;
+            document.getElementById('extendModal').classList.remove('show');
+        }
+
+        async function insertExtension(plan) {
+            if (!_extendUserId || !_extendUserEmail) return;
+            
+            const planLabels = { monthly: '30 días', semiannual: '180 días', annual: '365 días' };
+            const planLabel = planLabels[plan] || plan;
+
+            const payload = {
+                user_id: _extendUserId,
+                email: _extendUserEmail,
+                plan: plan,
+                status: 'approved',
+                amount: 0,
+                reference: 'Extensión manual por admin',
+                created_at: new Date().toISOString()
+            };
+
+            const { error } = await sb.from('payments').insert([payload]);
+            if (error) {
+                alert("Error al extender membresía: " + error.message);
+            } else {
+                alert(`✅ Membresía extendida por ${planLabel} correctamente.`);
+                hideExtendModal();
+                loadDashboardData();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('extendModal').addEventListener('click', function(e) {
+            if (e.target === this) hideExtendModal();
+        });
 
         let allVideos = [];
         let editingVideoId = null;
