@@ -434,6 +434,33 @@
             </table>
         </section>
 
+        
+        <!-- PESTAÑA PAGOS -->
+        <section id="tab-pagos" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Pagos Pendientes</h2>
+                <p style="color:var(--text-muted); font-weight:normal; margin: 4px 0 0; font-size: 0.9rem;">Aprueba o rechaza transferencias manuales (Binance Pay / Pago Móvil).</p>
+            </div>
+            
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Método</th>
+                            <th>Plan</th>
+                            <th>Referencia</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingPaymentsTableBody">
+                        <tr><td colspan="6" style="text-align:center; padding: 20px; color:var(--text-muted);">Cargando pagos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <!-- PESTAÑA 3: CONTENIDO EDUCATIVO -->
         <section id="tab-content" class="section-card">
             <div class="section-header">
@@ -607,19 +634,24 @@
         function switchTab(tabId) {
             // Actualizar menú
             document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget && event.currentTarget.classList) {
+                event.currentTarget.classList.add('active');
+            } else {
+                if(tabId === 'pagos') document.getElementById('navPagos').classList.add('active');
+            }
             
             // Actualizar vista
             document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
+            const tabEl = document.getElementById('tab-' + tabId);
+            if (tabEl) tabEl.classList.add('active');
             
-            // Títulos
             const titles = {
                 'dashboard': 'Dashboard General',
                 'users': 'Directorio de Clientes',
-                'content': 'Gestión de Contenido'
+                'content': 'Gestión de Contenido',
+                'pagos': 'Pagos Pendientes'
             };
-            document.getElementById('pageTitle').textContent = titles[tabId];
+            if(titles[tabId]) document.getElementById('pageTitle').textContent = titles[tabId];
         }
 
         // Carga de Datos Principales
