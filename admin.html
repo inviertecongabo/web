@@ -631,6 +631,8 @@
 
             // 3. Cargar Pagos aprobados
             const { data: payments, error: errP } = await sb.from('payments').select('*').eq('status', 'approved');
+            const { data: pendingPayments } = await sb.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+            if (typeof renderPendingPayments === 'function') renderPendingPayments(pendingPayments || []);
             if (errP) console.error("Error cargando pagos:", errP);
 
             const approvedPayments = payments || [];
@@ -684,6 +686,71 @@
         }
 
         // IMPROVEMENT 3: renderUsers now accepts payments as second argument
+        
+        function renderPendingPayments(payments) {
+            const tbody = document.getElementById('pendingPaymentsTableBody');
+            if (!tbody) return;
+            if (!payments || payments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px; color:var(--text-muted);">No hay pagos pendientes en este momento.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            payments.forEach(p => {
+                const dateStr = new Date(p.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                const method = p.payment_method || 'Manual';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <strong>${p.email}</strong><br>
+                        <span style="font-size:12px; color:var(--text-muted);">$${p.amount} USDT</span>
+                    </td>
+                    <td><span class="badge" style="background:var(--accent-glow); color:var(--accent);">${method.toUpperCase()}</span></td>
+                    <td>${(p.plan||'').toUpperCase()}</td>
+                    <td><strong style="color:#FBBF24; font-family:monospace; font-size:14px;">${p.reference}</strong></td>
+                    <td>${dateStr}</td>
+                    <td style="display:flex; gap:8px;">
+                        <button class="btn-primary" style="padding: 6px 12px; font-size: 13px; border-radius: 4px; border:none; cursor:pointer;" onclick="approvePayment('${p.id}', '${p.email}')">✅ Aprobar</button>
+                        <button class="btn-icon-danger" style="padding: 6px 12px; font-size: 13px; border-radius: 4px; border:none; cursor:pointer; background:rgba(239,68,68,0.2); color:#EF4444;" onclick="rejectPayment('${p.id}')">❌ Rechazar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        async function approvePayment(paymentId, email) {
+            if(!confirm('¿Estás seguro de APROBAR este pago para ' + email + '? Esto habilitará su acceso al bot de forma inmediata.')) return;
+            const { error } = await sb.from('payments').update({ status: 'approved' }).eq('id', paymentId);
+            if(error) {
+                alert('Error al aprobar: ' + error.message);
+            } else {
+                alert('✅ Pago aprobado. El usuario ya tiene acceso.');
+                // Enviar correo de bienvenida al backend
+                try {
+                    await fetch('/api/payment_approved', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'UPDATE',
+                            record: { user_email: email }
+                        })
+                    });
+                } catch(e) {}
+                loadDashboardData();
+            }
+        }
+        
+        async function rejectPayment(paymentId) {
+            if(!confirm('¿Estás seguro de RECHAZAR este pago?')) return;
+            const { error } = await sb.from('payments').update({ status: 'rejected' }).eq('id', paymentId);
+            if(error) {
+                alert('Error al rechazar: ' + error.message);
+            } else {
+                alert('❌ Pago rechazado.');
+                loadDashboardData();
+            }
+        }
+
+
         function renderUsers(users, payments) {
             payments = payments || [];
             const tbodyAll = document.getElementById("allUsersTable");
