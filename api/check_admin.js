@@ -1,10 +1,10 @@
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = "https://uyrcsfsqzkywrgrjkvbr.supabase.co";
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const ADMIN_EMAIL = "aibersonmontilla22@gmail.com";
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
