@@ -586,7 +586,7 @@
                     return;
                 }
             } catch (e) {
-                alert("Error de verificación. Intenta de nuevo.");
+                alert("Error de verificación: " + e.message);
                 window.location.href = "/dashboard";
                 return;
             }
