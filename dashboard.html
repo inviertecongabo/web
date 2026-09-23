@@ -2669,7 +2669,10 @@
 
                                 </div>
 
-                                <button id="btnConfigMfa" class="btn-save" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); width: auto; padding: 8px 16px; font-size: 0.9rem;">Configurar</button>
+                                <div style="display:flex; gap:8px;">
+                                    <button id="btnConfigMfa" class="btn-save" style="background: transparent; border: 1px solid var(--accent); color: var(--accent); width: auto; padding: 8px 16px; font-size: 0.9rem;">Configurar</button>
+                                    <button id="btnRemoveMfa" class="btn-save" style="display:none; background: transparent; border: 1px solid #EF4444; color: #EF4444; width: auto; padding: 8px 16px; font-size: 0.9rem;">Desactivar</button>
+                                </div>
 
                             </div>
 
@@ -4805,15 +4808,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const isVerified = totpFactors.some(f => f.status === 'verified');
 
             if (isVerified) {
-
                 document.getElementById("mfaStatusText").textContent = "Configurado (Protegido)";
-
                 document.getElementById("mfaStatusText").style.color = "#10B981";
-
-                document.getElementById("btnConfigMfa").style.display = "none";
-
-                document.getElementById("mfaSetupBlock").style.display = "none";
-
+                if(document.getElementById("btnConfigMfa")) document.getElementById("btnConfigMfa").style.display = "none";
+                if(document.getElementById("mfaSetupBlock")) document.getElementById("mfaSetupBlock").style.display = "none";
+                if(document.getElementById("btnRemoveMfa")) document.getElementById("btnRemoveMfa").style.display = "block";
+                
+                const verifiedFactor = totpFactors.find(f => f.status === 'verified');
+                window.currentMfaFactorId = verifiedFactor.id;
+            } else {
+                document.getElementById("mfaStatusText").textContent = "No configurado";
+                document.getElementById("mfaStatusText").style.color = "#EF4444";
+                if(document.getElementById("btnConfigMfa")) document.getElementById("btnConfigMfa").style.display = "block";
+                if(document.getElementById("btnRemoveMfa")) document.getElementById("btnRemoveMfa").style.display = "none";
             }
 
         } catch (e) {}
@@ -4825,6 +4832,30 @@ document.addEventListener('DOMContentLoaded', () => {
     checkMfaStatus();
 
 
+
+    document.getElementById("btnRemoveMfa")?.addEventListener("click", async () => {
+        if(!confirm("¿Estás seguro de que quieres desactivar Google Authenticator? Tu cuenta será menos segura.")) return;
+        
+        await require2FA(async () => {
+            const btn = document.getElementById("btnRemoveMfa");
+            btn.textContent = "Desactivando...";
+            btn.disabled = true;
+            
+            try {
+                const { error } = await sb.auth.mfa.unenroll({ factorId: window.currentMfaFactorId });
+                if (error) throw error;
+                
+                window.showToast("¡Listo!", "Google Authenticator desactivado exitosamente.", "success");
+                checkMfaStatus();
+            } catch (err) {
+                console.error(err);
+                alert("Error al desactivar 2FA: " + err.message);
+            } finally {
+                btn.textContent = "Desactivar";
+                btn.disabled = false;
+            }
+        });
+    });
 
     document.getElementById("btnConfigMfa").addEventListener("click", async () => {
 
