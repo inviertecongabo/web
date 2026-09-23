@@ -17,7 +17,14 @@
         .legal-page { padding-top: 120px; padding-bottom: 60px; min-height: 80vh; }
         .legal-container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
         
-        .legal-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        
+        .legal-tabs-wrapper { position: relative; margin-bottom: 40px; }
+        .legal-tabs { display: flex; gap: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+        .legal-tabs::-webkit-scrollbar { display: none; }
+        .legal-tab { flex-shrink: 0; }
+        .scroll-arrow-right { position: absolute; right: 0; bottom: 17px; background: linear-gradient(to right, rgba(10,14,23,0) 0%, rgba(10,14,23,1) 40%); border: none; color: var(--accent); cursor: pointer; padding-left: 40px; padding-right: 4px; height: 35px; display: none; align-items: center; justify-content: flex-end; }
+        @media (max-width: 600px) { .scroll-arrow-right { display: flex !important; } } /* Force on small screens if JS is slow */
+
         .legal-tabs::-webkit-scrollbar { display: none; }
         .legal-tab { background: transparent; border: none; color: var(--text-muted); font-family: var(--font-heading); font-weight: 600; font-size: 1rem; cursor: pointer; padding: 8px 16px; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; }
         .legal-tab:hover { color: var(--text-primary); }
@@ -94,12 +101,17 @@
             <div class="section-tag" style="margin-bottom: 12px; display: inline-block;">Legal y Soporte</div>
             <h1 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 32px;">Centro de Ayuda</h1>
             
-            <div class="legal-tabs">
-                <button class="legal-tab active" data-target="faq-sec">Preguntas Frecuentes</button>
-                <button class="legal-tab" data-target="terms-sec">Términos y Condiciones</button>
-                <button class="legal-tab" data-target="privacy-sec">Política de Privacidad</button>
-                <button class="legal-tab" data-target="cookies-sec">Cookies</button>
-                <button class="legal-tab" data-target="bot-sec">Políticas de Uso (GaboBot)</button>
+            <div class="legal-tabs-wrapper">
+                <div class="legal-tabs" id="legalTabsContainer">
+                    <button class="legal-tab active" data-target="faq-sec">Preguntas Frecuentes</button>
+                    <button class="legal-tab" data-target="terms-sec">Términos y Condiciones</button>
+                    <button class="legal-tab" data-target="privacy-sec">Política de Privacidad</button>
+                    <button class="legal-tab" data-target="cookies-sec">Cookies</button>
+                    <button class="legal-tab" data-target="bot-sec">Políticas de Uso (GaboBot)</button>
+                </div>
+                <button class="scroll-arrow-right" id="scrollTabsRight" aria-label="Deslizar pestañas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
 
             <!-- Preguntas Frecuentes -->
@@ -356,6 +368,39 @@
 
     <!-- Script de interacciA3n base -->
     <script src="index.js"></script>
+
+    
+            <!-- Setup scroll arrow -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tabsContainer = document.getElementById('legalTabsContainer');
+                    const scrollRightBtn = document.getElementById('scrollTabsRight');
+                    
+                    if(tabsContainer && scrollRightBtn) {
+                        const checkScroll = () => {
+                            if (tabsContainer.scrollWidth > tabsContainer.clientWidth) {
+                                // show arrow if not at the end
+                                if (Math.ceil(tabsContainer.scrollLeft + tabsContainer.clientWidth) >= tabsContainer.scrollWidth - 10) {
+                                    scrollRightBtn.style.display = 'none';
+                                } else {
+                                    scrollRightBtn.style.display = 'flex';
+                                }
+                            } else {
+                                scrollRightBtn.style.display = 'none';
+                            }
+                        };
+                        
+                        tabsContainer.addEventListener('scroll', checkScroll);
+                        window.addEventListener('resize', checkScroll);
+                        // initial check after rendering
+                        setTimeout(checkScroll, 100);
+
+                        scrollRightBtn.addEventListener('click', () => {
+                            tabsContainer.scrollBy({ left: 150, behavior: 'smooth' });
+                        });
+                    }
+                });
+            </script>
 
     <!-- Script para TABS y ACORDEÓN -->
     <script>
