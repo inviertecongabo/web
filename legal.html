@@ -18,12 +18,31 @@
         .legal-container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
         
         
-        .legal-tabs-wrapper { position: relative; margin-bottom: 40px; }
-        .legal-tabs { display: flex; gap: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+        .legal-tabs-wrapper { position: relative; margin-bottom: 40px; display: flex; align-items: center; }
+        .legal-tabs { display: flex; gap: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; width: 100%; position: relative; z-index: 2; }
         .legal-tabs::-webkit-scrollbar { display: none; }
         .legal-tab { flex-shrink: 0; }
-        .scroll-arrow-right { position: absolute; right: 0; bottom: 17px; background: linear-gradient(to right, rgba(10,14,23,0) 0%, rgba(10,14,23,1) 40%); border: none; color: var(--accent); cursor: pointer; padding-left: 40px; padding-right: 4px; height: 35px; display: none; align-items: center; justify-content: flex-end; }
-        @media (max-width: 600px) { .scroll-arrow-right { display: flex !important; } } /* Force on small screens if JS is slow */
+        
+        .legal-tabs-wrapper::before, .legal-tabs-wrapper::after {
+            content: ''; position: absolute; top: 0; bottom: 17px; width: 60px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .legal-tabs-wrapper::before { left: 0; background: linear-gradient(to right, #0A0E17 0%, transparent 100%); }
+        .legal-tabs-wrapper::after { right: 0; background: linear-gradient(to left, #0A0E17 0%, transparent 100%); }
+        .legal-tabs-wrapper.can-scroll-left::before { opacity: 1; }
+        .legal-tabs-wrapper.can-scroll-right::after { opacity: 1; }
+
+        .scroll-arrow {
+            position: absolute; top: 50%; transform: translateY(calc(-50% - 8px));
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(18, 24, 36, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10;
+            transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.5); opacity: 0; pointer-events: none;
+        }
+        .scroll-arrow:hover { color: var(--accent); border-color: rgba(240, 185, 11, 0.3); background: rgba(240, 185, 11, 0.1); }
+        .scroll-arrow.visible { opacity: 1; pointer-events: auto; }
+        .scroll-arrow.scroll-left { left: -12px; }
+        .scroll-arrow.scroll-right { right: -12px; }
 
         .legal-tabs::-webkit-scrollbar { display: none; }
         .legal-tab { background: transparent; border: none; color: var(--text-muted); font-family: var(--font-heading); font-weight: 600; font-size: 1rem; cursor: pointer; padding: 8px 16px; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; }
@@ -101,7 +120,11 @@
             <div class="section-tag" style="margin-bottom: 12px; display: inline-block;">Legal y Soporte</div>
             <h1 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 32px;">Centro de Ayuda</h1>
             
-            <div class="legal-tabs-wrapper">
+            <div class="legal-tabs-wrapper" id="legalTabsWrapper">
+                <button class="scroll-arrow scroll-left" id="scrollTabsLeft" aria-label="Deslizar izquierda">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                
                 <div class="legal-tabs" id="legalTabsContainer">
                     <button class="legal-tab active" data-target="faq-sec">Preguntas Frecuentes</button>
                     <button class="legal-tab" data-target="terms-sec">Términos y Condiciones</button>
@@ -109,8 +132,9 @@
                     <button class="legal-tab" data-target="cookies-sec">Cookies</button>
                     <button class="legal-tab" data-target="bot-sec">Políticas de Uso (GaboBot)</button>
                 </div>
-                <button class="scroll-arrow-right" id="scrollTabsRight" aria-label="Deslizar pestañas">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+
+                <button class="scroll-arrow scroll-right" id="scrollTabsRight" aria-label="Deslizar derecha">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
 
@@ -373,30 +397,43 @@
             <!-- Setup scroll arrow -->
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
-                    const tabsContainer = document.getElementById('legalTabsContainer');
-                    const scrollRightBtn = document.getElementById('scrollTabsRight');
+                    const wrapper = document.getElementById('legalTabsWrapper');
+                    const container = document.getElementById('legalTabsContainer');
+                    const btnLeft = document.getElementById('scrollTabsLeft');
+                    const btnRight = document.getElementById('scrollTabsRight');
                     
-                    if(tabsContainer && scrollRightBtn) {
+                    if(container && wrapper) {
                         const checkScroll = () => {
-                            if (tabsContainer.scrollWidth > tabsContainer.clientWidth) {
-                                // show arrow if not at the end
-                                if (Math.ceil(tabsContainer.scrollLeft + tabsContainer.clientWidth) >= tabsContainer.scrollWidth - 10) {
-                                    scrollRightBtn.style.display = 'none';
-                                } else {
-                                    scrollRightBtn.style.display = 'flex';
-                                }
+                            const isScrollable = container.scrollWidth > container.clientWidth;
+                            const isAtStart = container.scrollLeft <= 5;
+                            const isAtEnd = Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth - 5;
+                            
+                            if (isScrollable && !isAtStart) {
+                                btnLeft.classList.add('visible');
+                                wrapper.classList.add('can-scroll-left');
                             } else {
-                                scrollRightBtn.style.display = 'none';
+                                btnLeft.classList.remove('visible');
+                                wrapper.classList.remove('can-scroll-left');
+                            }
+                            
+                            if (isScrollable && !isAtEnd) {
+                                btnRight.classList.add('visible');
+                                wrapper.classList.add('can-scroll-right');
+                            } else {
+                                btnRight.classList.remove('visible');
+                                wrapper.classList.remove('can-scroll-right');
                             }
                         };
                         
-                        tabsContainer.addEventListener('scroll', checkScroll);
+                        container.addEventListener('scroll', checkScroll);
                         window.addEventListener('resize', checkScroll);
-                        // initial check after rendering
                         setTimeout(checkScroll, 100);
 
-                        scrollRightBtn.addEventListener('click', () => {
-                            tabsContainer.scrollBy({ left: 150, behavior: 'smooth' });
+                        btnRight.addEventListener('click', () => {
+                            container.scrollBy({ left: 200, behavior: 'smooth' });
+                        });
+                        btnLeft.addEventListener('click', () => {
+                            container.scrollBy({ left: -200, behavior: 'smooth' });
                         });
                     }
                 });
