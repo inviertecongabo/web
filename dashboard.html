@@ -3570,54 +3570,67 @@ document.addEventListener('DOMContentLoaded', () => {
         function updateBcvUI(forcePlan) {
             if (!currentBcvRate) return;
             
-            // 1. Initial Paywall Modal text
-            const paywallText = document.getElementById('bcv-paywall-instruction');
-            if (paywallText) {
-                let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
-                let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
-                paywallText.innerHTML = `Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$${amountUsd}</strong> a la cuenta destino.`;
-            }
+            let safePlan = (typeof forcePlan === 'string') ? forcePlan : (window._pwsPlan || 'yearly');
 
-            // 2. Settings Modal Pago Movil Hint (GaboBot tool)
-            const pwsHintText = document.getElementById('bcv-pws-hint');
-            if (pwsHintText) {
-                let activePlan = forcePlan || window._pwsPlan || 'yearly';
-                let amountUsd = activePlan === 'monthly' ? 0.99 : activePlan === 'semi' ? 5.00 : 9.00;
-                let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
-                pwsHintText.innerHTML = `Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$${amountUsd}</strong> a la cuenta destino:`;
-            }
+            try {
+                // 1. Initial Paywall Modal text
+                const paywallText = document.getElementById('bcv-paywall-instruction');
+                if (paywallText) {
+                    let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
+                    paywallText.innerHTML = `Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$${amountUsd}</strong> a la cuenta destino.`;
+                }
+            } catch(e) { console.error("Error in block 1", e); }
 
-            // Update the specific rows with the calculable amount
-            // Initial Paywall Row
-            const pwRow = document.getElementById('pw-row-amount');
-            if (pwRow) {
-                let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
-                let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
-                let amountBs = amountBsStr.replace('.', ',');
-                document.getElementById('pw-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
-                document.getElementById('pw-val-amount').textContent = `${amountBs} Bs`;
-                document.getElementById('pw-btn-amount').setAttribute('onclick', `copyText('${amountBsStr}', this)`);
-                pwRow.style.display = 'flex';
-            }
+            try {
+                // 2. Settings Modal Pago Movil Hint (GaboBot tool)
+                const pwsHintText = document.getElementById('bcv-pws-hint');
+                if (pwsHintText) {
+                    let amountUsd = safePlan === 'monthly' ? 0.99 : safePlan === 'semi' ? 5.00 : 9.00;
+                    pwsHintText.innerHTML = `Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$${amountUsd}</strong> a la cuenta destino:`;
+                }
+            } catch(e) { console.error("Error in block 2", e); }
 
-            // Settings Paywall Row — forcePlan comes directly from pwsSelectPlan
-            const pwsRow = document.getElementById('pws-row-amount');
-            if (pwsRow) {
-                let activePlan = forcePlan || window._pwsPlan || 'yearly';
-                let amountUsd = activePlan === 'monthly' ? 0.99 : activePlan === 'semi' ? 5.00 : 9.00;
-                let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
-                let amountBs = amountBsStr.replace('.', ',');
-                document.getElementById('pws-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
-                document.getElementById('pws-val-amount').textContent = `${amountBs} Bs`;
-                document.getElementById('pws-btn-amount').setAttribute('onclick', `pwsCopy('${amountBsStr}', this)`);
-                pwsRow.style.display = 'flex';
-            }
+            try {
+                // Initial Paywall Row
+                const pwRow = document.getElementById('pw-row-amount');
+                if (pwRow) {
+                    let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
+                    let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
+                    let amountBs = amountBsStr.replace('.', ',');
+                    const lbl = document.getElementById('pw-lbl-bcv');
+                    if (lbl) lbl.textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
+                    const val = document.getElementById('pw-val-amount');
+                    if (val) val.textContent = `${amountBs} Bs`;
+                    const btn = document.getElementById('pw-btn-amount');
+                    if (btn) btn.setAttribute('onclick', `copyText('${amountBsStr}', this)`);
+                    pwRow.style.display = 'flex';
+                }
+            } catch(e) { console.error("Error in block 3", e); }
 
-            // 3. Settings Modal Pago Movil instruction (inside QR)
-            const settingsBcvText = document.getElementById('bcv-instruction-text');
-            if (settingsBcvText) {
-                settingsBcvText.innerHTML = `<strong>2.</strong> Envía el monto exacto indicado arriba en Bolívares.`;
-            }
+            try {
+                // Settings Paywall Row
+                const pwsRow = document.getElementById('pws-row-amount');
+                if (pwsRow) {
+                    let amountUsd = safePlan === 'monthly' ? 0.99 : safePlan === 'semi' ? 5.00 : 9.00;
+                    let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
+                    let amountBs = amountBsStr.replace('.', ',');
+                    const lbl = document.getElementById('pws-lbl-bcv');
+                    if (lbl) lbl.textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
+                    const val = document.getElementById('pws-val-amount');
+                    if (val) val.textContent = `${amountBs} Bs`;
+                    const btn = document.getElementById('pws-btn-amount');
+                    if (btn) btn.setAttribute('onclick', `pwsCopy('${amountBsStr}', this)`);
+                    pwsRow.style.display = 'flex';
+                }
+            } catch(e) { console.error("Error in block 4", e); }
+
+            try {
+                // 3. Settings Modal Pago Movil instruction (inside QR)
+                const settingsBcvText = document.getElementById('bcv-instruction-text');
+                if (settingsBcvText) {
+                    settingsBcvText.innerHTML = `<strong>2.</strong> Envía el monto exacto indicado arriba en Bolívares.`;
+                }
+            } catch(e) { console.error("Error in block 5", e); }
         }
 
         // Call on load
