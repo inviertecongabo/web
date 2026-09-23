@@ -432,7 +432,7 @@
             <details class="faq-item">
                 <summary class="faq-question">¿Es seguro conectar mi cuenta de Binance?</summary>
                 <div class="faq-answer">
-                    Sí, 100% seguro. GaboBot funciona conectando una API Key con permisos estrictamente limitados a <strong>Lectura</strong> y <strong>Trading Spot</strong>. Al no habilitar la opción de retiros, el bot jamás podrá sacar tus fondos. Tu dinero siempre se queda en tu cuenta de Binance.
+                    Sí, 100% seguro. GaboBot funciona conectando una API Key con permisos estrictamente limitados a lectura y trading spot. Al no habilitar la opción de retiros, el bot jamás podrá sacar tus fondos. Tu dinero siempre se queda en tu cuenta de Binance.
                 </div>
             </details>
 
@@ -458,9 +458,16 @@
             </details>
 
             <details class="faq-item">
-                <summary class="faq-question">¿Por qué si configuro $100, a veces compra montos como $99.92?</summary>
+                <summary class="faq-question">¿Por qué mis compras a veces se ejecutan por un monto ligeramente menor al configurado?</summary>
                 <div class="faq-answer">
-                    Para protegerte de comisiones ocultas, el bot usa órdenes pasivas (Limit). Por las reglas de redondeo y tamaño de lote de Binance, el sistema calcula la fracción más cercana posible a tu monto original que garantice el mejor precio de compra en ese milisegundo. No es un error, es el bot optimizando tu capital.
+                    Esto no es un error ni una limitación del código del bot, sino una regla estricta del mercado de Binance llamada "Tamaño de Lote" (Lot Size). Binance solo permite comprar criptomonedas en bloques fraccionados específicos. Por ejemplo, si configuras el bot para comprar $100, el sistema calcula matemáticamente la cantidad máxima de fracciones que puede comprar sin pasarse de tu límite. Si el bloque exacto más cercano equivale a $99.92, el bot ejecutará esa cantidad para optimizar tu capital. Es muy importante destacar que los centavos restantes (en este caso, los $0.08 sobrantes) no se pierden ni desaparecen; simplemente se quedan guardados de forma segura en tu billetera Spot de Binance.
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué es obligatorio agregar una dirección IP a mi API Key de Binance?</summary>
+                <div class="faq-answer">
+                    Es una medida de seguridad exigida por Binance. Si creas una API Key sin restringirla a una IP de confianza (en este caso, la IP estática de nuestros servidores), Binance la considerará vulnerable y la eliminará automáticamente cada 90 días. Al agregar nuestra IP, garantizas que la conexión de tu bot sea permanente, aumentas drásticamente la seguridad de tu cuenta, y te evitas la molestia de tener que crear una llave nueva cada tres meses.
                 </div>
             </details>
         </section>
