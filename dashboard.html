@@ -3600,7 +3600,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lbl = document.getElementById('pw-lbl-bcv');
                     if (lbl) lbl.textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
                     const val = document.getElementById('pw-val-amount');
-                    if (val) val.textContent = `${amountBs} Bs`;
+                    if (val) {
+                        val.style.transition = 'opacity 0.15s ease-in-out';
+                        val.style.opacity = '0.2';
+                        setTimeout(() => {
+                            val.textContent = `${amountBs} Bs`;
+                            val.style.opacity = '1';
+                        }, 150);
+                    }
                     const btn = document.getElementById('pw-btn-amount');
                     if (btn) btn.setAttribute('onclick', `copyText('${amountBsStr}', this)`);
                     pwRow.style.display = 'flex';
@@ -3617,7 +3624,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lbl = document.getElementById('pws-lbl-bcv');
                     if (lbl) lbl.textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
                     const val = document.getElementById('pws-val-amount');
-                    if (val) val.textContent = `${amountBs} Bs`;
+                    if (val) {
+                        val.style.transition = 'opacity 0.15s ease-in-out';
+                        val.style.opacity = '0.2';
+                        setTimeout(() => {
+                            val.textContent = `${amountBs} Bs`;
+                            val.style.opacity = '1';
+                        }, 150);
+                    }
                     const btn = document.getElementById('pws-btn-amount');
                     if (btn) btn.setAttribute('onclick', `pwsCopy('${amountBsStr}', this)`);
                     pwsRow.style.display = 'flex';
