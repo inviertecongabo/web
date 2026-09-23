@@ -1427,7 +1427,7 @@
 
                     <input type="file" name="attachment" accept="image/*">
 
-                    <span class="file-hint">Sube una captura de pantalla si te ayuda a explicar mejor tu idea (Max 5MB).</span>
+                    <span class="file-hint">Sube una captura de pantalla si te ayuda a explicar mejor tu idea (Max 20MB).</span>
 
                 </div>
 
@@ -5607,6 +5607,15 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         e.preventDefault();
         alert('Por favor, selecciona a qué área corresponde tu sugerencia.');
         document.querySelector('.dropdown-header').style.borderColor = '#FF6B6B';
+        return;
+    }
+    const fileInput = document.querySelector('input[name="attachment"]');
+    if (fileInput.files.length > 0) {
+        const fileSize = fileInput.files[0].size / 1024 / 1024; // in MB
+        if (fileSize > 20) {
+            e.preventDefault();
+            alert('El archivo es muy pesado. El tamaño máximo permitido es de 20MB.');
+        }
     }
 });
 
