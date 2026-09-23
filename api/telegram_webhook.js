@@ -39,6 +39,25 @@ module.exports = async function handler(req, res) {
     if (action.startsWith('approve_')) {
         const paymentId = action.split('_')[1];
         
+        // Show confirmation buttons for Approve
+        await sendTelegramRequest('editMessageReplyMarkup', {
+            chat_id: chatId,
+            message_id: messageId,
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: "✅ SÍ, CONFIRMAR APROBACIÓN", callback_data: `confirmApprove_${paymentId}` }
+                    ],
+                    [
+                        { text: "🔙 Cancelar", callback_data: `cancelAction_${paymentId}` }
+                    ]
+                ]
+            }
+        });
+    } 
+    else if (action.startsWith('confirmApprove_')) {
+        const paymentId = action.split('_')[1];
+        
         // Approve payment
         const { data: pay } = await supabase.from('payments').update({ status: 'approved' }).eq('id', paymentId).select().single();
         
@@ -70,27 +89,27 @@ module.exports = async function handler(req, res) {
                 console.error("Error triggering email:", err);
             }
         }
-    } 
+    }
     else if (action.startsWith('reject_')) {
         const paymentId = action.split('_')[1];
         
-        // Show confirmation buttons
+        // Show confirmation buttons for Reject
         await sendTelegramRequest('editMessageReplyMarkup', {
             chat_id: chatId,
             message_id: messageId,
             reply_markup: {
                 inline_keyboard: [
                     [
-                        { text: "⚠️ CONFIRMAR RECHAZO", callback_data: `confirmReject_${paymentId}` }
+                        { text: "⚠️ SÍ, CONFIRMAR RECHAZO", callback_data: `confirmReject_${paymentId}` }
                     ],
                     [
-                        { text: "🔙 Cancelar", callback_data: `cancelReject_${paymentId}` }
+                        { text: "🔙 Cancelar", callback_data: `cancelAction_${paymentId}` }
                     ]
                 ]
             }
         });
     }
-    else if (action.startsWith('cancelReject_')) {
+    else if (action.startsWith('cancelAction_') || action.startsWith('cancelReject_')) {
         const paymentId = action.split('_')[1];
         
         // Revert to original buttons
