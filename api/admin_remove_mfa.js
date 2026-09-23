@@ -21,8 +21,9 @@ module.exports = async function handler(req, res) {
 
     try {
         const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-        const { data: { user }, error: authError } = await sb.auth.getUser(token);
 
+        // Verify caller is admin
+        const { data: { user }, error: authError } = await sb.auth.getUser(token);
         if (authError || !user || user.email !== ADMIN_EMAIL) {
             return res.status(403).json({ error: 'Acceso denegado.' });
         }
@@ -32,21 +33,39 @@ module.exports = async function handler(req, res) {
             return res.status(400).json({ error: 'Falta target_user_id' });
         }
 
-        const { data: targetUser, error: userErr } = await sb.auth.admin.getUserById(target_user_id);
-        if (userErr || !targetUser.user) {
-            return res.status(400).json({ error: 'Usuario no encontrado' });
+        // Get user's MFA factors using the Supabase Admin REST API directly
+        const getRes = await fetch(
+            `${SUPABASE_URL}/auth/v1/admin/users/${target_user_id}`,
+            {
+                headers: {
+                    'apikey': SUPABASE_SERVICE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`
+                }
+            }
+        );
+
+        if (!getRes.ok) {
+            const err = await getRes.text();
+            return res.status(400).json({ error: 'Usuario no encontrado: ' + err });
         }
 
-        const factors = targetUser.user.factors || [];
-        
+        const targetUser = await getRes.json();
+        const factors = targetUser.factors || [];
+
         let removed = 0;
         for (const factor of factors) {
-            // Delete factor using admin api
-            await sb.auth.admin.mfa.deleteFactor({
-                id: target_user_id,
-                factorId: factor.id
-            });
-            removed++;
+            // Delete each factor via Supabase Admin REST API
+            const delRes = await fetch(
+                `${SUPABASE_URL}/auth/v1/admin/users/${target_user_id}/factors/${factor.id}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_SERVICE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`
+                    }
+                }
+            );
+            if (delRes.ok) removed++;
         }
 
         return res.status(200).json({ success: true, removed });
