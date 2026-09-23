@@ -845,6 +845,10 @@
                 const extendBtn = `<button class="btn-icon-danger" style="background:rgba(240,185,11,0.15); color:var(--accent);" onclick="showExtendModal('${u.id}', '${(u.email || '').replace(/'/g, "\\'")}', '${(u.full_name || 'Usuario').replace(/'/g, "\\'")}')" title="Extender Membresía">
                     <i class="ph ph-calendar-plus"></i>
                 </button>`;
+                
+                const mfaBtn = `<button class="btn-icon-danger" style="background:rgba(239,68,68,0.15); color:#EF4444;" onclick="removeUserMfa('${u.id}', '${(u.email || '').replace(/'/g, "\\'")}')" title="Quitar Google Authenticator (Emergencia)">
+                    <i class="ph ph-shield-slash"></i>
+                </button>`;
 
                 // Tabla Principal
                 const trAll = document.createElement('tr');
@@ -854,7 +858,7 @@
                     <td>${botBadge}</td>
                     <td>${membershipBadge}</td>
                     <td>${dateStr}</td>
-                    <td style="display:flex; gap:8px;">${banBtn} ${roleBtn} ${extendBtn}</td>
+                    <td style="display:flex; gap:8px;">${banBtn} ${roleBtn} ${extendBtn} ${mfaBtn}</td>
                 `;
                 tbodyAll.appendChild(trAll);
                 
@@ -869,6 +873,33 @@
                     tbodyRecent.appendChild(trRecent);
                 }
             });
+        }
+
+        
+        async function removeUserMfa(userId, email) {
+            if(!confirm(`¿Estás seguro de que deseas REMOVER el Google Authenticator de ${email}?`)) return;
+            
+            const { data: { session } } = await sb.auth.getSession();
+            try {
+                const res = await fetch('/api/admin_remove_mfa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
+                    body: JSON.stringify({ target_user_id: userId })
+                });
+                const data = await res.json();
+                if(!res.ok) throw new Error(data.error || 'Error desconocido');
+                
+                if (data.removed > 0) {
+                    alert(`¡Listo! Se desactivó el 2FA de ${email}.`);
+                } else {
+                    alert(`El usuario no tenía ningún 2FA configurado.`);
+                }
+            } catch (err) {
+                alert("Error al quitar 2FA: " + err.message);
+            }
         }
 
         async function toggleBan(id, isBanned) {
