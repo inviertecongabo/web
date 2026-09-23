@@ -1423,10 +1423,15 @@
 
                 <div class="form-group">
 
-                    <label>Adjuntar Imagen (Opcional)</label>
-
-                    <input type="file" name="attachment" accept="image/*" multiple>
-
+                    <label>Adjuntar Imágenes (Opcional)</label>
+                    <div class="premium-file-upload">
+                        <label for="feedbackAttachment" id="feedbackAttachmentLabel" style="display:inline-flex; align-items:center; gap:8px; padding:10px 16px; background:rgba(255,255,255,0.05); border:1px dashed rgba(255,255,255,0.2); border-radius:8px; cursor:pointer; color:var(--text-primary); font-size:0.9rem; transition:var(--transition); margin-bottom:8px;" onmouseover="this.style.background=\'rgba(255,255,255,0.1)\'; this.style.borderColor=\'var(--accent)\';" onmouseout="this.style.background=\'rgba(255,255,255,0.05)\'; this.style.borderColor=\'rgba(255,255,255,0.2)\';">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Seleccionar archivos...
+                        </label>
+                        <input type="file" id="feedbackAttachment" name="attachment" accept="image/*" multiple style="display:none;">
+                        <div id="filePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; margin-bottom: 8px;"></div>
+                    </div>
                     <span class="file-hint">Puedes subir hasta 5 capturas de pantalla (Max 20MB en total).</span>
 
                 </div>
@@ -5286,6 +5291,56 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 
 <script src="/cookie_banner.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const fileInput = document.getElementById('feedbackAttachment');
+        const previewContainer = document.getElementById('filePreviewContainer');
+        
+        if (fileInput && previewContainer) {
+            fileInput.addEventListener('change', function() {
+                renderFilePreviews();
+            });
+
+            function renderFilePreviews() {
+                previewContainer.innerHTML = '';
+                const files = Array.from(fileInput.files);
+                
+                files.forEach((file, index) => {
+                    const fileChip = document.createElement('div');
+                    fileChip.style.cssText = 'background: rgba(240,185,11,0.1); border: 1px solid rgba(240,185,11,0.3); border-radius: 6px; padding: 4px 10px; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #e2e8f0;';
+                    
+                    const fileName = document.createElement('span');
+                    let name = file.name;
+                    if(name.length > 20) name = name.substring(0,10) + '...' + name.substring(name.length-6);
+                    fileName.textContent = name;
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.style.cssText = 'background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0; line-height: 0.8; font-weight: bold; margin-left: 4px; transition: transform 0.2s;';
+                    removeBtn.onmouseover = () => removeBtn.style.transform = 'scale(1.2)';
+                    removeBtn.onmouseout = () => removeBtn.style.transform = 'scale(1)';
+                    
+                    removeBtn.onclick = (e) => {
+                        e.preventDefault();
+                        const dt = new DataTransfer();
+                        const currentFiles = Array.from(fileInput.files);
+                        currentFiles.splice(index, 1);
+                        currentFiles.forEach(f => dt.items.add(f));
+                        fileInput.files = dt.files;
+                        renderFilePreviews();
+                    };
+                    
+                    fileChip.appendChild(fileName);
+                    fileChip.appendChild(removeBtn);
+                    previewContainer.appendChild(fileChip);
+                });
+            }
+        }
+    });
+</script>
+
 </body>
 
 
