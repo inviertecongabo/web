@@ -2143,7 +2143,7 @@
                             </div>
 
                             <div id="pwsDataPagomovil" class="pws-data" style="display:none;">
-                                <p class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$9</strong> según la tasa BCV del día a:</p>
+                                <p id="bcv-pws-hint" class="pws-hint">Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$9</strong> según la tasa BCV del día a:</p>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Banco</span>
@@ -3557,18 +3557,31 @@ document.addEventListener('DOMContentLoaded', () => {
         function updateBcvUI() {
             if (!currentBcvRate) return;
             
-            // Update Paywall Modal text
+            // 1. Initial Paywall Modal text
             const paywallText = document.getElementById('bcv-paywall-instruction');
             if (paywallText) {
-                let amountUsd = currentPlan === 'monthly' ? 0.99 : 10.00;
+                let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
                 let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
                 paywallText.innerHTML = `Transfiere <strong style="color:var(--text-primary);">${amountBs} Bs</strong> (Tasa BCV: ${currentBcvRateFormatted} Bs/$)`;
             }
 
-            // Update Settings Modal Pago Movil instruction
+            // 2. Settings Modal Pago Movil Hint (GaboBot tool)
+            const pwsHintText = document.getElementById('bcv-pws-hint');
+            if (pwsHintText) {
+                let amountUsd = 9.00;
+                if (typeof _pwsPlan !== 'undefined') {
+                    if (_pwsPlan === 'monthly') amountUsd = 0.99;
+                    if (_pwsPlan === 'semi') amountUsd = 5.00;
+                    if (_pwsPlan === 'yearly') amountUsd = 9.00;
+                }
+                let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
+                pwsHintText.innerHTML = `Transfiere exactamente <strong style="color:#f59e0b;">${amountBs} Bs</strong> (Tasa BCV: ${currentBcvRateFormatted} Bs/$) a:`;
+            }
+
+            // 3. Settings Modal Pago Movil instruction (inside QR)
             const settingsBcvText = document.getElementById('bcv-instruction-text');
             if (settingsBcvText) {
-                settingsBcvText.innerHTML = `<strong>2.</strong> Envía el equivalente a tu plan en Bs (Tasa BCV: <strong>${currentBcvRateFormatted} Bs/$</strong>).`;
+                settingsBcvText.innerHTML = `<strong>2.</strong> Envía el monto exacto indicado arriba en Bolívares.`;
             }
         }
 
@@ -5551,7 +5564,8 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             if(plan === 'semi') p = '$5';
             
             document.getElementById('pwsPriceBinance').textContent  = p + ' USDT';
-            document.getElementById('pwsPricePagomovil').textContent = p;
+            if (document.getElementById('pwsPricePagomovil')) document.getElementById('pwsPricePagomovil').textContent = p;
+            if (typeof updateBcvUI === 'function') updateBcvUI();
         };
 
         window.pwsSelectTab = function(tab) {
