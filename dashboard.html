@@ -3526,6 +3526,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Notificar a Telegram
+            try {
+                fetch('/api/notify_telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: user.email,
+                        method: currentMethod,
+                        plan: currentPlan,
+                        amount: amount,
+                        reference: ref
+                    })
+                });
+            } catch(e) {}
+
             // 2. Si es pago móvil, mostrar éxito manual
             if (currentMethod !== 'binance') {
                 document.getElementById('pw-checkout').style.display = 'none';
@@ -5540,6 +5555,23 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
                 alert('Error: ' + error.message);
                 btn.textContent = 'Reportar Pago'; btn.disabled = false;
                 return;
+            } 
+
+            // Notificar a Telegram si es manual (pwsTab != crypto)
+            if (!isAutoCrypto) {
+                try {
+                    fetch('/api/notify_telegram', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: u.email,
+                            method: _pwsTab,
+                            plan: _pwsPlan,
+                            amount: amount,
+                            reference: ref
+                        })
+                    });
+                } catch(e) {}
             } 
             
             if (isAutoCrypto) {
