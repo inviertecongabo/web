@@ -1415,7 +1415,7 @@
 
                     <label>Explícanos tu idea</label>
 
-                    <textarea name="Sugerencia" required placeholder="Escribe aquí tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
+                    <textarea name="Sugerencia" placeholder="Escribe aquí tu mejora, sugerencia o feedback. Mientras más detalles, mejor..."></textarea>
 
                 </div>
 
@@ -5603,18 +5603,33 @@ document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item').forEach(
 
 <script>
 document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    // 1. Validar categoría
     if (!document.getElementById('hiddenCategoria').value) {
         e.preventDefault();
-        alert('Por favor, selecciona a qué área corresponde tu sugerencia.');
+        window.showToast("Falta Categoría", "Por favor, selecciona a qué área corresponde tu sugerencia.", "error");
         document.querySelector('.dropdown-header').style.borderColor = '#FF6B6B';
+        setTimeout(() => document.querySelector('.dropdown-header').style.borderColor = '', 3000);
         return;
     }
+    
+    // 2. Validar textarea
+    const textArea = document.querySelector('textarea[name="Sugerencia"]');
+    if (!textArea.value.trim()) {
+        e.preventDefault();
+        window.showToast("Falta Información", "Por favor, explícanos tu idea o sugerencia en el cuadro de texto.", "error");
+        textArea.style.borderColor = '#FF6B6B';
+        setTimeout(() => textArea.style.borderColor = '', 3000);
+        return;
+    }
+
+    // 3. Validar archivos
     const fileInput = document.querySelector('input[name="attachment"]');
     if (fileInput.files.length > 5) {
         e.preventDefault();
-        alert('Puedes subir un máximo de 5 imágenes.');
+        window.showToast("Límite excedido", "Puedes subir un máximo de 5 imágenes.", "error");
         return;
     }
+    
     if (fileInput.files.length > 0) {
         let totalSize = 0;
         for (let i = 0; i < fileInput.files.length; i++) {
@@ -5622,7 +5637,8 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         }
         if (totalSize / 1024 / 1024 > 20) {
             e.preventDefault();
-            alert('El peso total de las imágenes es muy alto. El límite máximo es de 20MB en total.');
+            window.showToast("Imágenes muy pesadas", "El peso total de las imágenes supera los 20MB permitidos.", "error");
+            return;
         }
     }
 });
