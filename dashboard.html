@@ -1795,12 +1795,12 @@
                                 </div>
                                 <button class="pw-btn-copy" onclick="copyText('04120333976', this)">Copiar</button>
                             </div>
-                            <div class="pw-copy-row" id="pw-row-amount" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2);">
+                            <div class="pw-copy-row" id="pw-row-amount" style="display: none;">
                                 <div>
-                                    <span class="pw-copy-label" id="pw-lbl-bcv">Monto a pagar (Calculando BCV...)</span>
-                                    <span class="pw-copy-value" id="pw-val-amount" style="color: #f59e0b;">...</span>
+                                    <span class="pw-copy-label" id="pw-lbl-bcv">Monto a pagar</span>
+                                    <span class="pw-copy-value" id="pw-val-amount">...</span>
                                 </div>
-                                <button class="pw-btn-copy" id="pw-btn-amount" onclick="copyText('', this)" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">Copiar</button>
+                                <button class="pw-btn-copy" id="pw-btn-amount" onclick="copyText('', this)">Copiar</button>
                             </div>
                         </div>
                         
@@ -2171,12 +2171,12 @@
                                     </div>
                                     <button class="pws-copy" onclick="pwsCopy('04120333976',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
-                                <div class="pws-row" id="pws-row-amount" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2);">
+                                <div class="pws-row" id="pws-row-amount" style="display: none;">
                                     <div>
                                         <span class="pws-lbl" id="pws-lbl-bcv">Monto exacto</span>
-                                        <span class="pws-val pws-val-mono" id="pws-val-amount" style="color: #f59e0b; font-size: 1rem;">...</span>
+                                        <span class="pws-val pws-val-mono" id="pws-val-amount">...</span>
                                     </div>
-                                    <button class="pws-copy" id="pws-btn-amount" onclick="pwsCopy('',this)" title="Copiar" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                    <button class="pws-copy" id="pws-btn-amount" onclick="pwsCopy('',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrPagomovilContainer')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
                                 <div id="pwsQrPagomovilContainer" style="display:none; margin-top:16px; animation: fadeIn 0.3s ease;">
@@ -3609,11 +3609,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const pwsRow = document.getElementById('pws-row-amount');
             if (pwsRow) {
                 let amountUsd = 9.00;
-                if (typeof _pwsPlan !== 'undefined') {
-                    if (_pwsPlan === 'monthly') amountUsd = 0.99;
-                    if (_pwsPlan === 'semi') amountUsd = 5.00;
-                    if (_pwsPlan === 'yearly') amountUsd = 9.00;
-                }
+                
+                // Read from window object since _pwsPlan is defined in a later script tag!
+                let activePlan = window._pwsPlan || 'yearly'; 
+                if (activePlan === 'monthly') amountUsd = 0.99;
+                if (activePlan === 'semi') amountUsd = 5.00;
+                if (activePlan === 'yearly') amountUsd = 9.00;
+                
                 let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
                 let amountBs = amountBsStr.replace('.', ',');
                 
@@ -5600,6 +5602,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             if(plan === 'monthly' && _pwsTab === 'crypto') return;
             
             _pwsPlan = plan;
+            window._pwsPlan = plan; // EXPORT to window so updateBcvUI can see it!
             document.getElementById('pwsPlanMonthly').classList.toggle('selected', plan === 'monthly');
             document.getElementById('pwsPlanSemi').classList.toggle('selected', plan === 'semi');
             document.getElementById('pwsPlanYearly').classList.toggle('selected', plan === 'yearly');
