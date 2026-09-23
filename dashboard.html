@@ -3567,7 +3567,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        function updateBcvUI(forcePlan) {
+        window.updateBcvUI = function updateBcvUI(forcePlan) {
             if (!currentBcvRate) return;
             
             let safePlan = (typeof forcePlan === 'string') ? forcePlan : (window._pwsPlan || 'yearly');
