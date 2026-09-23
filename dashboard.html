@@ -1425,9 +1425,9 @@
 
                     <label>Adjuntar Imagen (Opcional)</label>
 
-                    <input type="file" name="attachment" accept="image/*">
+                    <input type="file" name="attachment" accept="image/*" multiple>
 
-                    <span class="file-hint">Sube una captura de pantalla si te ayuda a explicar mejor tu idea (Max 20MB).</span>
+                    <span class="file-hint">Puedes subir hasta 5 capturas de pantalla (Max 20MB en total).</span>
 
                 </div>
 
@@ -5610,11 +5610,19 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
         return;
     }
     const fileInput = document.querySelector('input[name="attachment"]');
+    if (fileInput.files.length > 5) {
+        e.preventDefault();
+        alert('Puedes subir un máximo de 5 imágenes.');
+        return;
+    }
     if (fileInput.files.length > 0) {
-        const fileSize = fileInput.files[0].size / 1024 / 1024; // in MB
-        if (fileSize > 20) {
+        let totalSize = 0;
+        for (let i = 0; i < fileInput.files.length; i++) {
+            totalSize += fileInput.files[i].size;
+        }
+        if (totalSize / 1024 / 1024 > 20) {
             e.preventDefault();
-            alert('El archivo es muy pesado. El tamaño máximo permitido es de 20MB.');
+            alert('El peso total de las imágenes es muy alto. El límite máximo es de 20MB en total.');
         }
     }
 });
