@@ -1795,6 +1795,13 @@
                                 </div>
                                 <button class="pw-btn-copy" onclick="copyText('04120333976', this)">Copiar</button>
                             </div>
+                            <div class="pw-copy-row" id="pw-row-amount" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2);">
+                                <div>
+                                    <span class="pw-copy-label" id="pw-lbl-bcv">Monto a pagar (Calculando BCV...)</span>
+                                    <span class="pw-copy-value" id="pw-val-amount" style="color: #f59e0b;">...</span>
+                                </div>
+                                <button class="pw-btn-copy" id="pw-btn-amount" onclick="copyText('', this)" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">Copiar</button>
+                            </div>
                         </div>
                         
                         <!-- REPORTE -->
@@ -2155,14 +2162,21 @@
                                         <span class="pws-lbl">Cédula</span>
                                         <span class="pws-val pws-val-mono">V30107924</span>
                                     </div>
-                                    <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('V30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                    <button class="pws-copy" onclick="pwsCopy('V30107924',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <div class="pws-row">
                                     <div>
                                         <span class="pws-lbl">Teléfono</span>
                                         <span class="pws-val pws-val-mono">04120333976</span>
                                     </div>
-                                    <button class="pws-copy" onclick="<button class="pws-copy" onclick="pwsCopy('04120333976',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                    <button class="pws-copy" onclick="pwsCopy('04120333976',this)" title="Copiar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+                                </div>
+                                <div class="pws-row" id="pws-row-amount" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2);">
+                                    <div>
+                                        <span class="pws-lbl" id="pws-lbl-bcv">Monto exacto</span>
+                                        <span class="pws-val pws-val-mono" id="pws-val-amount" style="color: #f59e0b; font-size: 1rem;">...</span>
+                                    </div>
+                                    <button class="pws-copy" id="pws-btn-amount" onclick="pwsCopy('',this)" title="Copiar" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                                 </div>
                                 <button class="pws-qr-btn" onclick="pwsToggleQR('pwsQrPagomovilContainer')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="7" y="7" width="3" height="3"></rect><rect x="14" y="7" width="3" height="3"></rect><rect x="7" y="14" width="3" height="3"></rect><rect x="14" y="14" width="3" height="3"></rect></svg> Mostrar código QR</button>
                                 <div id="pwsQrPagomovilContainer" style="display:none; margin-top:16px; animation: fadeIn 0.3s ease;">
@@ -3562,7 +3576,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (paywallText) {
                 let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
                 let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
-                paywallText.innerHTML = `Transfiere <strong style="color:var(--text-primary);">${amountBs} Bs</strong> (Tasa BCV: ${currentBcvRateFormatted} Bs/$)`;
+                paywallText.innerHTML = `Transfiere el equivalente a <strong id="price-pagomovil" style="color:var(--text-primary);">$${amountUsd}</strong> a la cuenta destino.`;
             }
 
             // 2. Settings Modal Pago Movil Hint (GaboBot tool)
@@ -3575,7 +3589,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (_pwsPlan === 'yearly') amountUsd = 9.00;
                 }
                 let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
-                pwsHintText.innerHTML = `Transfiere exactamente <strong style="color:#f59e0b;">${amountBs} Bs</strong> (Tasa BCV: ${currentBcvRateFormatted} Bs/$) a:`;
+                pwsHintText.innerHTML = `Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$${amountUsd}</strong> a la cuenta destino:`;
+            }
+
+            // Update the specific rows with the calculable amount
+            // Initial Paywall Row
+            const pwRow = document.getElementById('pw-row-amount');
+            if (pwRow) {
+                let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
+                let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
+                let amountBs = amountBsStr.replace('.', ',');
+                
+                document.getElementById('pw-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
+                document.getElementById('pw-val-amount').textContent = `${amountBs} Bs`;
+                document.getElementById('pw-btn-amount').setAttribute('onclick', `copyText('${amountBsStr}', this)`);
+                pwRow.style.display = 'flex';
+            }
+
+            // Settings Paywall Row
+            const pwsRow = document.getElementById('pws-row-amount');
+            if (pwsRow) {
+                let amountUsd = 9.00;
+                if (typeof _pwsPlan !== 'undefined') {
+                    if (_pwsPlan === 'monthly') amountUsd = 0.99;
+                    if (_pwsPlan === 'semi') amountUsd = 5.00;
+                    if (_pwsPlan === 'yearly') amountUsd = 9.00;
+                }
+                let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
+                let amountBs = amountBsStr.replace('.', ',');
+                
+                document.getElementById('pws-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
+                document.getElementById('pws-val-amount').textContent = `${amountBs} Bs`;
+                document.getElementById('pws-btn-amount').setAttribute('onclick', `pwsCopy('${amountBsStr}', this)`);
+                pwsRow.style.display = 'flex';
             }
 
             // 3. Settings Modal Pago Movil instruction (inside QR)
