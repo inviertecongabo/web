@@ -3567,7 +3567,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        function updateBcvUI() {
+        function updateBcvUI(forcePlan) {
             if (!currentBcvRate) return;
             
             // 1. Initial Paywall Modal text
@@ -3581,12 +3581,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // 2. Settings Modal Pago Movil Hint (GaboBot tool)
             const pwsHintText = document.getElementById('bcv-pws-hint');
             if (pwsHintText) {
-                let amountUsd = 9.00;
-                if (typeof _pwsPlan !== 'undefined') {
-                    if (_pwsPlan === 'monthly') amountUsd = 0.99;
-                    if (_pwsPlan === 'semi') amountUsd = 5.00;
-                    if (_pwsPlan === 'yearly') amountUsd = 9.00;
-                }
+                let activePlan = forcePlan || window._pwsPlan || 'yearly';
+                let amountUsd = activePlan === 'monthly' ? 0.99 : activePlan === 'semi' ? 5.00 : 9.00;
                 let amountBs = (amountUsd * currentBcvRate).toFixed(2).replace('.', ',');
                 pwsHintText.innerHTML = `Transfiere el equivalente a <strong id="pwsPricePagomovil" style="color:#ddd;">$${amountUsd}</strong> a la cuenta destino:`;
             }
@@ -3598,27 +3594,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 let amountUsd = (typeof currentPlan !== 'undefined' && currentPlan === 'monthly') ? 0.99 : 10.00;
                 let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
                 let amountBs = amountBsStr.replace('.', ',');
-                
                 document.getElementById('pw-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
                 document.getElementById('pw-val-amount').textContent = `${amountBs} Bs`;
                 document.getElementById('pw-btn-amount').setAttribute('onclick', `copyText('${amountBsStr}', this)`);
                 pwRow.style.display = 'flex';
             }
 
-            // Settings Paywall Row
+            // Settings Paywall Row — forcePlan comes directly from pwsSelectPlan
             const pwsRow = document.getElementById('pws-row-amount');
             if (pwsRow) {
-                let amountUsd = 9.00;
-                
-                // Read from window object since _pwsPlan is defined in a later script tag!
-                let activePlan = window._pwsPlan || 'yearly'; 
-                if (activePlan === 'monthly') amountUsd = 0.99;
-                if (activePlan === 'semi') amountUsd = 5.00;
-                if (activePlan === 'yearly') amountUsd = 9.00;
-                
+                let activePlan = forcePlan || window._pwsPlan || 'yearly';
+                let amountUsd = activePlan === 'monthly' ? 0.99 : activePlan === 'semi' ? 5.00 : 9.00;
                 let amountBsStr = (amountUsd * currentBcvRate).toFixed(2);
                 let amountBs = amountBsStr.replace('.', ',');
-                
                 document.getElementById('pws-lbl-bcv').textContent = `Monto exacto (Tasa BCV: ${currentBcvRateFormatted})`;
                 document.getElementById('pws-val-amount').textContent = `${amountBs} Bs`;
                 document.getElementById('pws-btn-amount').setAttribute('onclick', `pwsCopy('${amountBsStr}', this)`);
@@ -5613,7 +5601,7 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             
             document.getElementById('pwsPriceBinance').textContent  = p + ' USDT';
             if (document.getElementById('pwsPricePagomovil')) document.getElementById('pwsPricePagomovil').textContent = p;
-            if (typeof updateBcvUI === 'function') updateBcvUI();
+            if (typeof updateBcvUI === 'function') updateBcvUI(plan);
         };
 
         window.pwsSelectTab = function(tab) {
