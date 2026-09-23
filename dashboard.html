@@ -3555,11 +3555,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async function fetchBcvRate() {
             try {
-                const res = await fetch('https://exchange.vcoud.com/coins/latest?base=USD');
+                const res = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
                 const data = await res.json();
-                const bcvCoin = data.find(c => c.symbol === 'VESBCV');
-                if (bcvCoin && bcvCoin.price) {
-                    currentBcvRate = parseFloat(bcvCoin.price);
+                if (data && data.promedio) {
+                    currentBcvRate = parseFloat(data.promedio);
                     currentBcvRateFormatted = currentBcvRate.toFixed(2).replace('.', ',');
                     updateBcvUI();
                 }
