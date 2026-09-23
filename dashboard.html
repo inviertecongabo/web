@@ -3668,7 +3668,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        const isActive = botConfig.active === true;
+        let isActive = botConfig.active === true;
+        if (isActive && !window.gaboUserIsPremium) {
+            isActive = false;
+            botConfig.active = false;
+            try {
+                sb.auth.updateUser({ data: { bot_config: botConfig } });
+            } catch(e) {}
+        }
 
 
 

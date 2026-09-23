@@ -656,68 +656,67 @@
 
         // Carga de Datos Principales
         async function loadDashboardData() {
-            // 1. Cargar Perfiles (Usuarios)
-            const { data: users, error: errU } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
-            if (errU) console.error("Error cargando usuarios:", errU);
-            
-            // 2. Cargar Videos
-            const { data: videos, error: errV } = await sb.from('educational_content').select('*').order('created_at', { ascending: false });
-            if (errV) console.error("Error cargando videos:", errV);
-
-            // 3. Cargar Pagos aprobados
-            const { data: payments, error: errP } = await sb.from('payments').select('*').eq('status', 'approved');
-            const { data: pendingPayments } = await sb.from('payments').select('*').eq('status', 'pending').order('created_at', { ascending: false });
-            if (typeof renderPendingPayments === 'function') renderPendingPayments(pendingPayments || []);
-            if (errP) console.error("Error cargando pagos:", errP);
-
-            const approvedPayments = payments || [];
-
-            if(users) {
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                const res = await fetch('/api/admin_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    }
+                });
+                if (!res.ok) throw new Error('Error fetching admin data');
+                const data = await res.json();
+                
+                const users = data.users || [];
+                const videos = data.videos || [];
+                const allPayments = data.payments || [];
+                
+                const approvedPayments = allPayments.filter(p => p.status === 'approved');
+                const pendingPayments = allPayments.filter(p => p.status === 'pending');
+                
+                if (typeof renderPendingPayments === 'function') renderPendingPayments(pendingPayments);
+                
                 renderUsers(users, approvedPayments);
                 document.getElementById("statUsers").textContent = users.length;
                 document.getElementById("statBots").textContent = users.filter(u => u.bot_active).length;
-            }
-            
-            if(!errV && videos) {
+                
                 renderVideos(videos);
                 document.getElementById("statVideos").textContent = videos.length;
-            }
-
-            // Calculate financial stats from payments
-            const now = new Date();
-            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
-
-            // Track unique user_ids for active/expiring calculations
-            const seenUserIds = new Set();
-            let activeCount = 0;
-            let expiringSoonCount = 0;
-
-            // Group payments by user_id (or email as fallback), keep most recent
-            const latestByUser = {};
-            approvedPayments.forEach(p => {
-                const key = p.user_id || p.email;
-                if (!key) return;
-                if (!latestByUser[key] || new Date(p.created_at) > new Date(latestByUser[key].created_at)) {
-                    latestByUser[key] = p;
-                }
-            });
-
-            Object.values(latestByUser).forEach(p => {
-                const planDays = getPlanDays(p.plan);
-                const createdAt = new Date(p.created_at);
-                const expiresAt = new Date(createdAt.getTime() + planDays * 24 * 60 * 60 * 1000);
-                const msRemaining = expiresAt - now;
-
-                if (msRemaining > 0) {
-                    activeCount++;
-                    if (msRemaining <= sevenDaysMs) {
-                        expiringSoonCount++;
+                
+                // Track active and expiring memberships
+                const now = new Date();
+                const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+                let activeCount = 0;
+                let expiringSoonCount = 0;
+                
+                const latestByUser = {};
+                approvedPayments.forEach(p => {
+                    const key = p.user_id || p.email;
+                    if (!key) return;
+                    if (!latestByUser[key] || new Date(p.created_at) > new Date(latestByUser[key].created_at)) {
+                        latestByUser[key] = p;
                     }
-                }
-            });
-
-            document.getElementById("statPaying").textContent = activeCount;
-            document.getElementById("statExpiringSoon").textContent = expiringSoonCount;
+                });
+                
+                Object.values(latestByUser).forEach(p => {
+                    const planDays = getPlanDays(p.plan);
+                    const createdAt = new Date(p.created_at);
+                    const expiresAt = new Date(createdAt.getTime() + planDays * 24 * 60 * 60 * 1000);
+                    const msRemaining = expiresAt - now;
+                    if (msRemaining > 0) {
+                        activeCount++;
+                        if (msRemaining <= sevenDaysMs) {
+                            expiringSoonCount++;
+                        }
+                    }
+                });
+                
+                document.getElementById("statPaying").textContent = activeCount;
+                document.getElementById("statExpiringSoon").textContent = expiringSoonCount;
+            } catch (err) {
+                console.error("loadDashboardData error:", err);
+            }
         }
 
         // IMPROVEMENT 3: renderUsers now accepts payments as second argument
@@ -736,15 +735,15 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>
-                        <strong>${p.email}</strong><br>
+                        <strong>${p.user_email || p.email}</strong><br>
                         <span style="font-size:12px; color:var(--text-muted);">$${p.amount} USDT</span>
                     </td>
                     <td><span class="badge" style="background:var(--accent-glow); color:var(--accent);">${method.toUpperCase()}</span></td>
                     <td>${(p.plan||'').toUpperCase()}</td>
-                    <td><strong style="color:#FBBF24; font-family:monospace; font-size:14px;">${p.reference}</strong></td>
+                    <td><strong style="color:#FBBF24; font-family:monospace; font-size:14px;">${p.reference_number || p.reference}</strong></td>
                     <td>${dateStr}</td>
                     <td style="display:flex; gap:8px;">
-                        <button class="btn-primary" style="padding: 6px 12px; font-size: 13px; border-radius: 4px; border:none; cursor:pointer;" onclick="approvePayment('${p.id}', '${p.email}')">✅ Aprobar</button>
+                        <button class="btn-primary" style="padding: 6px 12px; font-size: 13px; border-radius: 4px; border:none; cursor:pointer;" onclick="approvePayment('${p.id}', '${p.user_email || p.email}')">✅ Aprobar</button>
                         <button class="btn-icon-danger" style="padding: 6px 12px; font-size: 13px; border-radius: 4px; border:none; cursor:pointer; background:rgba(239,68,68,0.2); color:#EF4444;" onclick="rejectPayment('${p.id}')">❌ Rechazar</button>
                     </td>
                 `;
@@ -754,7 +753,14 @@
         
         async function approvePayment(paymentId, email) {
             if(!confirm('¿Estás seguro de APROBAR este pago para ' + email + '? Esto habilitará su acceso al bot de forma inmediata.')) return;
-            const { error } = await sb.from('payments').update({ status: 'approved' }).eq('id', paymentId);
+            const { data: { session } } = await sb.auth.getSession();
+            const res = await fetch('/api/update_payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+                body: JSON.stringify({ payment_id: paymentId, status: 'approved' })
+            });
+            const data = await res.json();
+            const error = res.ok ? null : new Error(data.error || 'Error desconocido');
             if(error) {
                 alert('Error al aprobar: ' + error.message);
             } else {
@@ -776,7 +782,14 @@
         
         async function rejectPayment(paymentId) {
             if(!confirm('¿Estás seguro de RECHAZAR este pago?')) return;
-            const { error } = await sb.from('payments').update({ status: 'rejected' }).eq('id', paymentId);
+            const { data: { session } } = await sb.auth.getSession();
+            const res = await fetch('/api/update_payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+                body: JSON.stringify({ payment_id: paymentId, status: 'rejected' })
+            });
+            const data = await res.json();
+            const error = res.ok ? null : new Error(data.error || 'Error desconocido');
             if(error) {
                 alert('Error al rechazar: ' + error.message);
             } else {
