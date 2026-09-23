@@ -2772,15 +2772,19 @@
 
     <!-- Confirm Modal -->
     <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
-        <div style="background:var(--card-bg); border:1px solid var(--border); padding:32px; border-radius:var(--radius-md); max-width:400px; width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-            <div style="background:rgba(239, 68, 68, 0.1); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
-                <i class="ph-fill ph-warning" style="font-size:32px; color:#EF4444;"></i>
+        <div style="background:#121215; border:1px solid rgba(255,255,255,0.08); padding:32px; border-radius:16px; max-width:400px; width:90%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+            <div style="background:linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05)); border: 1px solid rgba(239, 68, 68, 0.2); width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
             </div>
-            <h3 id="confirmModalTitle" style="margin:0 0 12px; font-size:1.25rem; font-weight:700; color:var(--text-primary);">¿Estás seguro?</h3>
-            <p id="confirmModalDesc" style="margin:0 0 24px; color:var(--text-secondary); font-size:0.95rem; line-height:1.5;">Esta acción no se puede deshacer.</p>
+            <h3 id="confirmModalTitle" style="margin:0 0 12px; font-size:1.3rem; font-weight:700; color:#FFFFFF;">¿Estás seguro?</h3>
+            <p id="confirmModalDesc" style="margin:0 0 24px; color:#A1A1AA; font-size:0.95rem; line-height:1.6;">Esta acción no se puede deshacer.</p>
             <div style="display:flex; gap:12px; justify-content:center;">
-                <button id="confirmModalCancelBtn" class="btn-secondary" style="flex:1; padding:10px; border-radius:8px; font-weight:600; cursor:pointer;">Cancelar</button>
-                <button id="confirmModalConfirmBtn" class="btn-primary" style="flex:1; background:#EF4444; color:white; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; border:none;">Confirmar</button>
+                <button id="confirmModalCancelBtn" style="flex:1; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; background:transparent; border:1px solid rgba(255,255,255,0.15); color:#E4E4E7; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">Cancelar</button>
+                <button id="confirmModalConfirmBtn" style="flex:1; background:linear-gradient(135deg, #EF4444, #DC2626); color:white; padding:12px; border-radius:10px; font-weight:600; cursor:pointer; border:none; box-shadow:0 4px 12px rgba(239,68,68,0.3); transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='none'">Confirmar</button>
             </div>
         </div>
     </div>
