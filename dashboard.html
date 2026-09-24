@@ -1381,7 +1381,7 @@
             <form id="feedbackForm" class="feedback-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="access_key" value="d2d58852-428d-4245-8f86-365d9b47c0b0">
                 <input type="hidden" name="subject" value="Nueva sugerencia desde el Dashboard">
-                <input type="hidden" name="redirect" value="https://www.inviertecongabo.com/dashboard?feedback=success">
+                <input type="hidden" name="redirect" value="https://www.inviertecongabo.com/dashboard?feedback=success#sugerencias">
                 <input type="hidden" name="email" id="sugerenciaUserEmail" value="">
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
@@ -3925,14 +3925,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // NAVIGATION
-
-
-
     
+    // Check for Web3Forms success redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('feedback') === 'success') {
+        setTimeout(() => window.showToast("¡Gracias!", "Tu sugerencia ha sido enviada con éxito.", "success"), 600);
+        // Clean URL to prevent duplicate toasts on refresh
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    }
 
-        // Read hash on load and switch if needed
-
-        const hash = window.location.hash.replace('#', '');
+    // Read hash on load and switch if needed
+    const hash = window.location.hash.replace('#', '');
 
         if (hash && document.getElementById("sec-" + hash)) {
 
