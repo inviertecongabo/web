@@ -1487,18 +1487,12 @@
 
 
 
-            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
-
-                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-
-                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
-
-                    <span>/</span>
-
-                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
-
+                        <div class="section-breadcrumb" style="display:flex; align-items:center; gap:6px; margin-bottom:16px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;">Inicio</a>
+                <span class="breadcrumb-sub" style="display:flex; align-items:center; gap:6px; color:var(--text-muted);">
+                    <span style="color:var(--text-muted);">&gt;</span>
+                    <a class="breadcrumb-sub-link" onclick="event.preventDefault()" href="#" style="color:var(--text-primary); font-weight:500; cursor:default; text-decoration:none;"></a>
                 </span>
-
             </div>
 
             <h2 class="section-heading">Contenido Educativo</h2>
@@ -2500,18 +2494,12 @@
 
 
 
-            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
-
-                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-
-                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
-
-                    <span>/</span>
-
-                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
-
+                        <div class="section-breadcrumb" style="display:flex; align-items:center; gap:6px; margin-bottom:16px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;">Inicio</a>
+                <span class="breadcrumb-sub" style="display:flex; align-items:center; gap:6px; color:var(--text-muted);">
+                    <span style="color:var(--text-muted);">&gt;</span>
+                    <a class="breadcrumb-sub-link" onclick="event.preventDefault()" href="#" style="color:var(--text-primary); font-weight:500; cursor:default; text-decoration:none;"></a>
                 </span>
-
             </div>
 
             <h2 class="section-heading">Alertas de Precio</h2>
@@ -2558,18 +2546,12 @@
 
 
 
-            <div class="section-breadcrumb" style="display:none; align-items:center; gap:6px; margin-bottom:8px; font-size:0.85rem; color:var(--text-muted);">
-
-                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px; text-decoration:none;">&#8249; Inicio</a>
-
-                <span class="breadcrumb-sub" style="display:none; align-items:center; gap:4px; color:var(--text-muted);">
-
-                    <span>/</span>
-
-                    <a class="breadcrumb-sub-link" onclick="" href="#" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;"></a>
-
+                        <div class="section-breadcrumb" style="display:flex; align-items:center; gap:6px; margin-bottom:16px; font-size:0.85rem; color:var(--text-muted);">
+                <a onclick="switchSection(event,'inicio')" href="#inicio" style="color:var(--accent); font-weight:700; cursor:pointer; text-decoration:none;">Inicio</a>
+                <span class="breadcrumb-sub" style="display:flex; align-items:center; gap:6px; color:var(--text-muted);">
+                    <span style="color:var(--text-muted);">&gt;</span>
+                    <a class="breadcrumb-sub-link" onclick="event.preventDefault()" href="#" style="color:var(--text-primary); font-weight:500; cursor:default; text-decoration:none;"></a>
                 </span>
-
             </div>
 
             <h2 class="section-heading">Mi Perfil</h2>
@@ -4111,19 +4093,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById("topbarTitle").textContent = "Configuración";
 
                     } else {
-
                         crumb.style.display = "flex";
-
-                        if (crumbSub) crumbSub.style.display = "none";
-
+                        if (crumbSub) {
+                            crumbSub.style.display = "flex";
+                            if (crumbSubLink) {
+                                crumbSubLink.textContent = "Configuración";
+                                crumbSubLink.style.color = "var(--text-primary)";
+                                crumbSubLink.style.fontWeight = "500";
+                            }
+                        }
                     }
-
                 } else {
-
                     crumb.style.display = "flex";
-
-                    if (crumbSub) crumbSub.style.display = "none";
-
+                    if (crumbSub) {
+                        crumbSub.style.display = "flex";
+                        if (crumbSubLink) {
+                            crumbSubLink.textContent = sectionTitles[id] || id;
+                            crumbSubLink.style.color = "var(--text-primary)";
+                            crumbSubLink.style.fontWeight = "500";
+                            crumbSubLink.style.cursor = "default";
+                            crumbSubLink.onclick = (ev) => ev.preventDefault();
+                        }
+                    }
                 }
 
             }
