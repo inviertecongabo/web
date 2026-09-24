@@ -1429,7 +1429,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                             Seleccionar archivos...
                         </label>
-                        <input type="file" id="feedbackAttachment" name="attachment" accept="image/*" multiple style="display:none;">
+                        <input type="file" id="feedbackAttachment" accept="image/*" multiple style="display:none;">
                         <div id="filePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; margin-bottom: 8px;"></div>
                     </div>
                     <span class="file-hint">Puedes subir hasta 5 capturas de pantalla (Max 20MB en total).</span>
@@ -5657,10 +5657,11 @@ document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item').forEach(
     
 
 <script>
-document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
     // 1. Validar categoría
     if (!document.getElementById('hiddenCategoria').value) {
-        e.preventDefault();
         window.showToast("Falta Categoría", "Por favor, selecciona a qué área corresponde tu sugerencia.", "error");
         document.querySelector('.dropdown-header').style.borderColor = '#FF6B6B';
         setTimeout(() => document.querySelector('.dropdown-header').style.borderColor = '', 3000);
@@ -5670,7 +5671,6 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     // 2. Validar textarea
     const textArea = document.querySelector('textarea[name="Sugerencia"]');
     if (!textArea.value.trim()) {
-        e.preventDefault();
         window.showToast("Falta Información", "Por favor, explícanos tu idea o sugerencia en el cuadro de texto.", "error");
         textArea.style.borderColor = '#FF6B6B';
         setTimeout(() => textArea.style.borderColor = '', 3000);
@@ -5678,9 +5678,8 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
     }
 
     // 3. Validar archivos
-    const fileInput = document.querySelector('input[name="attachment"]');
+    const fileInput = document.getElementById('feedbackAttachment');
     if (fileInput.files.length > 5) {
-        e.preventDefault();
         window.showToast("Límite excedido", "Puedes subir un máximo de 5 imágenes.", "error");
         return;
     }
@@ -5691,10 +5690,53 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             totalSize += fileInput.files[i].size;
         }
         if (totalSize / 1024 / 1024 > 20) {
-            e.preventDefault();
             window.showToast("Imágenes muy pesadas", "El peso total de las imágenes supera los 20MB permitidos.", "error");
             return;
         }
+    }
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Procesando...';
+
+    try {
+        let urls = [];
+        if (fileInput.files.length > 0) {
+            submitBtn.textContent = 'Subiendo imágenes...';
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, "_");
+                const fileName = `${Date.now()}_${Math.floor(Math.random()*1000)}_${safeName}`;
+                
+                const { data, error } = await sb.storage.from('feedback').upload(fileName, file);
+                if (error) throw error;
+                
+                const { data: urlData } = sb.storage.from('feedback').getPublicUrl(fileName);
+                urls.push(urlData.publicUrl);
+            }
+        }
+        
+        if (urls.length > 0) {
+            let hiddenInput = document.getElementById('feedbackImageUrls');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('textarea');
+                hiddenInput.id = 'feedbackImageUrls';
+                hiddenInput.name = 'Links_de_Imagenes';
+                hiddenInput.style.display = 'none';
+                this.appendChild(hiddenInput);
+            }
+            hiddenInput.value = urls.join('\n');
+        }
+        
+        submitBtn.textContent = 'Enviando...';
+        this.submit();
+
+    } catch (err) {
+        console.error(err);
+        window.showToast("Error", "Hubo un error subiendo las imágenes. Intenta de nuevo.", "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
     }
 });
 
