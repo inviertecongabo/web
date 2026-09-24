@@ -3878,14 +3878,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             
-            if (botConfig.termsAccepted) {
-                await window.checkBotPaymentStatus(user);
-            } else {
-                document.getElementById("botOnboarding").style.display = "block";
-                document.getElementById("botPaymentStep").style.display = "none";
-                document.getElementById("botConfigPanel").style.display = "none";
-                if(window.goToBotStep) window.goToBotStep('terms');
-            }
+            // Always evaluate payment status to enforce Terms checking if no active/pending payment
+            await window.checkBotPaymentStatus(user, false);
 
 
 
@@ -4481,7 +4475,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     
-    window.checkBotPaymentStatus = async function(uCheck) {
+    window.checkBotPaymentStatus = async function(uCheck, forceShowCheckout = false) {
         let isPremium = uCheck?.email === 'aibersonmontilla22@gmail.com' || uCheck?.user_metadata?.is_premium === true;
         let daysRemaining = 0;
         let hasExpired = false;
@@ -4515,15 +4509,25 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("botOnboarding").style.display = "none";
             document.getElementById("botPaymentStep").style.display = "none";
             document.getElementById("botConfigPanel").style.display = "block";
-            if(window.goToBotStep) window.goToBotStep("api");
+            if(window.goToBotStep) window.goToBotStep("api", true);
         } else {
             const { data: pendingPays } = await sb.from('payments').select('id, payment_method').eq('user_id', uCheck.id).eq('status', 'pending');
+            const hasPending = pendingPays && pendingPays.length > 0;
+
+            if (!hasPending && !forceShowCheckout) {
+                document.getElementById("botOnboarding").style.display = "block";
+                document.getElementById("botPaymentStep").style.display = "none";
+                document.getElementById("botConfigPanel").style.display = "none";
+                if(window.goToBotStep) window.goToBotStep('terms', true);
+                return;
+            }
+
             document.getElementById("botOnboarding").style.display = "none";
             document.getElementById("botConfigPanel").style.display = "none";
             document.getElementById("botPaymentStep").style.display = "block";
-            if(window.goToBotStep) window.goToBotStep('payment');
+            if(window.goToBotStep) window.goToBotStep('payment', true);
             
-            if (pendingPays && pendingPays.length > 0) {
+            if (hasPending) {
                 document.getElementById("pwsCheckout").style.display = "none";
                 document.getElementById("pwsPending").style.display = "block";
                 document.getElementById("pwsContinueBtn").style.display = "block";
@@ -4590,7 +4594,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = "Aceptar y Continuar";
 
         const { data: { user: uCheck } } = await sb.auth.getUser();
-        await window.checkBotPaymentStatus(uCheck);
+        await window.checkBotPaymentStatus(uCheck, true);
         switchSection(null, 'tool-bot');
 
 
@@ -6059,7 +6063,22 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
             }, 5000);
         };
 
-                window.goToBotStep = function(step) {
+                window.goToBotStep = function(step, force = false) {
+            // PREVENT SKIPPING TERMS
+            if (!force && !window.gaboUserIsPremium && (step === 'payment' || step === 'api')) {
+                const c1 = document.getElementById("botTermsCheck1");
+                const c2 = document.getElementById("botTermsCheck2");
+                const hasPending = document.getElementById("pwsPending") && document.getElementById("pwsPending").style.display === "block";
+                
+                if (!hasPending && c1 && c2 && (!c1.checked || !c2.checked)) {
+                    if (window.showToast) {
+                        window.showToast("Debes aceptar los términos primero", "error");
+                    } else {
+                        alert("Debes aceptar los términos primero");
+                    }
+                    step = 'terms';
+                }
+            }
             const terms = document.getElementById('botOnboarding');
             const payment = document.getElementById('botPaymentStep');
             const api = document.getElementById('botConfigPanel');
@@ -6129,7 +6148,7 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
 
         window.pwsContinueToConfig = function() {
             document.getElementById('botPaymentStep').style.display = 'none';
-            document.getElementById('botConfigPanel').style.display = 'block'; if(window.goToBotStep) window.goToBotStep('api');
+            document.getElementById('botConfigPanel').style.display = 'block'; if(window.goToBotStep) window.goToBotStep('api', true);
         };
 
         window.pwsInit = function() {
