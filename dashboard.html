@@ -171,7 +171,8 @@
 
 
 
-        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer; transition: var(--transition); border-radius: 8px; padding: 4px; }
+        .user-info:hover { transform: translateY(-3px); }
 
 
 
@@ -236,7 +237,8 @@
 
 
 
-        .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 0.9rem; color: var(--text-dark); overflow: hidden; position: relative; }
+        .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 800; font-size: 0.9rem; color: var(--text-dark); overflow: hidden; position: relative; transition: var(--transition); border: 2px solid transparent; }
+        .topbar-avatar:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(240,185,11,0.2); }
 
 
 
@@ -1042,7 +1044,7 @@
 
 
 
-        <div class="user-info" onclick="switchSection(event, 'perfil')" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+        <div class="user-info" onclick="switchSection(event, 'perfil')" >
 
 
 
@@ -1164,7 +1166,7 @@
 
 
 
-            <div class="topbar-avatar" id="topbarAvatar" onclick="switchSection(event, 'perfil')" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+            <div class="topbar-avatar" id="topbarAvatar" onclick="switchSection(event, 'perfil')" >
 
 
 
