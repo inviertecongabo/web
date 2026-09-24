@@ -5882,6 +5882,24 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
 
             const btn = document.getElementById('pwsSubmitBtn');
             btn.textContent = 'Procesando...'; btn.disabled = true;
+
+            if (!isAutoCrypto) {
+                try {
+                    const { data: existingRef } = await sb.from('payments')
+                        .select('id')
+                        .eq('reference_number', ref)
+                        .limit(1);
+                        
+                    if (existingRef && existingRef.length > 0) {
+                        window.showToast("Referencia Duplicada", "Esta referencia ya ha sido reportada anteriormente.", "error");
+                        btn.textContent = 'Reportar Pago'; 
+                        btn.disabled = false;
+                        return;
+                    }
+                } catch(e) {
+                    console.error("Error checking ref", e);
+                }
+            }
             
             let amount = 9;
             if (_pwsPlan === 'monthly') amount = 0.99;
