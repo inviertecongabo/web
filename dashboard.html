@@ -4528,6 +4528,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if(window.goToBotStep) window.goToBotStep('payment', true);
             
             if (hasPending) {
+                // Start polling to automatically approve if webhook arrives
+                if (!window.paymentPollInterval) {
+                    window.paymentPollInterval = setInterval(async () => {
+                        try {
+                            const { data: latest } = await sb.from('payments').select('status').eq('user_id', uCheck.id).order('created_at', {ascending: false}).limit(1);
+                            if (latest && latest.length > 0) {
+                                if (latest[0].status === 'approved') {
+                                    clearInterval(window.paymentPollInterval);
+                                    window.gaboUserIsPremium = true;
+                                    if (window.showToast) window.showToast("¡Pago Confirmado!", "Tu pago cripto ha sido verificado en la blockchain. Ya puedes encender el bot.", "success");
+                                    document.getElementById("pwsPending").style.display = "none";
+                                    document.getElementById("botPaymentStep").style.display = "none";
+                                    document.getElementById("botConfigPanel").style.display = "block";
+                                } else if (latest[0].status === 'rejected') {
+                                    clearInterval(window.paymentPollInterval);
+                                    if (window.showToast) window.showToast("Pago Cancelado", "El intento de pago ha sido cancelado.", "error");
+                                    setTimeout(() => window.location.reload(), 2000);
+                                }
+                            }
+                        } catch(err) {}
+                    }, 10000);
+                }
+
                 document.getElementById("pwsCheckout").style.display = "none";
                 document.getElementById("pwsPending").style.display = "block";
                 document.getElementById("pwsContinueBtn").style.display = "block";
