@@ -972,6 +972,7 @@
 
 
                 <button class="sub-nav-item" data-section="tool-bot">GaboBot (Compras BTC)</button>
+                <button class="sub-nav-item" data-section="historial">Historial GaboBot</button>
 
 
 
@@ -2538,6 +2539,66 @@
 
 
 
+        <!-- HISTORIAL -->
+        <section class="dash-section" id="sec-historial">
+            <h2 class="section-heading">Historial de Operaciones</h2>
+            <p class="section-sub">Registros de todas las compras automatizadas (DCA) que ha realizado GaboBot.</p>
+            
+            <div id="historialPremiumView" style="display: none;">
+                <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-top: 24px;">
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Fecha y Hora</th>
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Moneda</th>
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Monto (USDT)</th>
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Recibido</th>
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Precio Compra</th>
+                                    <th style="padding: 16px; color: var(--text-muted); font-weight: 500;">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historialTableBody">
+                                <!-- Data will be populated here -->
+                                <tr><td colspan="6" style="padding: 32px; text-align: center; color: var(--text-muted);">Cargando operaciones...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="historialFreeView" style="display: none; position: relative; margin-top: 24px;">
+                <!-- Mock table (blurred) -->
+                <div style="filter: blur(6px); opacity: 0.4; user-select: none; pointer-events: none; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;">
+                     <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                         <div style="width: 100px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 80px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 120px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                     </div>
+                     <div style="padding: 16px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                         <div style="width: 120px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 60px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 100px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                     </div>
+                     <div style="padding: 16px; display: flex; justify-content: space-between;">
+                         <div style="width: 90px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 110px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                         <div style="width: 70px; height: 16px; background: rgba(255,255,255,0.1); border-radius: 4px;"></div>
+                     </div>
+                </div>
+
+                <!-- Overlay content -->
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; z-index: 5;">
+                    <i class="ph-fill ph-lock-key" style="font-size: 3rem; color: var(--accent); margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(250,204,21,0.3));"></i>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Función Exclusiva para Miembros</h3>
+                    <p style="color: var(--text-muted); max-width: 400px; margin-bottom: 24px; font-size: 0.95rem; line-height: 1.5;">Lleva el control exacto de tu dinero. Esta sección guarda el registro de todas las compras automatizadas que hace el bot por ti. Adquiere GaboBot para desbloquear tu historial.</p>
+                    <button onclick="switchSection(event, 'tool-bot'); window.goToBotStep('onboarding');" class="btn btn-primary" style="font-weight: 700;">
+                        <i class="ph-fill ph-crown"></i> Desbloquear GaboBot
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- PERFIL -->
 
 
@@ -3058,7 +3119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const sectionTitles = { inicio:"Inicio", contenido:"Contenido Educativo", herramientas:"Mis Herramientas", "tool-bot":"Compras BTC (GaboBot)", perfil:"Mi Perfil" };
+    const sectionTitles = { inicio:"Inicio", contenido:"Contenido Educativo", herramientas:"Mis Herramientas", "tool-bot":"Compras BTC (GaboBot)", "historial":"Historial de Operaciones", perfil:"Mi Perfil" };
 
 
 
@@ -4025,6 +4086,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         document.getElementById("sec-" + id).classList.add("active");
+        
+        if (id === 'historial') {
+            if (window.gaboUserIsPremium) {
+                document.getElementById('historialPremiumView').style.display = 'block';
+                document.getElementById('historialFreeView').style.display = 'none';
+            } else {
+                document.getElementById('historialPremiumView').style.display = 'none';
+                document.getElementById('historialFreeView').style.display = 'block';
+            }
+        }
 
 
 
