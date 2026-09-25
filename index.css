@@ -1819,3 +1819,22 @@ body {
     object-fit: cover;
     z-index: -1;
 }
+
+/* --- Corner Ribbon --- */
+.corner-ribbon {
+    position: absolute;
+    top: 24px;
+    right: -36px;
+    width: 150px;
+    background: linear-gradient(135deg, #F0B90B, #F8D12F);
+    color: #000;
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 12px rgba(240, 185, 11, 0.4);
+    z-index: 10;
+    pointer-events: none;
+    padding: 6px 0;
+}

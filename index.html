@@ -382,38 +382,19 @@
             const SUPABASE_KEY = 'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa';
             const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
             
-            // 1. Detectar Sesión y Membresía
+            // 1. Detectar Sesión
             const { data: sessionData } = await sb.auth.getSession();
             const loginBtn = document.getElementById('navLoginBtn');
             const registerBtn = document.getElementById('navRegisterBtn');
             const panelBtn = document.getElementById('navPanelBtn');
             
             let isLoggedIn = false;
-            let isPro = false;
 
             if (sessionData && sessionData.session) {
                 isLoggedIn = true;
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (registerBtn) registerBtn.style.display = 'none';
                 if (panelBtn) panelBtn.style.display = 'inline-flex';
-                
-                // Verificar estado de pago
-                const { data: payments } = await sb.from('payments')
-                    .select('*')
-                    .eq('user_id', sessionData.session.user.id)
-                    .eq('status', 'approved')
-                    .order('created_at', { ascending: false });
-                
-                if (payments && payments.length > 0) {
-                    const p = payments[0];
-                    let days = 30;
-                    if (p.plan === 'semiannual') days = 180;
-                    if (p.plan === 'annual') days = 365;
-                    const expiry = new Date(new Date(p.created_at).getTime() + days * 86400000);
-                    if (expiry > new Date()) {
-                        isPro = true;
-                    }
-                }
             }
 
             // 2. Renderizar Tarjetas
@@ -422,8 +403,8 @@
                 const catLabel = { recientes: 'RECIENTES', binance: 'BINANCE', trading: 'TRADING', acciones: 'ACCIONES VENEZOLANAS' };
                 const isFree = card.is_free !== false;
                 
-                // LOGIC: If it's not free, BUT the user is PRO, we treat the link as accessible!
-                const isAccessible = isFree || isPro;
+                // LOGIC: If user is logged in, they can access everything. 
+                const isAccessible = isFree || isLoggedIn;
                 
                 const categoryList = card.category ? card.category.split(',') : ['recientes'];
                 const category = categoryList.join(',');
@@ -445,12 +426,10 @@
                 const targetAttr = isAccessible ? '_blank' : '_self';
                 const textColor = !isFree ? 'color: var(--accent);' : '';
                 
-                // Beautiful badge
+                // Beautiful Ribbon
                 let badgeHTML = '';
-                if (isFree) {
-                    badgeHTML = `<div class="thumb-badge free" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">GRATIS</div>`;
-                } else {
-                    badgeHTML = `<div class="thumb-badge exclusive" style="background: linear-gradient(135deg, #F0B90B, #F8D12F); color: #000; box-shadow: 0 4px 12px rgba(240, 185, 11, 0.4); border: none;"><i class="ph-fill ph-lock-key" style="margin-right:2px;"></i> EXCLUSIVO</div>`;
+                if (!isFree) {
+                    badgeHTML = `<div class="corner-ribbon"><i class="ph-fill ph-star" style="margin-right:2px;"></i> EXCLUSIVO</div>`;
                 }
 
                 return `<div class="video-card reveal" data-category="${category}">
@@ -541,7 +520,7 @@
 
             initFilterTabs();
 
-            // 3. Lógica del Gated Modal con mensajes personalizados
+            // 3. Lógica del Gated Modal (Sólo para no registrados)
             container.querySelectorAll('.gated-trigger').forEach(el => {
                 el.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -552,19 +531,11 @@
                     const text = modal.querySelector('.gated-modal-text');
                     const btn = modal.querySelector('.gated-modal-btn');
                     
-                    if (isLoggedIn && !isPro) {
-                        // Usuario sin plan activo
-                        title.textContent = 'Contenido Premium';
-                        text.textContent = 'Este contenido es exclusivo para miembros con suscripción activa. Ve a tu panel para renovar o adquirir tu plan y desbloquear todas las herramientas.';
-                        btn.textContent = 'Ir a mi Panel';
-                        btn.href = '/dashboard';
-                    } else {
-                        // Usuario no registrado / no logueado
-                        title.textContent = 'Contenido Exclusivo';
-                        text.textContent = 'Estás a un paso de aprender a invertir. Para ver este video completo y acceder a todas las guías de Invierte con Gabo, crea tu cuenta o inicia sesión. ¡Es 100% gratis!';
-                        btn.textContent = 'Crear mi cuenta gratis';
-                        btn.href = '/login';
-                    }
+                    // Si llega aquí, es porque NO está logueado (los logueados no tienen la clase gated-trigger)
+                    title.innerHTML = 'Acceso Exclusivo <i class="ph-fill ph-star" style="color:var(--accent);"></i>';
+                    text.textContent = 'Estás a un paso de aprender a invertir. Para ver este video completo y acceder a todo el material de Invierte con Gabo, inicia sesión o crea tu cuenta. ¡Es 100% gratis!';
+                    btn.textContent = 'Crear mi cuenta gratis / Iniciar Sesión';
+                    btn.href = '/login';
                     
                     modal.classList.add('active');
                 });
@@ -573,7 +544,6 @@
             // Cerrar modal
             const closeBtn = document.getElementById('gatedModalClose');
             if(closeBtn) {
-                // Remove old listeners to avoid duplicates
                 const newClose = closeBtn.cloneNode(true);
                 closeBtn.parentNode.replaceChild(newClose, closeBtn);
                 newClose.addEventListener('click', () => {
@@ -581,8 +551,7 @@
                 });
             }
         })();
-    </script>
-</script>
+    </script></script>
 <script src="/cookie_banner.js"></script>
 </body>
 </html>
