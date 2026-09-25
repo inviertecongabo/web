@@ -4040,6 +4040,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     
+    window.fetchHistorialData = async function() {
+        if(!window.gaboUserIsPremium || !window.uCheck) return;
+        const tbody = document.getElementById('historialTableBody');
+        if(!tbody) return;
+        try {
+            const { data, error } = await sb
+                .from('dca_history')
+                .select('*')
+                .eq('user_id', window.uCheck.id)
+                .order('created_at', { ascending: false })
+                .limit(50);
+                
+            if(error) throw error;
+            if(!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="padding: 32px; text-align: center; color: var(--text-muted);">Aún no tienes compras registradas. Tu primera operación aparecerá aquí.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                const dateObj = new Date(item.created_at);
+                const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid var(--border-color)';
+                const badgeClass = item.estado === 'completado' ? 'badge badge-success' : 'badge badge-danger';
+                const estadoText = item.estado.charAt(0).toUpperCase() + item.estado.slice(1);
+                tr.innerHTML = `
+                    <td style="padding: 16px; color: var(--text-primary);">${dateStr}</td>
+                    <td style="padding: 16px; color: var(--text-primary); font-weight: 500;">
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="ph-fill ph-currency-btc" style="color: #F7931A;"></i> ${item.moneda}
+                        </span>
+                    </td>
+                    <td style="padding: 16px; color: var(--text-primary);">$${item.monto_usdt.toFixed(2)}</td>
+                    <td style="padding: 16px; color: #22c55e;">+${item.cantidad_recibida.toFixed(6)}</td>
+                    <td style="padding: 16px; color: var(--text-muted);">$${item.precio_compra.toFixed(2)}</td>
+                    <td style="padding: 16px;"><span class="${badgeClass}">${estadoText}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch(err) {
+            console.error("Error cargando historial:", err);
+            tbody.innerHTML = '<tr><td colspan="6" style="padding: 32px; text-align: center; color: #ef4444;">Ocurrió un error cargando tu historial.</td></tr>';
+        }
+    };
+
     window.updateHistorialView = function() {
         if (!document.getElementById('historialPremiumView')) return;
         if (window.gaboUserIsPremium) {
