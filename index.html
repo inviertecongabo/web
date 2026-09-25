@@ -14,6 +14,23 @@
     <!-- Link al archivo CSS -->
     <link rel="stylesheet" href="index.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    
+    <!-- Open Graph / Redes Sociales -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://inviertecongabo.com/">
+    <meta property="og:title" content="Invierte con Gabo | Aprende a multiplicar tu dinero">
+    <meta property="og:description" content="Descubre cómo invertir en acciones venezolanas y criptomonedas de forma segura. Sin falsas promesas, aprendamos lo que verdaderamente funciona.">
+    <meta property="og:image" content="https://inviertecongabo.com/assets/images/og-image.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Invierte con Gabo | Aprende a multiplicar tu dinero">
+    <meta name="twitter:description" content="Descubre cómo invertir en acciones venezolanas y criptomonedas de forma segura. Sin falsas promesas, aprendamos lo que verdaderamente funciona.">
+    <meta name="twitter:image" content="https://inviertecongabo.com/assets/images/og-image.png">
+
 </head>
 <body>
     <!-- Fondo decorativo con gradiente dinámico -->
@@ -165,10 +182,11 @@
 
                 <!-- Grid de Videos (cargado dinámicamente desde Supabase) -->
                 <div class="video-grid" id="videoGrid">
-                    <div id="homepageCardsContainer" style="display:contents;">
-                        <div style="grid-column:1/-1; text-align:center; padding: 40px; color: var(--text-muted);">
-                            Cargando contenido...
-                        </div>
+                    <div id="homepageCardsContainer"><div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; width: 100%;">
+    <div class="video-card skeleton" style="height: 380px;"></div>
+    <div class="video-card skeleton" style="height: 380px;"></div>
+    <div class="video-card skeleton" style="height: 380px;"></div>
+</div></div>
                     </div>
                 </div>
             </div>

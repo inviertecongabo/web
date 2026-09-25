@@ -913,6 +913,19 @@
 
 .empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
 
+
+/* SKELETON LOADERS */
+.skeleton {
+    background: linear-gradient(90deg, #1A1D24 25%, #232730 50%, #1A1D24 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: var(--radius-md);
+}
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
 </style>
 
 <style>
@@ -1109,6 +1122,10 @@
 
 
     </style>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
 
 
@@ -1770,7 +1787,12 @@
 
 
 
-            <div class="video-grid" id="videoGrid"></div>
+            <div class="video-grid" id="videoGrid">
+<div class="video-card skeleton" style="height: 190px;"></div>
+<div class="video-card skeleton" style="height: 190px;"></div>
+<div class="video-card skeleton" style="height: 190px;"></div>
+<div class="video-card skeleton" style="height: 190px;"></div>
+</div>
 
         </section>
 
