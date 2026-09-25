@@ -13,6 +13,7 @@
     
     <!-- Link al archivo CSS -->
     <link rel="stylesheet" href="index.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <!-- Fondo decorativo con gradiente dinámico -->
@@ -373,56 +374,59 @@
     <!-- Script de interacción -->
     <script src="index.js"></script>
 
-    <!-- Supabase: detectar sesion para cambiar botones de navbar -->
+    <!-- Supabase: detectar sesion y cargar tarjetas dinámicas -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script>
-        (async () => {
-            const sb = supabase.createClient(
-                'https://uyrcsfsqzkywrgrjkvbr.supabase.co',
-                'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa'
-            );
-            const { data } = await sb.auth.getSession();
-            const loginBtn = document.getElementById('navLoginBtn');
-            const registerBtn = document.getElementById('navRegisterBtn');
-            const panelBtn = document.getElementById('navPanelBtn');
-            
-            if (data.session) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (registerBtn) registerBtn.style.display = 'none';
-                if (panelBtn) panelBtn.style.display = 'inline-flex';
-            }
-        })();
-    </script>
-    <!-- Cargar tarjetas dinámicamente desde Supabase homepage_cards -->
     <script>
         (async () => {
             const SUPABASE_URL = 'https://uyrcsfsqzkywrgrjkvbr.supabase.co';
             const SUPABASE_KEY = 'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa';
-            // Re-use the already-loaded supabase client if available, or create a new one
-            const sbCards = (typeof supabase !== 'undefined')
-                ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-                : null;
+            const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            
+            // 1. Detectar Sesión y Membresía
+            const { data: sessionData } = await sb.auth.getSession();
+            const loginBtn = document.getElementById('navLoginBtn');
+            const registerBtn = document.getElementById('navRegisterBtn');
+            const panelBtn = document.getElementById('navPanelBtn');
+            
+            let isLoggedIn = false;
+            let isPro = false;
 
-            if (!sbCards) return;
+            if (sessionData && sessionData.session) {
+                isLoggedIn = true;
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (panelBtn) panelBtn.style.display = 'inline-flex';
+                
+                // Verificar estado de pago
+                const { data: payments } = await sb.from('payments')
+                    .select('*')
+                    .eq('user_id', sessionData.session.user.id)
+                    .eq('status', 'approved')
+                    .order('created_at', { ascending: false });
+                
+                if (payments && payments.length > 0) {
+                    const p = payments[0];
+                    let days = 30;
+                    if (p.plan === 'semiannual') days = 180;
+                    if (p.plan === 'annual') days = 365;
+                    const expiry = new Date(new Date(p.created_at).getTime() + days * 86400000);
+                    if (expiry > new Date()) {
+                        isPro = true;
+                    }
+                }
+            }
 
+            // 2. Renderizar Tarjetas
             function renderHomepageCard(card) {
-                const catMap = {
-                    recientes: 'recientes',
-                    binance: 'binance',
-                    trading: 'trading',
-                    acciones: 'acciones'
-                };
-                const catLabel = {
-                    recientes: 'RECIENTES',
-                    binance: 'BINANCE',
-                    trading: 'TRADING',
-                    acciones: 'ACCIONES VENEZOLANAS'
-                };
+                const catMap = { recientes: 'recientes', binance: 'binance', trading: 'trading', acciones: 'acciones' };
+                const catLabel = { recientes: 'RECIENTES', binance: 'BINANCE', trading: 'TRADING', acciones: 'ACCIONES VENEZOLANAS' };
                 const isFree = card.is_free !== false;
-                const badgeClass = isFree ? 'free' : 'exclusive';
-                const badgeText = isFree ? 'GRATIS' : 'EXCLUSIVO';
+                
+                // LOGIC: If it's not free, BUT the user is PRO, we treat the link as accessible!
+                const isAccessible = isFree || isPro;
+                
                 const categoryList = card.category ? card.category.split(',') : ['recientes'];
-                const category = categoryList.join(','); // stores the comma separated string in data-category
+                const category = categoryList.join(',');
                 const displayCat = catLabel[categoryList[0].trim()] || categoryList[0].trim().toUpperCase();
                 
                 const imgContent = card.image_data
@@ -435,11 +439,22 @@
                     ? 'Ver video en Instagram →'
                     : (isYouTube ? 'Ver video en YouTube →' : 'Ver clase completa →');
 
-                const href = (card.is_free === false) ? 'javascript:void(0)' : (card.url || '#');
-                const gatedClass = (card.is_free === false) ? ' gated-trigger' : '';
+                // Generate links and classes based on accessibility
+                const href = isAccessible ? (card.url || '#') : 'javascript:void(0)';
+                const gatedClass = isAccessible ? '' : ' gated-trigger';
+                const targetAttr = isAccessible ? '_blank' : '_self';
+                const textColor = !isFree ? 'color: var(--accent);' : '';
+                
+                // Beautiful badge
+                let badgeHTML = '';
+                if (isFree) {
+                    badgeHTML = `<div class="thumb-badge free" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">GRATIS</div>`;
+                } else {
+                    badgeHTML = `<div class="thumb-badge exclusive" style="background: linear-gradient(135deg, #F0B90B, #F8D12F); color: #000; box-shadow: 0 4px 12px rgba(240, 185, 11, 0.4); border: none;"><i class="ph-fill ph-lock-key" style="margin-right:2px;"></i> EXCLUSIVO</div>`;
+                }
 
                 return `<div class="video-card reveal" data-category="${category}">
-                    <a href="${href}" target="${card.is_free === false ? '_self' : '_blank'}" rel="noopener noreferrer" class="video-thumbnail-link${gatedClass}">
+                    <a href="${href}" target="${targetAttr}" rel="noopener noreferrer" class="video-thumbnail-link${gatedClass}">
                         <div class="video-thumbnail-wrapper">
                             <div class="video-overlay">
                                 <span class="play-btn">
@@ -448,7 +463,7 @@
                             </div>
                             <div class="custom-thumbnail" style="background:#0d0d0d; overflow:hidden; display:flex; align-items:center; justify-content:center;">
                                 ${imgContent}
-                                <div class="thumb-badge${isFree ? '' : '" style="background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);"'}">${isFree ? badgeText : '🔒 ' + badgeText}</div>
+                                ${badgeHTML}
                             </div>
                         </div>
                     </a>
@@ -456,8 +471,8 @@
                         <span class="video-category">${displayCat}</span>
                         <h3 class="video-title">${card.title}</h3>
                         <p class="video-desc">${card.description || ''}</p>
-                        <a href="${href}" target="${card.is_free === false ? '_self' : '_blank'}" rel="noopener noreferrer"
-                           class="video-link${gatedClass}"${card.is_free === false ? ' style="color: var(--accent);"' : ''}>
+                        <a href="${href}" target="${targetAttr}" rel="noopener noreferrer"
+                           class="video-link${gatedClass}" style="${textColor}">
                             ${linkText}
                             <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                         </a>
@@ -470,7 +485,6 @@
                 const getVideoCards = () => document.querySelectorAll('#videoGrid .video-card');
 
                 filterButtons.forEach(button => {
-                    // Remove old listeners by cloning and replacing
                     const clone = button.cloneNode(true);
                     button.parentNode.replaceChild(clone, button);
                 });
@@ -495,7 +509,7 @@
             const container = document.getElementById('homepageCardsContainer');
             if (!container) return;
 
-            const { data, error } = await sbCards
+            const { data, error } = await sb
                 .from('homepage_cards')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -510,7 +524,6 @@
             } else {
                 container.innerHTML = data.map(renderHomepageCard).join('');
                 
-                // Aplicar efecto reveal a las tarjetas cargadas dinámicamente
                 const newReveals = container.querySelectorAll('.reveal');
                 const cardObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
@@ -526,19 +539,50 @@
                 newReveals.forEach(el => cardObserver.observe(el));
             }
 
-            // Re-initialize filter tabs so they work with dynamically loaded cards
             initFilterTabs();
 
-            // Re-attach gated modal triggers for exclusive cards
+            // 3. Lógica del Gated Modal con mensajes personalizados
             container.querySelectorAll('.gated-trigger').forEach(el => {
                 el.addEventListener('click', function(e) {
                     e.preventDefault();
                     const modal = document.getElementById('gatedModal');
-                    if (modal) modal.style.display = 'flex';
+                    if (!modal) return;
+                    
+                    const title = modal.querySelector('.gated-modal-title');
+                    const text = modal.querySelector('.gated-modal-text');
+                    const btn = modal.querySelector('.gated-modal-btn');
+                    
+                    if (isLoggedIn && !isPro) {
+                        // Usuario sin plan activo
+                        title.textContent = 'Contenido Premium';
+                        text.textContent = 'Este contenido es exclusivo para miembros con suscripción activa. Ve a tu panel para renovar o adquirir tu plan y desbloquear todas las herramientas.';
+                        btn.textContent = 'Ir a mi Panel';
+                        btn.href = '/dashboard';
+                    } else {
+                        // Usuario no registrado / no logueado
+                        title.textContent = 'Contenido Exclusivo';
+                        text.textContent = 'Estás a un paso de aprender a invertir. Para ver este video completo y acceder a todas las guías de Invierte con Gabo, crea tu cuenta o inicia sesión. ¡Es 100% gratis!';
+                        btn.textContent = 'Crear mi cuenta gratis';
+                        btn.href = '/login';
+                    }
+                    
+                    modal.classList.add('active');
                 });
             });
+            
+            // Cerrar modal
+            const closeBtn = document.getElementById('gatedModalClose');
+            if(closeBtn) {
+                // Remove old listeners to avoid duplicates
+                const newClose = closeBtn.cloneNode(true);
+                closeBtn.parentNode.replaceChild(newClose, closeBtn);
+                newClose.addEventListener('click', () => {
+                    document.getElementById('gatedModal').classList.remove('active');
+                });
+            }
         })();
     </script>
+</script>
 <script src="/cookie_banner.js"></script>
 </body>
 </html>
