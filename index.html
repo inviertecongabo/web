@@ -421,7 +421,9 @@
                 const isFree = card.is_free !== false;
                 const badgeClass = isFree ? 'free' : 'exclusive';
                 const badgeText = isFree ? 'GRATIS' : 'EXCLUSIVO';
-                const category = catMap[card.category] || card.category;
+                const categoryList = card.category ? card.category.split(',') : ['recientes'];
+                const category = categoryList.join(','); // stores the comma separated string in data-category
+                const displayCat = catLabel[categoryList[0].trim()] || categoryList[0].trim().toUpperCase();
                 
                 const imgContent = card.image_data
                     ? `<img src="${card.image_data}" alt="${card.title}" loading="lazy">`
@@ -480,7 +482,7 @@
                         const filterValue = this.getAttribute('data-filter');
                         getVideoCards().forEach(card => {
                             const cardCategory = card.getAttribute('data-category');
-                            if (filterValue === 'all' || cardCategory === filterValue) {
+                            if (filterValue === 'all' || (cardCategory && cardCategory.split(',').includes(filterValue))) {
                                 card.style.display = '';
                             } else {
                                 card.style.display = 'none';

@@ -555,12 +555,12 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Categoría</label>
-                            <select id="hCategory" class="form-input" required>
-                                <option value="recientes">Recientes</option>
-                                <option value="binance">Binance</option>
-                                <option value="trading">Trading</option>
-                                <option value="acciones">Acciones Venezolanas</option>
-                            </select>
+                            <div id="hCategoryGroup" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="recientes" checked> Recientes</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="binance"> Binance</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="trading"> Trading</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="acciones"> Acciones Venezolanas</label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">URL del enlace (YouTube, Instagram, etc.)</label>
@@ -1243,7 +1243,11 @@
                             </div>
                         </div>
                     </td>
-                    <td><span style="background:rgba(240,185,11,0.1);color:#F0B90B;padding:3px 8px;border-radius:999px;font-size:0.78rem;font-weight:600;">${catLabels[card.category] || card.category}</span></td>
+                    <td>
+                <div style="display:flex; flex-wrap:wrap; gap:4px;">
+                    ${(card.category || 'recientes').split(',').map(cat => `<span style="background:rgba(240,185,11,0.1);color:#F0B90B;padding:3px 8px;border-radius:999px;font-size:0.78rem;font-weight:600;">${catLabels[cat.trim()] || cat.trim()}</span>`).join('')}
+                </div>
+            </td>
                     <td>${card.is_free ? '<span style="color:#22c55e; font-weight:600;">GRATIS</span>' : '<span style="color:#ef4444; font-weight:600;">EXCLUSIVO</span>'}</td>
                     <td style="color:var(--text-muted);font-size:0.85rem;">${new Date(card.created_at).toLocaleDateString('es-ES')}</td>
                     <td>
@@ -1264,7 +1268,9 @@
             document.getElementById('homepageFormWrapper').style.display = 'none';
             document.getElementById('homepageForm').reset();
             document.getElementById('editingHomepageCardId').value = '';
-            document.getElementById('homepageFormTitle').textContent = 'Nueva Tarjeta';
+            document.querySelectorAll('input[name="hCat"]').forEach(cb => cb.checked = false);
+    document.querySelector('input[name="hCat"][value="recientes"]').checked = true;
+    document.getElementById('homepageFormTitle').textContent = 'Nueva Tarjeta';
             document.getElementById('btnHomepageSubmit').innerHTML = '<i class="ph ph-upload-simple"></i> Publicar Tarjeta';
             editingHomepageCardId = null;
         }
@@ -1273,7 +1279,15 @@
             const { data, error } = await sb.from('homepage_cards').select('*').eq('id', id).single();
             if (error || !data) { alert('Error cargando tarjeta'); return; }
             document.getElementById('hTitle').value = data.title || '';
-            document.getElementById('hCategory').value = data.category || 'recientes';
+            document.querySelectorAll('input[name="hCat"]').forEach(cb => cb.checked = false);
+    if (data.category) {
+        data.category.split(',').forEach(cat => {
+            const cb = document.querySelector(`input[name="hCat"][value="${cat.trim()}"]`);
+            if (cb) cb.checked = true;
+        });
+    } else {
+        document.querySelector('input[name="hCat"][value="recientes"]').checked = true;
+    }
             document.getElementById('hUrl').value = data.url || '';
             document.getElementById('hIsFree').value = data.is_free ? 'true' : 'false';
             document.getElementById('hDesc').value = data.description || '';
@@ -1304,7 +1318,15 @@
                     msg.textContent = '';
                     
                     const title = document.getElementById('hTitle').value.trim();
-                    const category = document.getElementById('hCategory').value;
+                    const categoryBoxes = document.querySelectorAll('input[name="hCat"]:checked');
+            const category = Array.from(categoryBoxes).map(cb => cb.value).join(',');
+            if (!category) {
+                msg.style.color = '#ef4444';
+                msg.textContent = 'Selecciona al menos una categoría.';
+                btn.disabled = false;
+                btn.textContent = 'Publicar Tarjeta';
+                return;
+            }
                     const url = document.getElementById('hUrl').value.trim();
                     const isFree = document.getElementById('hIsFree').value === 'true';
                     const desc = document.getElementById('hDesc').value.trim();
