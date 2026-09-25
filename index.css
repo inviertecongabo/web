@@ -365,7 +365,7 @@ body {
     border-radius: 50%;
     z-index: 2;
     position: relative;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 12px 30px rgba(240, 185, 11, 0.15);
 }
 
 .section-tag {
@@ -476,14 +476,14 @@ body {
     flex-direction: column;
     transition: var(--transition-normal);
     width: 100%;
-    max-width: 400px;
+    max-width: 280px;
     margin: 0 auto;
 }
 
 .video-card:hover {
     transform: translateY(-8px);
     border-color: rgba(240, 185, 11, 0.2);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 12px 30px rgba(240, 185, 11, 0.15);
 }
 
 /* Video Destacado (Binance) toma más importancia en el layout */
@@ -494,7 +494,7 @@ body {
 
 .video-thumbnail-wrapper {
     position: relative;
-    padding-top: 56.25%; /* Proporcion 16:9 horizontal tipo YouTube */
+    padding-top: 130%; /* Proporcion 9:16 vertical tipo Reel de Instagram */
     overflow: hidden;
     background-color: #000;
 }
