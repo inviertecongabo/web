@@ -537,6 +537,27 @@
             }
         })();
     </script>
-<script src="/cookie_banner.js"></script>
+<script src="/cookie_banner.js">
+        // Open FAQ based on hash in URL
+        function openFaqFromHash() {
+            if (window.location.hash) {
+                const targetId = window.location.hash;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement && targetElement.tagName.toLowerCase() === 'details') {
+                    targetElement.setAttribute('open', '');
+                    
+                    // Add a subtle highlight effect
+                    targetElement.style.transition = 'box-shadow 0.5s ease';
+                    targetElement.style.boxShadow = '0 0 20px rgba(240, 185, 11, 0.4)';
+                    setTimeout(() => {
+                        targetElement.style.boxShadow = 'none';
+                    }, 2000);
+                }
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", openFaqFromHash);
+        window.addEventListener("hashchange", openFaqFromHash);
+</script>
 </body>
 </html>
