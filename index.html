@@ -423,7 +423,7 @@
                 const linkText = 'Seleccionar red social →';
                 
                 // If not accessible, gate it. If accessible AND has JSON (or legacy URL), use social modal trigger
-                const isAccessible = isFree || isLoggedIn;
+                // isAccessible already declared above
                 let href = 'javascript:void(0)';
                 let gatedClass = '';
                 let dataAttrs = '';
@@ -567,8 +567,8 @@
 <script src="/cookie_banner.js"></script>
 
 <!-- SOCIAL MODAL -->
-<div class="gated-modal" id="socialModal">
-    <div class="gated-modal-content" style="text-align:center; max-width: 400px; padding: 40px 24px;">
+<div class="gated-modal-overlay" id="socialModal">
+    <div class="gated-modal">
         <button class="gated-modal-close" id="socialModalClose" style="top:15px; right:15px; font-size:1.5rem;">&times;</button>
         <h3 class="gated-modal-title" style="margin-bottom: 24px;">¿Dónde prefieres ver el video?</h3>
         <p class="gated-modal-text" style="margin-bottom: 30px;">Selecciona tu red social favorita para reproducir este contenido.</p>

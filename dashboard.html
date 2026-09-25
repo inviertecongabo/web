@@ -861,6 +861,19 @@
         .dropdown-options::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
         .dropdown-options::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
+
+/* Gated Modal / Social Modal */
+.gated-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+.gated-modal-overlay.active { opacity: 1; pointer-events: auto; }
+.gated-modal { background: #121824; border: 1px solid rgba(240,185,11,0.2); padding: 40px; border-radius: 16px; text-align: center; max-width: 450px; width: 90%; position: relative; transform: scale(0.95); transition: transform 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.gated-modal-overlay.active .gated-modal { transform: scale(1); }
+.gated-modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #9CA3AF; font-size: 24px; cursor: pointer; transition: color 0.2s; }
+.gated-modal-close:hover { color: #fff; }
+.gated-modal-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #fff; margin-bottom: 12px; }
+.gated-modal-text { color: #9CA3AF; line-height: 1.6; margin-bottom: 32px; font-size: 0.95rem; }
+.gated-modal-btn { width: 100%; display: block; font-size: 1.1rem; padding: 14px; text-decoration: none; border-radius: 8px; font-weight: 600; transition: transform 0.2s; }
+.gated-modal-btn:hover { transform: translateY(-2px); }
+
 </style>
 
 
@@ -5981,8 +5994,8 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
 </div>
 
 <!-- SOCIAL MODAL -->
-<div class="gated-modal" id="socialModal">
-    <div class="gated-modal-content" style="text-align:center; max-width: 400px; padding: 40px 24px;">
+<div class="gated-modal-overlay" id="socialModal">
+    <div class="gated-modal">
         <button class="gated-modal-close" id="socialModalClose" style="top:15px; right:15px; font-size:1.5rem;">&times;</button>
         <h3 class="gated-modal-title" style="margin-bottom: 24px;">¿Dónde prefieres ver el video?</h3>
         <p class="gated-modal-text" style="margin-bottom: 30px;">Selecciona tu red social favorita para reproducir este contenido.</p>
