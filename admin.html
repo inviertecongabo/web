@@ -1102,7 +1102,13 @@
             document.getElementById('uploadFormWrapper').style.display = 'block';
             
             document.getElementById("vTitle").value = v.title;
-            document.getElementById("vCategory").value = v.category || 'otros';
+            document.querySelectorAll('input[name="vCat"]').forEach(cb => cb.checked = false);
+            if(v.category) {
+                const cats = v.category.split(',');
+                document.querySelectorAll('input[name="vCat"]').forEach(cb => {
+                    if(cats.includes(cb.value)) cb.checked = true;
+                });
+            }
             document.getElementById("vUrl").value = v.url;
             document.getElementById("vDesc").value = v.description || '';
             // El input file de imagen no se puede pre-llenar, pero si suben algo nuevo se reemplazará
@@ -1147,7 +1153,7 @@
             const title = document.getElementById("vTitle").value;
             const desc = document.getElementById("vDesc").value;
             const url = document.getElementById("vUrl").value;
-            const category = document.getElementById("vCategory").value;
+            const category = Array.from(document.querySelectorAll('input[name="vCat"]:checked')).map(cb => cb.value).join(",");
             const fileInput = document.getElementById("vImage");
             
             let imageData = null;
