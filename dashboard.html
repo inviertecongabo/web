@@ -5940,10 +5940,10 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
 
     try {
         let urls = [];
-        if (fileInput.files.length > 0) {
+        if (window.feedbackFiles.length > 0) {
             submitBtn.textContent = 'Subiendo imágenes...';
-            for (let i = 0; i < fileInput.files.length; i++) {
-                const file = fileInput.files[i];
+            for (let i = 0; i < window.feedbackFiles.length; i++) {
+                const file = window.feedbackFiles[i];
                 const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, "_");
                 const fileName = `${Date.now()}_${Math.floor(Math.random()*1000)}_${safeName}`;
                 
