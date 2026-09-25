@@ -1809,3 +1809,13 @@ body {
 .sheet-icon { font-size: 1.5rem; }
 .sheet-title { font-weight: 600; font-size: 1rem; }
 .sheet-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+.custom-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
