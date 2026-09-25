@@ -3554,15 +3554,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        // Disparar click en "Recientes" (all) para que se aplique el filtro actual si es necesario
-
-
-
-        const activeChip = document.querySelector(".filter-chip.active");
-
-
-
-        if(activeChip) activeChip.click();
+        // Aplicar filtro guardado o por defecto
+        const savedCat = sessionStorage.getItem('activeDashboardFilter') || 'all';
+        const targetChip = document.querySelector(`.filter-chip[data-vcat="${savedCat}"]`);
+        if(targetChip) {
+            targetChip.click();
+        } else {
+            const defaultChip = document.querySelector(".filter-chip.active");
+            if(defaultChip) defaultChip.click();
+        }
 
 
 
@@ -4408,45 +4408,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.querySelectorAll(".filter-chip").forEach(chip => {
-
-
-
         chip.addEventListener("click", () => {
-
-
-
             document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-
-
-
             chip.classList.add("active");
-
-
-
             const cat = chip.getAttribute("data-vcat");
-
-
-
+            
+            sessionStorage.setItem('activeDashboardFilter', cat);
+            
             document.querySelectorAll(".video-card").forEach(card => {
-
-
-
                 const cc = card.getAttribute("data-vcat") || "";
-
-
-
                 card.style.display = (cat === "all" || cc.includes(cat)) ? "block" : "none";
-
-
-
             });
-
-
-
         });
-
-
-
     });
 
 
