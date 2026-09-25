@@ -26,9 +26,24 @@
                 invierte<span>con</span>gabo
             </a>
             
-            <button class="nav-toggle" aria-label="Abrir menú" id="navToggle">
-                <span class="hamburger"></span>
-            </button>
+            
+            <style>
+                .mobile-header-right { display: none; align-items: center; gap: 16px; }
+                .mobile-login-icon { color: var(--text-primary); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s; padding: 4px; }
+                .mobile-login-icon:hover { color: var(--accent); }
+                @media (max-width: 768px) {
+                    .mobile-header-right { display: flex; }
+                }
+            </style>
+            <div class="mobile-header-right">
+                <a href="/login.html" class="mobile-login-icon" aria-label="Iniciar Sesión">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+                <button class="nav-toggle" aria-label="Abrir menú" id="navToggle" style="display: block;">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+
 
             <nav class="nav-menu" id="navMenu">
                 <ul>
