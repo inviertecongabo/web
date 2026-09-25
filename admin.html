@@ -491,7 +491,7 @@
                             <label class="form-label">Categoría</label>
                             <select id="vCategory" class="form-input" required>
                                 <option value="binance">Binance</option>
-                                <option value="trading">Trading</option>
+                                <option value="campanas">Campañas</option>
                                 <option value="acciones">Acciones Venezolanas</option>
                                 <option value="otros">Otros</option>
                             </select>
@@ -558,7 +558,7 @@
                             <div id="hCategoryGroup" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
                                 <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="recientes" checked> Recientes</label>
                                 <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="binance"> Binance</label>
-                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="trading"> Trading</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="campanas"> Campañas</label>
                                 <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="hCat" value="acciones"> Acciones Venezolanas</label>
                             </div>
                         </div>
@@ -1062,7 +1062,7 @@
             
             videos.forEach(v => {
                 const dateStr = new Date(v.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-                const catMap = { 'binance': 'Binance', 'trading': 'Trading', 'acciones': 'Acciones Vzla', 'otros': 'Otros' };
+                const catMap = { 'binance': 'Binance', 'campanas': 'Campañas', 'acciones': 'Acciones Vzla', 'otros': 'Otros' };
                 const catName = catMap[v.category] || 'Otros';
                 
                 const tr = document.createElement('tr');
@@ -1230,7 +1230,7 @@
                 return;
             }
             
-            const catLabels = { recientes: 'Recientes', binance: 'Binance', trading: 'Trading', acciones: 'Acciones Venezolanas' };
+            const catLabels = { recientes: 'Recientes', binance: 'Binance', campanas: 'Campañas', acciones: 'Acciones Venezolanas' };
             
             tbody.innerHTML = data.map(card => `
                 <tr>

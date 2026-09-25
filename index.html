@@ -158,9 +158,9 @@
                 <!-- Filtros de Categorías -->
                 <div class="filter-container">
                     <button class="filter-btn active" data-filter="all">Recientes</button>
-                    <button class="filter-btn" data-filter="acciones">Acciones Venezolanas</button>
-                    <button class="filter-btn" data-filter="trading">Trading</button>
                     <button class="filter-btn" data-filter="binance">Binance</button>
+                    <button class="filter-btn" data-filter="acciones">Acciones Venezolanas</button>
+                    <button class="filter-btn" data-filter="campanas">Campañas</button>
                 </div>
 
                 <!-- Grid de Videos (cargado dinámicamente desde Supabase) -->
@@ -399,8 +399,8 @@
 
             // 2. Renderizar Tarjetas
             function renderHomepageCard(card) {
-                const catMap = { recientes: 'recientes', binance: 'binance', trading: 'trading', acciones: 'acciones' };
-                const catLabel = { recientes: 'RECIENTES', binance: 'BINANCE', trading: 'TRADING', acciones: 'ACCIONES VENEZOLANAS' };
+                const catMap = { recientes: 'recientes', binance: 'binance', campanas: 'campanas', acciones: 'acciones' };
+                const catLabel = { recientes: 'RECIENTES', binance: 'BINANCE', campanas: 'CAMPAÑAS', acciones: 'ACCIONES VENEZOLANAS' };
                 const isFree = card.is_free !== false;
                 
                 // LOGIC: If user is logged in, they can access everything. 
