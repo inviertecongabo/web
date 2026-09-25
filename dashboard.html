@@ -2589,13 +2589,18 @@
                 </div>
 
                 <!-- Overlay content -->
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; z-index: 5;">
-                    <i class="ph-fill ph-lock-key" style="font-size: 3rem; color: var(--accent); margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(250,204,21,0.3));"></i>
-                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Función Exclusiva para Miembros</h3>
-                    <p style="color: var(--text-muted); max-width: 400px; margin-bottom: 24px; font-size: 0.95rem; line-height: 1.5;">Lleva el control exacto de tu dinero. Esta sección guarda el registro de todas las compras automatizadas que hace el bot por ti. Adquiere GaboBot para desbloquear tu historial.</p>
-                    <button onclick="switchSection(event, 'tool-bot'); window.goToBotStep('onboarding');" class="pws-continue" style="max-width: 280px; margin: 0 auto; box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);">
-                        <i class="ph-fill ph-crown"></i> Desbloquear GaboBot
-                    </button>
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 5; padding: 24px;">
+                    <div style="background: linear-gradient(135deg, rgba(240,185,11,0.07) 0%, rgba(30,30,35,0.98) 60%); border: 1px solid rgba(240,185,11,0.25); border-radius: 20px; padding: 40px 36px; text-align: center; max-width: 420px; width: 100%; backdrop-filter: blur(8px); box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(240,185,11,0.1);">
+                        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(240,185,11,0.12); border: 1px solid rgba(240,185,11,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; filter: drop-shadow(0 0 16px rgba(240,185,11,0.4));">
+                            <i class="ph-fill ph-lock-key" style="font-size: 1.8rem; color: #F0B90B;"></i>
+                        </div>
+                        <div style="display: inline-block; background: rgba(240,185,11,0.12); border: 1px solid rgba(240,185,11,0.3); border-radius: 999px; padding: 3px 12px; font-size: 0.7rem; font-weight: 700; color: #F0B90B; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px;">Solo para Miembros</div>
+                        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: #f1f5f9;">Tu Historial de Inversiones</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 28px;">Cada compra que ejecuta GaboBot queda registrada aquí: monto, precio, fecha y estado. Activa tu membresía para ver tu progreso en tiempo real.</p>
+                        <button onclick="switchSection(event, 'tool-bot'); window.goToBotStep('onboarding');" style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #F0B90B, #F8D347); color: #0D0D0F; font-weight: 700; font-size: 0.95rem; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; box-shadow: 0 4px 20px rgba(240,185,11,0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 28px rgba(240,185,11,0.45)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(240,185,11,0.3)';">
+                            <i class="ph-fill ph-crown" style="font-size: 1.1rem;"></i> Desbloquear Historial
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -5497,7 +5502,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    <div id="successModal" class="custom-modal-overlay">
+    <div id="successModal" class="custom-modal-overlay" style="display:none;">
         <div class="custom-modal">
             <div class="custom-modal-icon">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
@@ -5511,7 +5516,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>
 
-    <div id="cancelModal" class="custom-modal-overlay">
+    <div id="cancelModal" class="custom-modal-overlay" style="display:none;">
         <div class="custom-modal">
             <div class="custom-modal-icon" style="background: rgba(239, 68, 68, 0.1);">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
