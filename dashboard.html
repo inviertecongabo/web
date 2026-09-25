@@ -3348,15 +3348,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-            const videoId = v.url.includes("v=") ? v.url.split("v=")[1].split("&")[0] : 
-
-
-
-                           v.url.includes("youtu.be/") ? v.url.split("youtu.be/")[1].split("?")[0] : null;
-
-
-
+            
+            let parsedUrl = {ig: v.url, tt: '', fb: ''};
+            if (v.url && v.url.startsWith('{')) {
+                try { parsedUrl = JSON.parse(v.url); } catch(e){}
+            }
+            
+            const rawMainUrl = parsedUrl.ig || v.url || '';
+            const videoId = rawMainUrl.includes("v=") ? rawMainUrl.split("v=")[1].split("&")[0] : 
+                           rawMainUrl.includes("youtu.be/") ? rawMainUrl.split("youtu.be/")[1].split("?")[0] : null;
             const thumbUrl = v.image_data ? v.image_data : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://via.placeholder.com/320x180/121824/F0B90B?text=Gabo+Video');
+            
+            const dataAttrs = `data-ig="${parsedUrl.ig || ''}" data-tt="${parsedUrl.tt || ''}" data-fb="${parsedUrl.fb || ''}"`;
+
 
 
 
@@ -3384,7 +3388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                        <a href="${v.url}" target="_blank" class="play-icon" style="z-index: 2; text-decoration:none; color:inherit;">&#9654;</a>
+                        <a href="#" class="play-icon social-trigger" ${dataAttrs} style="z-index: 2; text-decoration:none; color:inherit;">&#9654;</a>
 
 
 
@@ -3408,7 +3412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                        <a class="video-link" href="${v.url}" target="_blank" style="color:var(--accent); font-size:0.85rem; text-decoration:none; display:inline-block; margin-top:10px;">Ver video &#8594;</a>
+                        <a class="video-link social-trigger" href="#" ${dataAttrs} style="color:var(--accent); font-size:0.85rem; text-decoration:none; display:inline-block; margin-top:10px;">Ver video &#8594;</a>
 
 
 
@@ -5975,5 +5979,56 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         </button>
     </div>
 </div>
+
+<!-- SOCIAL MODAL -->
+<div class="gated-modal" id="socialModal">
+    <div class="gated-modal-content" style="text-align:center; max-width: 400px; padding: 40px 24px;">
+        <button class="gated-modal-close" id="socialModalClose" style="top:15px; right:15px; font-size:1.5rem;">&times;</button>
+        <h3 class="gated-modal-title" style="margin-bottom: 24px;">¿Dónde prefieres ver el video?</h3>
+        <p class="gated-modal-text" style="margin-bottom: 30px;">Selecciona tu red social favorita para reproducir este contenido.</p>
+        
+        <div style="display:flex; flex-direction:column; gap:16px;">
+            <a id="btnSocialIg" href="#" target="_blank" class="gated-modal-btn" style="background:#E1306C; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-instagram-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Instagram / YouTube</a>
+            <a id="btnSocialTt" href="#" target="_blank" class="gated-modal-btn" style="background:#000000; color:#fff; display:none; padding: 14px; font-size: 1rem; border:1px solid #333;"><i class="ph-fill ph-tiktok-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en TikTok</a>
+            <a id="btnSocialFb" href="#" target="_blank" class="gated-modal-btn" style="background:#1877F2; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-facebook-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Facebook</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const sModal = document.getElementById('socialModal');
+    const sClose = document.getElementById('socialModalClose');
+    const bIg = document.getElementById('btnSocialIg');
+    const bTt = document.getElementById('btnSocialTt');
+    const bFb = document.getElementById('btnSocialFb');
+    
+    if(sClose) {
+        sClose.addEventListener('click', () => sModal.classList.remove('active'));
+    }
+    
+    document.body.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.social-trigger');
+        if(trigger) {
+            e.preventDefault();
+            const ig = trigger.getAttribute('data-ig');
+            const tt = trigger.getAttribute('data-tt');
+            const fb = trigger.getAttribute('data-fb');
+            
+            bIg.style.display = ig ? 'inline-block' : 'none';
+            bIg.href = ig || '#';
+            
+            bTt.style.display = tt ? 'inline-block' : 'none';
+            bTt.href = tt || '#';
+            
+            bFb.style.display = fb ? 'inline-block' : 'none';
+            bFb.href = fb || '#';
+            
+            sModal.classList.add('active');
+        }
+    });
+});
+</script>
+
 </body>
 </html>

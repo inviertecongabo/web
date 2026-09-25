@@ -498,7 +498,9 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">URL del Video (YouTube o Instagram)</label>
-                            <input type="url" id="vUrl" class="form-input" placeholder="https://..." required>
+                            <input type="url" id="vUrlIg" class="form-input" placeholder="Enlace de Instagram / YouTube (Principal)" style="margin-bottom:8px;" required>
+                            <input type="url" id="vUrlTt" class="form-input" placeholder="Enlace de TikTok (Opcional)" style="margin-bottom:8px;">
+                            <input type="url" id="vUrlFb" class="form-input" placeholder="Enlace de Facebook (Opcional)">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Portada (Imagen opcional)</label>
@@ -564,7 +566,9 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">URL del enlace (YouTube, Instagram, etc.)</label>
-                            <input type="url" id="hUrl" class="form-input" placeholder="https://..." required>
+                            <input type="url" id="hUrlIg" class="form-input" placeholder="Enlace de Instagram / YouTube (Principal)" style="margin-bottom:8px;" required>
+                    <input type="url" id="hUrlTt" class="form-input" placeholder="Enlace de TikTok (Opcional)" style="margin-bottom:8px;">
+                    <input type="url" id="hUrlFb" class="form-input" placeholder="Enlace de Facebook (Opcional)">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Tipo de acceso</label>
@@ -1109,7 +1113,15 @@
                     if(cats.includes(cb.value)) cb.checked = true;
                 });
             }
-            document.getElementById("vUrl").value = v.url;
+            
+            let parsedUrl = {ig: v.url, tt: '', fb: ''};
+            if (v.url && v.url.startsWith('{')) {
+                try { parsedUrl = JSON.parse(v.url); } catch(e){}
+            }
+            document.getElementById("vUrlIg").value = parsedUrl.ig || '';
+            document.getElementById("vUrlTt").value = parsedUrl.tt || '';
+            document.getElementById("vUrlFb").value = parsedUrl.fb || '';
+
             document.getElementById("vDesc").value = v.description || '';
             // El input file de imagen no se puede pre-llenar, pero si suben algo nuevo se reemplazará
             
@@ -1136,6 +1148,9 @@
         function cancelEdit() {
             editingVideoId = null;
             document.getElementById("contentForm").reset();
+              document.getElementById("vUrlIg").value = '';
+              document.getElementById("vUrlTt").value = '';
+              document.getElementById("vUrlFb").value = '';
             const btn = document.getElementById("btnSubmit");
             btn.innerHTML = `Publicar Ahora`;
             document.getElementById("btnCancelEdit").style.display = "none";
@@ -1152,7 +1167,12 @@
             
             const title = document.getElementById("vTitle").value;
             const desc = document.getElementById("vDesc").value;
-            const url = document.getElementById("vUrl").value;
+            const urlObj = {
+                  ig: document.getElementById("vUrlIg").value.trim(),
+                  tt: document.getElementById("vUrlTt").value.trim(),
+                  fb: document.getElementById("vUrlFb").value.trim()
+              };
+              const url = JSON.stringify(urlObj);
             const category = Array.from(document.querySelectorAll('input[name="vCat"]:checked')).map(cb => cb.value).join(",");
             const fileInput = document.getElementById("vImage");
             
@@ -1274,6 +1294,9 @@
         function cancelHomepageForm() {
             document.getElementById('homepageFormWrapper').style.display = 'none';
             document.getElementById('homepageForm').reset();
+    document.getElementById("hUrlIg").value = '';
+    document.getElementById("hUrlTt").value = '';
+    document.getElementById("hUrlFb").value = '';
             document.getElementById('editingHomepageCardId').value = '';
             document.querySelectorAll('input[name="hCat"]').forEach(cb => cb.checked = false);
     document.querySelector('input[name="hCat"][value="recientes"]').checked = true;
@@ -1295,7 +1318,15 @@
     } else {
         document.querySelector('input[name="hCat"][value="recientes"]').checked = true;
     }
-            document.getElementById('hUrl').value = data.url || '';
+            
+    let parsedHUrl = {ig: data.url, tt: '', fb: ''};
+    if (data.url && data.url.startsWith('{')) {
+        try { parsedHUrl = JSON.parse(data.url); } catch(e){}
+    }
+    document.getElementById("hUrlIg").value = parsedHUrl.ig || '';
+    document.getElementById("hUrlTt").value = parsedHUrl.tt || '';
+    document.getElementById("hUrlFb").value = parsedHUrl.fb || '';
+
             document.getElementById('hIsFree').value = data.is_free ? 'true' : 'false';
             document.getElementById('hDesc').value = data.description || '';
             document.getElementById('editingHomepageCardId').value = id;
@@ -1334,7 +1365,12 @@
                 btn.textContent = 'Publicar Tarjeta';
                 return;
             }
-                    const url = document.getElementById('hUrl').value.trim();
+                    const urlObj = {
+                ig: document.getElementById("hUrlIg").value.trim(),
+                tt: document.getElementById("hUrlTt").value.trim(),
+                fb: document.getElementById("hUrlFb").value.trim()
+            };
+            const url = JSON.stringify(urlObj);
                     const isFree = document.getElementById('hIsFree').value === 'true';
                     const desc = document.getElementById('hDesc').value.trim();
                     const cardId = document.getElementById('editingHomepageCardId').value;
