@@ -2946,7 +2946,7 @@
 
 
 
-        <button class="mobile-nav-item" id="mobileNavHerramientas" onclick="openToolsSheet()">
+        <button class="mobile-nav-item" id="mobileNavHerramientas" data-section="herramientas">
 
 
 
@@ -2984,7 +2984,47 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-    window.customConfirm = function(title, desc, btnText, type = 'danger') {
+    
+// Toggle mobile sidebar
+window.toggleMobileSidebar = function() {
+    const sidebar = document.querySelector('.sidebar');
+    let overlay = document.getElementById('mobileSidebarOverlay');
+    
+    if (sidebar.style.transform === 'translateX(0px)') {
+        sidebar.style.transform = 'translateX(-100%)';
+        if (overlay) overlay.style.display = 'none';
+    } else {
+        sidebar.style.transform = 'translateX(0px)';
+        sidebar.style.zIndex = '1000'; // ensure it is above everything
+        
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'mobileSidebarOverlay';
+            overlay.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:999; backdrop-filter:blur(3px);';
+            overlay.onclick = window.toggleMobileSidebar;
+            document.body.appendChild(overlay);
+        } else {
+            overlay.style.display = 'block';
+        }
+    }
+};
+
+// Also close the sidebar if a link is clicked inside it on mobile
+document.querySelectorAll('.sidebar .nav-item, .sidebar .sub-nav-item, .sidebar .action-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+            const sidebar = document.querySelector('.sidebar');
+            // Check if it's the toggleTools button which shouldn't close the sidebar itself
+            if (!btn.hasAttribute('onclick') || !btn.getAttribute('onclick').includes('toggleTools')) {
+                sidebar.style.transform = 'translateX(-100%)';
+                const overlay = document.getElementById('mobileSidebarOverlay');
+                if (overlay) overlay.style.display = 'none';
+            }
+        }
+    });
+});
+
+window.customConfirm = function(title, desc, btnText, type = 'danger') {
         return new Promise((resolve) => {
             const modal = document.getElementById("confirmModal");
             document.getElementById("confirmModalTitle").textContent = title;
