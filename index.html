@@ -453,7 +453,7 @@
                         </div>
                     </a>
                     <div class="video-info">
-                        <span class="video-category">${catLabel[card.category] || card.category.toUpperCase()}</span>
+                        <span class="video-category">${displayCat}</span>
                         <h3 class="video-title">${card.title}</h3>
                         <p class="video-desc">${card.description || ''}</p>
                         <a href="${href}" target="${card.is_free === false ? '_self' : '_blank'}" rel="noopener noreferrer"
@@ -509,6 +509,21 @@
                 container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">Próximamente habrá contenido aquí. ¡Vuelve pronto!</div>';
             } else {
                 container.innerHTML = data.map(renderHomepageCard).join('');
+                
+                // Aplicar efecto reveal a las tarjetas cargadas dinámicamente
+                const newReveals = container.querySelectorAll('.reveal');
+                const cardObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            setTimeout(() => {
+                                entry.target.classList.remove('reveal', 'active');
+                            }, 800);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+                newReveals.forEach(el => cardObserver.observe(el));
             }
 
             // Re-initialize filter tabs so they work with dynamically loaded cards
