@@ -4148,9 +4148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById("sec-" + id).classList.add("active");
         
-        if (id === 'historial') {
-            updateHistorialView();
-        }
+        if (id === 'historial') { if(window.updateHistorialView) window.updateHistorialView(); }
 
 
 
