@@ -475,7 +475,7 @@ body {
     flex-direction: column;
     transition: var(--transition-normal);
     width: 100%;
-    max-width: 540px;
+    max-width: 400px;
     margin: 0 auto;
 }
 
@@ -493,7 +493,7 @@ body {
 
 .video-thumbnail-wrapper {
     position: relative;
-    padding-top: 130%; /* Proporción 9:16 vertical tipo Reel de Instagram */
+    padding-top: 56.25%; /* Proporcion 16:9 horizontal tipo YouTube */
     overflow: hidden;
     background-color: #000;
 }
