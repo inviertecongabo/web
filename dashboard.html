@@ -4041,14 +4041,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     window.fetchHistorialData = async function() {
-        if(!window.gaboUserIsPremium || !window.uCheck) return;
+        if(!window.gaboUserIsPremium) return;
+        const { data: { user } } = await sb.auth.getUser();
+        if(!user) return;
         const tbody = document.getElementById('historialTableBody');
         if(!tbody) return;
         try {
             const { data, error } = await sb
                 .from('dca_history')
                 .select('*')
-                .eq('user_id', window.uCheck.id)
+                .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
                 .limit(50);
                 
