@@ -485,14 +485,20 @@
                         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                         this.classList.add('active');
                         const filterValue = this.getAttribute('data-filter');
+                        let visibleCount = 0;
                         getVideoCards().forEach(card => {
                             const cardCategory = card.getAttribute('data-category');
                             if (filterValue === 'all' || (cardCategory && cardCategory.split(',').includes(filterValue))) {
                                 card.style.display = '';
+                                visibleCount++;
                             } else {
                                 card.style.display = 'none';
                             }
                         });
+                        const emptyMsg = document.querySelector('#videoGrid .empty-state-msg');
+                        if (emptyMsg) {
+                            emptyMsg.style.display = (visibleCount === 0) ? 'flex' : 'none';
+                        }
                     });
                 });
             }
@@ -513,7 +519,14 @@
             if (data.length === 0) {
                 container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">Próximamente habrá contenido aquí. ¡Vuelve pronto!</div>';
             } else {
-                container.innerHTML = data.map(renderHomepageCard).join('');
+                const emptyStateHtml = `
+                <div class="empty-state-msg" style="display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 60px 20px; text-align: center; grid-column: 1 / -1; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 16px; margin: 20px 0;">
+                    <i class="ph-fill ph-cone" style="font-size: 3rem; color: var(--accent); margin-bottom: 16px; opacity: 0.8;"></i>
+                    <h3 style="color: #fff; font-size: 1.3rem; font-weight: 600; margin-bottom: 8px;">Sección en construcción 🚧</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 400px; margin-bottom: 24px; line-height: 1.5;">Estamos grabando y editando contenido exclusivo para esta categoría. ¡Atento a las actualizaciones!</p>
+                    <button onclick="document.querySelector('.filter-btn[data-filter=\'all\']').click()" class="btn-primary" style="padding: 12px 24px;">Ver lo más reciente</button>
+                </div>`;
+                container.innerHTML = data.map(renderHomepageCard).join('') + emptyStateHtml;
                 
                 const newReveals = container.querySelectorAll('.reveal');
                 const cardObserver = new IntersectionObserver((entries, observer) => {
