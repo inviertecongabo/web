@@ -5539,8 +5539,21 @@ document.addEventListener('DOMContentLoaded', () => {
           if (fileInput && previewContainer) {
               fileInput.addEventListener('change', function() {
                   const newFiles = Array.from(fileInput.files);
-                  if (window.feedbackFiles.length + newFiles.length > 5) {
-                      window.showToast("Límite excedido", "Puedes subir un máximo de 5 imágenes.", "error");
+                  const remaining = 5 - window.feedbackFiles.length;
+
+                  if (newFiles.length === 0) return;
+
+                  if (newFiles.length > 5) {
+                      // Selected more than 5 files at once
+                      window.showToast("Demasiadas imágenes", `Solo puedes subir hasta 5 imágenes. Seleccionaste ${newFiles.length}.`, "error");
+                  } else if (remaining <= 0) {
+                      // Already at max
+                      window.showToast("Límite alcanzado", "Ya tienes 5 imágenes adjuntas. Elimina alguna para agregar otra.", "error");
+                  } else if (window.feedbackFiles.length + newFiles.length > 5) {
+                      // Some fit, some don't — add the ones that fit and warn
+                      const toAdd = newFiles.slice(0, remaining);
+                      window.feedbackFiles = window.feedbackFiles.concat(toAdd);
+                      window.showToast("Límite parcial", `Solo se agregaron ${toAdd.length} de ${newFiles.length} imágenes. El límite es 5.`, "error");
                   } else {
                       window.feedbackFiles = window.feedbackFiles.concat(newFiles);
                   }
