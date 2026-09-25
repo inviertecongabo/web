@@ -871,8 +871,32 @@
 .gated-modal-close:hover { color: #fff; }
 .gated-modal-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #fff; margin-bottom: 12px; }
 .gated-modal-text { color: #9CA3AF; line-height: 1.6; margin-bottom: 32px; font-size: 0.95rem; }
-.gated-modal-btn { width: 100%; display: block; font-size: 1.1rem; padding: 14px; text-decoration: none; border-radius: 8px; font-weight: 600; transition: transform 0.2s; }
-.gated-modal-btn:hover { transform: translateY(-2px); }
+.gated-modal-btn { 
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    font-size: 1.05rem; 
+    padding: 14px; 
+    text-decoration: none; 
+    border-radius: 12px; 
+    font-weight: 600; 
+    transition: all 0.3s ease; 
+    border: none;
+    color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.gated-modal-btn:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+}
+.btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.btn-yt { background: #FF0000; }
+.btn-tt { background: #121212; border: 1px solid #333; }
+.btn-fb { background: #1877F2; }
+
 
 </style>
 
@@ -6001,9 +6025,9 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         <p class="gated-modal-text" style="margin-bottom: 30px;">Selecciona tu red social favorita para reproducir este contenido.</p>
         
         <div style="display:flex; flex-direction:column; gap:16px;">
-            <a id="btnSocialIg" href="#" target="_blank" class="gated-modal-btn" style="background:#E1306C; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-instagram-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Instagram / YouTube</a>
-            <a id="btnSocialTt" href="#" target="_blank" class="gated-modal-btn" style="background:#000000; color:#fff; display:none; padding: 14px; font-size: 1rem; border:1px solid #333;"><i class="ph-fill ph-tiktok-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en TikTok</a>
-            <a id="btnSocialFb" href="#" target="_blank" class="gated-modal-btn" style="background:#1877F2; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-facebook-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Facebook</a>
+            <a id="btnSocialIg" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-instagram-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Instagram / YouTube</a>
+            <a id="btnSocialTt" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-tiktok-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en TikTok</a>
+            <a id="btnSocialFb" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-facebook-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Facebook</a>
         </div>
     </div>
 </div>
@@ -6028,14 +6052,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const tt = trigger.getAttribute('data-tt');
             const fb = trigger.getAttribute('data-fb');
             
-            bIg.style.display = ig ? 'inline-block' : 'none';
-            bIg.href = ig || '#';
             
-            bTt.style.display = tt ? 'inline-block' : 'none';
-            bTt.href = tt || '#';
+            if (ig) {
+                bIg.style.display = 'flex';
+                bIg.href = ig;
+                if(ig.includes('youtube.com') || ig.includes('youtu.be')) {
+                    bIg.className = 'gated-modal-btn btn-yt';
+                    bIg.innerHTML = '<i class="ph-fill ph-youtube-logo" style="font-size:1.4rem;"></i> Ver en YouTube';
+                } else {
+                    bIg.className = 'gated-modal-btn btn-ig';
+                    bIg.innerHTML = '<i class="ph-fill ph-instagram-logo" style="font-size:1.4rem;"></i> Ver en Instagram';
+                }
+            } else {
+                bIg.style.display = 'none';
+            }
             
-            bFb.style.display = fb ? 'inline-block' : 'none';
-            bFb.href = fb || '#';
+            if (tt) {
+                bTt.style.display = 'flex';
+                bTt.className = 'gated-modal-btn btn-tt';
+                bTt.href = tt;
+                bTt.innerHTML = '<i class="ph-fill ph-tiktok-logo" style="font-size:1.4rem;"></i> Ver en TikTok';
+            } else {
+                bTt.style.display = 'none';
+            }
+            
+            if (fb) {
+                bFb.style.display = 'flex';
+                bFb.className = 'gated-modal-btn btn-fb';
+                bFb.href = fb;
+                bFb.innerHTML = '<i class="ph-fill ph-facebook-logo" style="font-size:1.4rem;"></i> Ver en Facebook';
+            } else {
+                bFb.style.display = 'none';
+            }
+
             
             sModal.classList.add('active');
         }

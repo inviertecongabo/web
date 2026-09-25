@@ -1168,7 +1168,31 @@ body {
 .gated-modal-icon { font-size: 48px; margin-bottom: 24px; }
 .gated-modal-title { font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-primary); margin-bottom: 12px; }
 .gated-modal-text { color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; font-size: 0.95rem; }
-.gated-modal-btn { width: 100%; display: block; font-size: 1.1rem; padding: 14px; }
+.gated-modal-btn { 
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    font-size: 1.05rem; 
+    padding: 14px; 
+    text-decoration: none; 
+    border-radius: 12px; 
+    font-weight: 600; 
+    transition: all 0.3s ease; 
+    border: none;
+    color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.gated-modal-btn:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+}
+.btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.btn-yt { background: #FF0000; }
+.btn-tt { background: #121212; border: 1px solid #333; }
+.btn-fb { background: #1877F2; }
 
 /* ====== Tools / GaboBot Section ====== */
 .tools-section {

@@ -574,9 +574,9 @@
         <p class="gated-modal-text" style="margin-bottom: 30px;">Selecciona tu red social favorita para reproducir este contenido.</p>
         
         <div style="display:flex; flex-direction:column; gap:16px;">
-            <a id="btnSocialIg" href="#" target="_blank" class="gated-modal-btn" style="background:#E1306C; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-instagram-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Instagram / YouTube</a>
-            <a id="btnSocialTt" href="#" target="_blank" class="gated-modal-btn" style="background:#000000; color:#fff; display:none; padding: 14px; font-size: 1rem; border:1px solid #333;"><i class="ph-fill ph-tiktok-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en TikTok</a>
-            <a id="btnSocialFb" href="#" target="_blank" class="gated-modal-btn" style="background:#1877F2; color:#fff; display:none; padding: 14px; font-size: 1rem;"><i class="ph-fill ph-facebook-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Facebook</a>
+            <a id="btnSocialIg" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-instagram-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Instagram / YouTube</a>
+            <a id="btnSocialTt" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-tiktok-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en TikTok</a>
+            <a id="btnSocialFb" href="#" target="_blank" class="gated-modal-btn"><i class="ph-fill ph-facebook-logo" style="margin-right:8px; font-size:1.2rem;"></i> Ver en Facebook</a>
         </div>
     </div>
 </div>
@@ -601,14 +601,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const tt = trigger.getAttribute('data-tt');
             const fb = trigger.getAttribute('data-fb');
             
-            bIg.style.display = ig ? 'inline-block' : 'none';
-            bIg.href = ig || '#';
             
-            bTt.style.display = tt ? 'inline-block' : 'none';
-            bTt.href = tt || '#';
+            if (ig) {
+                bIg.style.display = 'flex';
+                bIg.href = ig;
+                if(ig.includes('youtube.com') || ig.includes('youtu.be')) {
+                    bIg.className = 'gated-modal-btn btn-yt';
+                    bIg.innerHTML = '<i class="ph-fill ph-youtube-logo" style="font-size:1.4rem;"></i> Ver en YouTube';
+                } else {
+                    bIg.className = 'gated-modal-btn btn-ig';
+                    bIg.innerHTML = '<i class="ph-fill ph-instagram-logo" style="font-size:1.4rem;"></i> Ver en Instagram';
+                }
+            } else {
+                bIg.style.display = 'none';
+            }
             
-            bFb.style.display = fb ? 'inline-block' : 'none';
-            bFb.href = fb || '#';
+            if (tt) {
+                bTt.style.display = 'flex';
+                bTt.className = 'gated-modal-btn btn-tt';
+                bTt.href = tt;
+                bTt.innerHTML = '<i class="ph-fill ph-tiktok-logo" style="font-size:1.4rem;"></i> Ver en TikTok';
+            } else {
+                bTt.style.display = 'none';
+            }
+            
+            if (fb) {
+                bFb.style.display = 'flex';
+                bFb.className = 'gated-modal-btn btn-fb';
+                bFb.href = fb;
+                bFb.innerHTML = '<i class="ph-fill ph-facebook-logo" style="font-size:1.4rem;"></i> Ver en Facebook';
+            } else {
+                bFb.style.display = 'none';
+            }
+
             
             sModal.classList.add('active');
         }
