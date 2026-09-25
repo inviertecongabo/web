@@ -5582,7 +5582,9 @@ document.addEventListener('DOMContentLoaded', () => {
               }
           }
 
-          document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+      }); // close DOMContentLoaded
+
+document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     // 1. Validar categoría
