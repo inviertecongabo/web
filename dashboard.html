@@ -902,6 +902,115 @@
 .empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
 .empty-btn-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
 
+
+        /* ===== PAYMENT WIZARD (pws-*) ===== */
+        #botPaymentStep { max-width: 560px; }
+        .pws-card { background: #13161e; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; }
+        .pws-top { height: 3px; background: var(--accent-gradient); }
+        .pws-body { padding: 22px 20px 20px; }
+        .pws-badge { display: inline-block; background: rgba(240,185,11,0.12); color: var(--accent); border: 1px solid rgba(240,185,11,0.25); border-radius: 999px; padding: 3px 12px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 12px; }
+        .pws-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px; line-height: 1.2; }
+        .pws-subtitle { color: var(--text-muted); font-size: 0.83rem; line-height: 1.5; margin-bottom: 18px; }
+        /* Plans */
+        .pws-plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
+        .pws-plan { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .pws-plan:hover { border-color: rgba(240,185,11,0.35); background: rgba(240,185,11,0.04); }
+        .pws-plan.selected { border-color: var(--accent); background: rgba(240,185,11,0.07); box-shadow: 0 0 14px rgba(240,185,11,0.12); }
+        .pws-plan-name { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; line-height: 1.3; }
+        .pws-plan-price { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 3px; }
+        .pws-plan-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; }
+        .pws-plan-badge { display: inline-block; border-radius: 999px; padding: 1px 7px; font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+        /* Tabs */
+        .pws-tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .pws-tab { flex: 1; padding: 9px 6px; text-align: center; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+        .pws-tab:hover { color: var(--text-primary); }
+        .pws-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        /* Data panels */
+        .pws-data { display: none; }
+        .pws-data.visible { display: block; }
+        .pws-hint { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+        .pws-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); gap: 8px; }
+        .pws-row:last-of-type { border-bottom: none; }
+        .pws-lbl { display: block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); margin-bottom: 2px; }
+        .pws-val { font-size: 0.88rem; font-weight: 600; color: #fff; }
+        .pws-val-mono { font-family: 'Courier New', monospace; letter-spacing: 0.3px; }
+        .pws-copy { background: none; border: none; padding: 6px; cursor: pointer; color: var(--text-muted); border-radius: 6px; display: flex; align-items: center; transition: all 0.2s; flex-shrink: 0; }
+        .pws-copy:hover { color: var(--accent); background: rgba(240,185,11,0.08); }
+        .pws-copy svg { width: 15px; height: 15px; }
+        .pws-qr-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-gradient); color: #121215; border: none; border-radius: 10px; padding: 11px; font-size: 0.85rem; font-weight: 700; cursor: pointer; margin-top: 14px; transition: all 0.2s; }
+        .pws-qr-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(240,185,11,0.25); }
+        /* Report form */
+        .pws-ref { display: block; width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; color: var(--text-primary); font-family: var(--font-body); font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+        .pws-ref:focus { border-color: rgba(240,185,11,0.4); }
+        .pws-submit { width: 100%; background: var(--accent-gradient); color: #121215; border: none; border-radius: 10px; padding: 13px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
+        .pws-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
+        .pws-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+        /* Pending state */
+        .pws-pending { display: none; text-align: center; padding: 28px 12px; }
+        .pws-pending-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(34,197,94,0.12); border: 2px solid rgba(34,197,94,0.4); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; color: #22c55e; }
+        .pws-continue { width: 100%; background: var(--accent-gradient); color: #121215; border: none; border-radius: 10px; padding: 13px; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: none; transition: all 0.2s; }
+        .pws-continue:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
+        @media (max-width: 600px) { .pws-plans { grid-template-columns: 1fr; } .pws-tabs { flex-direction: column; } }
+
+        /* CUSTOM DROPDOWN */
+
+        .custom-dropdown { position: relative; width: 100%; user-select: none; }
+        .dropdown-header { padding: 13px 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s; }
+        .dropdown-header:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+        .dropdown-header.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .dropdown-arrow { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .dropdown-header.active .dropdown-arrow { transform: rotate(180deg); stroke: var(--accent); }
+        .dropdown-options { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); overflow: hidden; max-height: 0; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .dropdown-options.open { max-height: 350px; opacity: 1; visibility: visible; overflow-y: auto; }
+        .dropdown-option { padding: 14px 16px; font-size: 0.9rem; color: var(--text-primary); cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .dropdown-option:last-child { border-bottom: none; }
+        .dropdown-option:hover { background: rgba(240,185,11,0.08); color: var(--accent); padding-left: 20px; }
+        .dropdown-option.selected { background: rgba(240,185,11,0.15); color: var(--accent); font-weight: 600; border-left: 3px solid var(--accent); padding-left: 17px; }
+        .dropdown-options::-webkit-scrollbar { width: 6px; }
+        .dropdown-options::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        .dropdown-options::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+
+/* Gated Modal / Social Modal */
+.gated-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+.gated-modal-overlay.active { opacity: 1; pointer-events: auto; }
+.gated-modal { background: #121824; border: 1px solid rgba(240,185,11,0.2); padding: 40px; border-radius: 16px; text-align: center; max-width: 450px; width: 90%; position: relative; transform: scale(0.95); transition: transform 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.gated-modal-overlay.active .gated-modal { transform: scale(1); }
+.gated-modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #9CA3AF; font-size: 24px; cursor: pointer; transition: color 0.2s; }
+.gated-modal-close:hover { color: #fff; }
+.gated-modal-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #fff; margin-bottom: 12px; }
+.gated-modal-text { color: #9CA3AF; line-height: 1.6; margin-bottom: 32px; font-size: 0.95rem; }
+.gated-modal-btn { 
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    font-size: 1.05rem; 
+    padding: 14px; 
+    text-decoration: none; 
+    border-radius: 12px; 
+    font-weight: 600; 
+    transition: all 0.3s ease; 
+    border: none;
+    color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.gated-modal-btn:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+}
+.btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.btn-yt { background: #FF0000; }
+.btn-tt { background: #121212; border: 1px solid #333; }
+.btn-fb { background: #1877F2; }
+
+
+
+.empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
+.empty-btn-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
+
         /* ===================================================
            PAYMENT WIZARD STYLES (pws-*)
         =================================================== */
