@@ -3453,10 +3453,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             const catKey = v.category || 'otros';
-
-
-
-            const catName = catMap[catKey] || 'Otros';
+            const catList = catKey.split(',');
+            const catName = catMap[catList[0].trim()] || catList[0].trim().toUpperCase();
 
 
 

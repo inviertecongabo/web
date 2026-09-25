@@ -489,12 +489,12 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Categoría</label>
-                            <select id="vCategory" class="form-input" required>
-                                <option value="binance">Binance</option>
-                                <option value="acciones">Acciones Venezolanas</option>
-                                <option value="campanas">Campañas</option>
-                                <option value="otros">Otros</option>
-                            </select>
+                            <div id="vCategoryGroup" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="vCat" value="recientes" checked> Recientes</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="vCat" value="binance"> Binance</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="vCat" value="acciones"> Acciones Venezolanas</label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text-primary); font-size:0.9rem;"><input type="checkbox" name="vCat" value="campanas"> Campañas</label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">URL del Video (YouTube o Instagram)</label>
@@ -1062,8 +1062,9 @@
             
             videos.forEach(v => {
                 const dateStr = new Date(v.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
-                const catMap = { 'binance': 'Binance', 'campanas': 'Campañas', 'acciones': 'Acciones Vzla', 'otros': 'Otros' };
-                const catName = catMap[v.category] || 'Otros';
+                const catMap = { recientes: 'Recientes', binance: 'Binance', campanas: 'Campañas', acciones: 'Acciones Vzla', otros: 'Otros' };
+                const catList = v.category ? v.category.split(',') : ['otros'];
+                const catName = catList.map(c => catMap[c.trim()] || c).join(', ');
                 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
