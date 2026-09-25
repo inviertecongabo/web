@@ -329,6 +329,9 @@
             <li class="menu-item" onclick="switchTab('content')">
                 <i class="ph ph-video"></i> Contenido
             </li>
+            <li class="menu-item" onclick="switchTab('homepage')">
+                <i class="ph ph-house"></i> Página Principal
+            </li>
             <li class="menu-item" onclick="switchTab('pagos')" id="navPagos">
                 <i class="ph ph-credit-card"></i> Pagos
             </li>
@@ -527,6 +530,82 @@
             </table>
         </section>
 
+        <!-- PESTAÑA: PÁGINA PRINCIPAL -->
+        <section id="tab-homepage" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">Tarjetas de la Página Principal</h2>
+                <button class="btn-primary" onclick="document.getElementById('homepageFormWrapper').style.display='block'">
+                    <i class="ph ph-plus-circle"></i> Nueva Tarjeta
+                </button>
+            </div>
+            
+            <div id="homepageFormWrapper" style="display:none; background: rgba(0,0,0,0.2); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 32px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                    <h3 style="margin:0;" id="homepageFormTitle">Nueva Tarjeta</h3>
+                    <button style="background:none; border:none; color:var(--text-muted); cursor:pointer;" onclick="cancelHomepageForm()"><i class="ph ph-x" style="font-size:1.5rem;"></i></button>
+                </div>
+                
+                <div id="homepageStatusMsg" class="msg"></div>
+                
+                <form id="homepageForm">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Título de la Tarjeta</label>
+                            <input type="text" id="hTitle" class="form-input" placeholder="Ej: Cómo invertir en BTC" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Categoría</label>
+                            <select id="hCategory" class="form-input" required>
+                                <option value="recientes">Recientes</option>
+                                <option value="binance">Binance</option>
+                                <option value="trading">Trading</option>
+                                <option value="acciones">Acciones Venezolanas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL del enlace (YouTube, Instagram, etc.)</label>
+                            <input type="url" id="hUrl" class="form-input" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo de acceso</label>
+                            <select id="hIsFree" class="form-input">
+                                <option value="true">GRATIS</option>
+                                <option value="false">EXCLUSIVO</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label class="form-label">Portada (imagen)</label>
+                            <input type="file" id="hImage" class="form-input" accept="image/*" style="padding-top:10px;">
+                            <small style="color:var(--text-muted);">Si no subes imagen, se usará un fondo negro por defecto.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea id="hDesc" class="form-input" rows="2" placeholder="Breve descripción de la tarjeta..." required></textarea>
+                    </div>
+                    <input type="hidden" id="editingHomepageCardId" value="">
+                    <button type="submit" class="btn-primary" id="btnHomepageSubmit">
+                        <i class="ph ph-upload-simple"></i> Publicar Tarjeta
+                    </button>
+                </form>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Tarjeta</th>
+                        <th>Categoría</th>
+                        <th>Acceso</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="homepageCardsTable">
+                    <tr><td colspan="5" style="text-align:center;">Cargando tarjetas...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
     </main>
 
     <!-- IMPROVEMENT 4: Extend Membership Modal -->
@@ -649,9 +728,12 @@
                 'dashboard': 'Dashboard General',
                 'users': 'Directorio de Clientes',
                 'content': 'Gestión de Contenido',
-                'pagos': 'Pagos Pendientes'
+                'pagos': 'Pagos Pendientes',
+                'homepage': 'Página Principal'
             };
             if(titles[tabId]) document.getElementById('pageTitle').textContent = titles[tabId];
+            
+            if (tabId === 'homepage') loadHomepageCards();
         }
 
         // Carga de Datos Principales
@@ -1129,6 +1211,146 @@
             if (error) alert("Error al eliminar: " + error.message);
             else loadDashboardData();
         }
+
+        // =============================================
+        // HOMEPAGE CARDS MANAGEMENT
+        // =============================================
+        let editingHomepageCardId = null;
+
+        async function loadHomepageCards() {
+            const tbody = document.getElementById('homepageCardsTable');
+            if (!tbody) return;
+            const { data, error } = await sb.from('homepage_cards').select('*').order('created_at', { ascending: false });
+            if (error || !data) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#ef4444;">Error cargando tarjetas.</td></tr>';
+                return;
+            }
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No hay tarjetas publicadas aún.</td></tr>';
+                return;
+            }
+            
+            const catLabels = { recientes: 'Recientes', binance: 'Binance', trading: 'Trading', acciones: 'Acciones Venezolanas' };
+            
+            tbody.innerHTML = data.map(card => `
+                <tr>
+                    <td>
+                        <div style="display:flex; align-items:center; gap: 12px;">
+                            ${card.image_data ? `<img src="${card.image_data}" style="width:48px; height:36px; object-fit:cover; border-radius:6px;">` : '<div style="width:48px;height:36px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>'}
+                            <div>
+                                <div style="font-weight:600;">${card.title}</div>
+                                <div style="font-size:0.8rem; color:var(--text-muted);">${card.description ? card.description.substring(0,50) + '...' : ''}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span style="background:rgba(240,185,11,0.1);color:#F0B90B;padding:3px 8px;border-radius:999px;font-size:0.78rem;font-weight:600;">${catLabels[card.category] || card.category}</span></td>
+                    <td>${card.is_free ? '<span style="color:#22c55e; font-weight:600;">GRATIS</span>' : '<span style="color:#ef4444; font-weight:600;">EXCLUSIVO</span>'}</td>
+                    <td style="color:var(--text-muted);font-size:0.85rem;">${new Date(card.created_at).toLocaleDateString('es-ES')}</td>
+                    <td>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-action btn-role" onclick="editHomepageCard('${card.id}')" title="Editar">
+                                <i class="ph ph-pencil"></i>
+                            </button>
+                            <button class="btn-action btn-ban" onclick="deleteHomepageCard('${card.id}')" title="Eliminar">
+                                <i class="ph ph-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function cancelHomepageForm() {
+            document.getElementById('homepageFormWrapper').style.display = 'none';
+            document.getElementById('homepageForm').reset();
+            document.getElementById('editingHomepageCardId').value = '';
+            document.getElementById('homepageFormTitle').textContent = 'Nueva Tarjeta';
+            document.getElementById('btnHomepageSubmit').innerHTML = '<i class="ph ph-upload-simple"></i> Publicar Tarjeta';
+            editingHomepageCardId = null;
+        }
+
+        async function editHomepageCard(id) {
+            const { data, error } = await sb.from('homepage_cards').select('*').eq('id', id).single();
+            if (error || !data) { alert('Error cargando tarjeta'); return; }
+            document.getElementById('hTitle').value = data.title || '';
+            document.getElementById('hCategory').value = data.category || 'recientes';
+            document.getElementById('hUrl').value = data.url || '';
+            document.getElementById('hIsFree').value = data.is_free ? 'true' : 'false';
+            document.getElementById('hDesc').value = data.description || '';
+            document.getElementById('editingHomepageCardId').value = id;
+            document.getElementById('homepageFormTitle').textContent = 'Editando Tarjeta';
+            document.getElementById('btnHomepageSubmit').innerHTML = '<i class="ph ph-floppy-disk"></i> Guardar Cambios';
+            editingHomepageCardId = id;
+            document.getElementById('homepageFormWrapper').style.display = 'block';
+            document.getElementById('homepageFormWrapper').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function deleteHomepageCard(id) {
+            if (!confirm('¿Seguro que quieres eliminar esta tarjeta de la página principal?')) return;
+            const { error } = await sb.from('homepage_cards').delete().eq('id', id);
+            if (error) { alert('Error eliminando: ' + error.message); return; }
+            loadHomepageCards();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hForm = document.getElementById('homepageForm');
+            if (hForm) {
+                hForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const msg = document.getElementById('homepageStatusMsg');
+                    const btn = document.getElementById('btnHomepageSubmit');
+                    btn.disabled = true;
+                    btn.textContent = 'Guardando...';
+                    msg.textContent = '';
+                    
+                    const title = document.getElementById('hTitle').value.trim();
+                    const category = document.getElementById('hCategory').value;
+                    const url = document.getElementById('hUrl').value.trim();
+                    const isFree = document.getElementById('hIsFree').value === 'true';
+                    const desc = document.getElementById('hDesc').value.trim();
+                    const cardId = document.getElementById('editingHomepageCardId').value;
+                    const imageFile = document.getElementById('hImage').files[0];
+                    
+                    let imageData = null;
+                    if (imageFile) {
+                        imageData = await new Promise(resolve => {
+                            const reader = new FileReader();
+                            reader.onload = e => resolve(e.target.result);
+                            reader.readAsDataURL(imageFile);
+                        });
+                    }
+                    
+                    const payload = { title, description: desc, url, category, is_free: isFree };
+                    if (imageData) payload.image_data = imageData;
+                    
+                    let error;
+                    if (cardId) {
+                        const res = await sb.from('homepage_cards').update(payload).eq('id', cardId);
+                        error = res.error;
+                    } else {
+                        payload.created_at = new Date().toISOString();
+                        const res = await sb.from('homepage_cards').insert([payload]);
+                        error = res.error;
+                    }
+                    
+                    btn.disabled = false;
+                    btn.innerHTML = cardId ? '<i class="ph ph-floppy-disk"></i> Guardar Cambios' : '<i class="ph ph-upload-simple"></i> Publicar Tarjeta';
+                    
+                    if (error) {
+                        msg.style.color = '#ef4444';
+                        msg.style.display = 'block';
+                        msg.textContent = 'Error: ' + error.message;
+                    } else {
+                        msg.style.color = '#22c55e';
+                        msg.style.display = 'block';
+                        msg.textContent = cardId ? '¡Tarjeta actualizada exitosamente!' : '¡Tarjeta publicada exitosamente!';
+                        cancelHomepageForm();
+                        loadHomepageCards();
+                        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+                    }
+                });
+            }
+        });
 
         // Arrancar
         initAdmin();

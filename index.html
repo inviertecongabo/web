@@ -142,72 +142,16 @@
                 <!-- Filtros de Categorías -->
                 <div class="filter-container">
                     <button class="filter-btn active" data-filter="all">Recientes</button>
-                    <button class="filter-btn" data-filter="bolsa">Acciones Venezolanas</button>
+                    <button class="filter-btn" data-filter="acciones">Acciones Venezolanas</button>
                     <button class="filter-btn" data-filter="trading">Trading</button>
                     <button class="filter-btn" data-filter="binance">Binance</button>
                 </div>
 
-                <!-- Grid de Videos -->
+                <!-- Grid de Videos (cargado dinámicamente desde Supabase) -->
                 <div class="video-grid" id="videoGrid">
-                    <!-- Video 1 (Binance Destacado - Gratis) -->
-                    <div class="video-card featured reveal" data-category="binance">
-                        <a href="https://www.instagram.com/reel/DaEcLYuRSr5/" target="_blank" rel="noopener noreferrer" class="video-thumbnail-link">
-                            <div class="video-thumbnail-wrapper">
-                                <div class="video-overlay">
-                                    <span class="play-btn">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                                    </span>
-                                </div>
-                                <div class="custom-thumbnail binance-thumb">
-                                    <div class="thumb-badge">GRATIS</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="video-info">
-                            <span class="video-category">Binance</span>
-                            <h3 class="video-title">Cómo reclamar los $20 USD de ayuda humanitaria de Binance</h3>
-                            <p class="video-desc">Guía rápida para activar el cupón de $20 USD que Binance está distribuyendo en Venezuela. Aprende los requisitos paso a paso.</p>
-                            <a href="https://www.instagram.com/reel/DaEcLYuRSr5/" target="_blank" rel="noopener noreferrer" class="video-link">Ver video en Instagram <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-                        </div>
-                    </div>
-
-                    <!-- Video 2 (Acciones - Bloqueado) -->
-                    <div class="video-card reveal" data-category="bolsa">
-                        <a href="javascript:void(0)" class="video-thumbnail-link gated-trigger">
-                            <div class="video-thumbnail-wrapper">
-                                <div class="video-overlay">
-                                    <span class="play-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-                                </div>
-                                <div class="custom-thumbnail" style="background: linear-gradient(135deg, #1e232d 0%, #0b0e14 100%);">
-                                    <div class="thumb-badge" style="background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);">🔒 EXCLUSIVO</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="video-info">
-                            <span class="video-category">Acciones Venezolanas</span>
-                            <h3 class="video-title">Tutorial paso a paso para invertir en la Bolsa de Valores de Caracas</h3>
-                            <p class="video-desc">Aprende desde cero cómo abrir tu cuenta de corretaje y comprar tus primeras acciones de empresas venezolanas 100% legal.</p>
-                            <a href="javascript:void(0)" class="video-link gated-trigger" style="color: var(--accent);">Ver clase completa <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-                        </div>
-                    </div>
-
-                    <!-- Video 3 (Trading - Bloqueado) -->
-                    <div class="video-card reveal" data-category="trading">
-                        <a href="javascript:void(0)" class="video-thumbnail-link gated-trigger">
-                            <div class="video-thumbnail-wrapper">
-                                <div class="video-overlay">
-                                    <span class="play-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-                                </div>
-                                <div class="custom-thumbnail" style="background: linear-gradient(135deg, #2b261a 0%, #141108 100%);">
-                                    <div class="thumb-badge" style="background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);">🔒 EXCLUSIVO</div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="video-info">
-                            <span class="video-category">Trading</span>
-                            <h3 class="video-title">Estrategia de Scalping en 5 minutos para principiantes</h3>
-                            <p class="video-desc">La estrategia exacta que utilizo para buscar rendimientos diarios en el mercado cripto, explicada con ejemplos reales.</p>
-                            <a href="javascript:void(0)" class="video-link gated-trigger" style="color: var(--accent);">Ver clase completa <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    <div id="homepageCardsContainer" style="display:contents;">
+                        <div style="grid-column:1/-1; text-align:center; padding: 40px; color: var(--text-muted);">
+                            Cargando contenido...
                         </div>
                     </div>
                 </div>
@@ -431,6 +375,135 @@
                 if (registerBtn) registerBtn.style.display = 'none';
                 if (panelBtn) panelBtn.style.display = 'inline-flex';
             }
+        })();
+    </script>
+    <!-- Cargar tarjetas dinámicamente desde Supabase homepage_cards -->
+    <script>
+        (async () => {
+            const SUPABASE_URL = 'https://uyrcsfsqzkywrgrjkvbr.supabase.co';
+            const SUPABASE_KEY = 'sb_publishable_SBBWsktsWGJLNa0-2Y4_wQ_sPeHJnHa';
+            // Re-use the already-loaded supabase client if available, or create a new one
+            const sbCards = (typeof supabase !== 'undefined')
+                ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+                : null;
+
+            if (!sbCards) return;
+
+            function renderHomepageCard(card) {
+                const catMap = {
+                    recientes: 'recientes',
+                    binance: 'binance',
+                    trading: 'trading',
+                    acciones: 'acciones'
+                };
+                const catLabel = {
+                    recientes: 'RECIENTES',
+                    binance: 'BINANCE',
+                    trading: 'TRADING',
+                    acciones: 'ACCIONES VENEZOLANAS'
+                };
+                const isFree = card.is_free !== false;
+                const badgeClass = isFree ? 'free' : 'exclusive';
+                const badgeText = isFree ? 'GRATIS' : 'EXCLUSIVO';
+                const category = catMap[card.category] || card.category;
+                
+                const imgContent = card.image_data
+                    ? `<img src="${card.image_data}" alt="${card.title}" loading="lazy">`
+                    : `<div style="width:100%;height:200px;background:#1a1a1a;border-radius:4px;"></div>`;
+
+                const isInstagram = card.url && card.url.includes('instagram');
+                const isYouTube = card.url && card.url.includes('youtube') || (card.url && card.url.includes('youtu.be'));
+                const linkText = isInstagram
+                    ? 'Ver video en Instagram →'
+                    : (isYouTube ? 'Ver video en YouTube →' : 'Ver clase completa →');
+
+                const href = (card.is_free === false) ? 'javascript:void(0)' : (card.url || '#');
+                const gatedClass = (card.is_free === false) ? ' gated-trigger' : '';
+
+                return `<div class="video-card reveal" data-category="${category}">
+                    <a href="${href}" target="${card.is_free === false ? '_self' : '_blank'}" rel="noopener noreferrer" class="video-thumbnail-link${gatedClass}">
+                        <div class="video-thumbnail-wrapper">
+                            <div class="video-overlay">
+                                <span class="play-btn">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                            </div>
+                            <div class="custom-thumbnail" style="background:#0d0d0d; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                                ${imgContent}
+                                <div class="thumb-badge${isFree ? '' : '" style="background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border);"'}">${isFree ? badgeText : '🔒 ' + badgeText}</div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="video-info">
+                        <span class="video-category">${catLabel[card.category] || card.category.toUpperCase()}</span>
+                        <h3 class="video-title">${card.title}</h3>
+                        <p class="video-desc">${card.description || ''}</p>
+                        <a href="${href}" target="${card.is_free === false ? '_self' : '_blank'}" rel="noopener noreferrer"
+                           class="video-link${gatedClass}"${card.is_free === false ? ' style="color: var(--accent);"' : ''}>
+                            ${linkText}
+                            <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>`;
+            }
+
+            function initFilterTabs() {
+                const filterButtons = document.querySelectorAll('.filter-btn');
+                const getVideoCards = () => document.querySelectorAll('#videoGrid .video-card');
+
+                filterButtons.forEach(button => {
+                    // Remove old listeners by cloning and replacing
+                    const clone = button.cloneNode(true);
+                    button.parentNode.replaceChild(clone, button);
+                });
+
+                document.querySelectorAll('.filter-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        const filterValue = this.getAttribute('data-filter');
+                        getVideoCards().forEach(card => {
+                            const cardCategory = card.getAttribute('data-category');
+                            if (filterValue === 'all' || cardCategory === filterValue) {
+                                card.style.display = '';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            }
+
+            const container = document.getElementById('homepageCardsContainer');
+            if (!container) return;
+
+            const { data, error } = await sbCards
+                .from('homepage_cards')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error || !data) {
+                container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">No se pudo cargar el contenido. Intenta de nuevo más tarde.</div>';
+                return;
+            }
+
+            if (data.length === 0) {
+                container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">Próximamente habrá contenido aquí. ¡Vuelve pronto!</div>';
+            } else {
+                container.innerHTML = data.map(renderHomepageCard).join('');
+            }
+
+            // Re-initialize filter tabs so they work with dynamically loaded cards
+            initFilterTabs();
+
+            // Re-attach gated modal triggers for exclusive cards
+            container.querySelectorAll('.gated-trigger').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const modal = document.getElementById('gatedModal');
+                    if (modal) modal.style.display = 'flex';
+                });
+            });
         })();
     </script>
 <script src="/cookie_banner.js"></script>
