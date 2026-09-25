@@ -526,7 +526,7 @@
                     </div>
                     <h3 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px;">Próximamente</h3>
                     <p style="color: #9CA3AF; font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">Estamos preparando material exclusivo para esta sección. ¡Atento a las actualizaciones!</p>
-                    <button onclick="document.querySelector('.filter-btn[data-filter=\'all\']').click()" class="btn-primary" style="padding: 12px 28px; border-radius: 12px; font-size: 0.95rem;">Explorar recientes</button>
+                    <button onclick="document.querySelector('.filter-btn[data-filter=\'all\']').click()" class="empty-btn-hover" style="background: var(--accent); color: #121215; border: none; outline: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">Explorar recientes</button>
                 </div>`;
                 container.innerHTML = data.map(renderHomepageCard).join('') + emptyStateHtml;
                 

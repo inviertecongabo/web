@@ -102,6 +102,7 @@ body {
 }
 
 .btn-primary {
+    border: none;
     background: var(--accent-gradient);
     color: var(--text-dark);
     box-shadow: 0 4px 14px var(--accent-glow);
@@ -1862,3 +1863,7 @@ body {
     pointer-events: none;
     padding: 6px 0;
 }
+
+/* Empty State Button */
+.empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
+.empty-btn-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.4); outline: none; }

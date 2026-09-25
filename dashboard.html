@@ -898,6 +898,9 @@
 .btn-fb { background: #1877F2; }
 
 
+
+.empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
+.empty-btn-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.3); }
 </style>
 
 
@@ -3481,7 +3484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <h3 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px;">Próximamente</h3>
             <p style="color: #9CA3AF; font-size: 0.95rem; line-height: 1.6; margin-bottom: 28px;">Estamos preparando material exclusivo para esta sección. ¡Atento a las actualizaciones!</p>
-            <button onclick="document.querySelector('.filter-chip[data-vcat=\'all\']').click()" style="background: var(--accent); color: #121215; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: transform 0.2s; font-size: 0.95rem;">Explorar recientes</button>
+            <button onclick="document.querySelector('.filter-chip[data-vcat=\'all\']').click()" class="empty-btn-hover" style="background: var(--accent); color: #121215; border: none; outline: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">Explorar recientes</button>
         </div>`;
         container.innerHTML = html + emptyStateHtml;
 
