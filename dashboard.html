@@ -4091,8 +4091,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('historialPremiumView').style.display = 'block';
             document.getElementById('historialFreeView').style.display = 'none';
             // Also call a function to fetch data if we are premium
-            if (typeof fetchHistorialData === 'function') {
-                fetchHistorialData();
+            if (typeof window.fetchHistorialData === 'function') {
+                window.fetchHistorialData();
             }
         } else {
             document.getElementById('historialPremiumView').style.display = 'none';
