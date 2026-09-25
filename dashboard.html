@@ -2592,7 +2592,7 @@
                     <i class="ph-fill ph-lock-key" style="font-size: 3rem; color: var(--accent); margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(250,204,21,0.3));"></i>
                     <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Función Exclusiva para Miembros</h3>
                     <p style="color: var(--text-muted); max-width: 400px; margin-bottom: 24px; font-size: 0.95rem; line-height: 1.5;">Lleva el control exacto de tu dinero. Esta sección guarda el registro de todas las compras automatizadas que hace el bot por ti. Adquiere GaboBot para desbloquear tu historial.</p>
-                    <button onclick="switchSection(event, 'tool-bot'); window.goToBotStep('onboarding');" class="btn btn-primary" style="font-weight: 700;">
+                    <button onclick="switchSection(event, 'tool-bot'); window.goToBotStep('onboarding');" class="pws-continue" style="max-width: 280px; margin: 0 auto; box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);">
                         <i class="ph-fill ph-crown"></i> Desbloquear GaboBot
                     </button>
                 </div>
@@ -4039,6 +4039,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    
+    window.updateHistorialView = function() {
+        if (!document.getElementById('historialPremiumView')) return;
+        if (window.gaboUserIsPremium) {
+            document.getElementById('historialPremiumView').style.display = 'block';
+            document.getElementById('historialFreeView').style.display = 'none';
+            // Also call a function to fetch data if we are premium
+            if (typeof fetchHistorialData === 'function') {
+                fetchHistorialData();
+            }
+        } else {
+            document.getElementById('historialPremiumView').style.display = 'none';
+            document.getElementById('historialFreeView').style.display = 'block';
+        }
+    };
+
     function switchSection(e, id) {
 
 
@@ -4088,13 +4104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("sec-" + id).classList.add("active");
         
         if (id === 'historial') {
-            if (window.gaboUserIsPremium) {
-                document.getElementById('historialPremiumView').style.display = 'block';
-                document.getElementById('historialFreeView').style.display = 'none';
-            } else {
-                document.getElementById('historialPremiumView').style.display = 'none';
-                document.getElementById('historialFreeView').style.display = 'block';
-            }
+            updateHistorialView();
         }
 
 
@@ -4574,6 +4584,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         window.gaboUserIsPremium = isPremium;
+        if(window.updateHistorialView) window.updateHistorialView();
         window.gaboUserDaysRemaining = daysRemaining;
 
         if (isPremium) {
@@ -4608,6 +4619,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 if (latest[0].status === 'approved') {
                                     clearInterval(window.paymentPollInterval);
                                     window.gaboUserIsPremium = true;
+                                    if(window.updateHistorialView) window.updateHistorialView();
                                     if (window.showToast) window.showToast("¡Pago Confirmado!", "Tu pago cripto ha sido verificado en la blockchain. Ya puedes encender el bot.", "success");
                                     document.getElementById("pwsPending").style.display = "none";
                                     document.getElementById("botPaymentStep").style.display = "none";
