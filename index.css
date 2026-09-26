@@ -1880,3 +1880,7 @@ body {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+
+/* Hover over entire card triggers text highlight */
+.video-card:hover .video-link { color: #facc15; }
+.video-card:hover .video-link .icon-arrow { transform: translateX(4px); }

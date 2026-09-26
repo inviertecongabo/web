@@ -464,8 +464,9 @@
                     badgeHTML = `<div class="corner-ribbon"><i class="ph-fill ph-star" style="margin-right:2px;"></i> EXCLUSIVO</div>`;
                 }
 
-                return `<div class="video-card reveal" data-category="${category}">
-                    <a href="${href}" target="${targetAttr}" rel="noopener noreferrer" class="video-thumbnail-link${gatedClass}" ${dataAttrs}>
+                return `<div class="video-card reveal" style="position:relative;" data-category="${category}">
+                    <div class="video-thumbnail-link">
+                        <a href="${href}" target="${targetAttr}" rel="noopener noreferrer" class="${gatedClass.trim()}" ${dataAttrs} style="position:absolute; inset:0; z-index:10; border-radius:12px;"></a>
                         <div class="video-thumbnail-wrapper">
                             <div class="video-overlay">
                                 <span class="play-btn">
@@ -477,16 +478,15 @@
                                 ${badgeHTML}
                             </div>
                         </div>
-                    </a>
+                    </div>
                     <div class="video-info">
                         <span class="video-category">${displayCat}</span>
                         <h3 class="video-title">${card.title}</h3>
                         <p class="video-desc">${card.description || ''}</p>
-                        <a href="${href}" target="${targetAttr}" rel="noopener noreferrer"
-                           class="video-link${gatedClass}" style="${textColor}" ${dataAttrs}>
+                        <span class="video-link" style="${textColor}; position:relative; z-index:5;">
                             ${linkText}
                             <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </a>
+                        </span>
                     </div>
                 </div>`;
             }

@@ -395,6 +395,7 @@
 
 
 
+        .video-card:hover .video-link { color: #facc15 !important; }
         .video-card:hover .play-icon { background: var(--accent); color: var(--text-dark); transform: translate(-50%, -50%) scale(1.1); }
 
 
@@ -3640,9 +3641,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                <div class="video-card" data-vcat="${catKey}">
+                <div class="video-card" data-vcat="${catKey}" style="position:relative;">
 
-
+                    <a href="#" class="social-trigger" ${dataAttrs} style="position:absolute; inset:0; z-index:10; border-radius:12px;"></a>
 
                     <div class="video-thumb">
 
@@ -3656,7 +3657,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                        <a href="#" class="play-icon social-trigger" ${dataAttrs} style="z-index: 2; text-decoration:none; color:inherit;">&#9654;</a>
+                        <div class="play-icon" ${dataAttrs} style="z-index: 2; text-decoration:none; color:inherit;">&#9654;</div>
 
 
 
@@ -3680,7 +3681,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-                        <a class="video-link social-trigger" href="#" ${dataAttrs} style="color:var(--accent); font-size:0.85rem; text-decoration:none; display:inline-block; margin-top:10px;">Ver video &#8594;</a>
+                        <span class="video-link" style="color:var(--accent); font-size:0.85rem; text-decoration:none; display:inline-block; margin-top:10px;">Ver video &#8594;</span>
 
 
 
