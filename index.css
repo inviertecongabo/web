@@ -1866,6 +1866,7 @@ body {
 
 /* Empty State Button */
 .empty-btn-hover { transition: all 0.2s; box-shadow: 0 4px 14px rgba(240,185,11,0.15); outline: none; }
+.empty-btn-hover:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 24px rgba(240,185,11,0.4); }
 .empty-btn-hover:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,185,11,0.4); outline: none; }
 
 /* SKELETON LOADERS */
